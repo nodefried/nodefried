@@ -95,31 +95,33 @@ function git(argument) {
 function config(argument) {
 	var sys = require('util');
 	var exec = require('child_process').exec;
-	var currentPath = process.cwd();
+	var configW32 = process.cwd()+'\lib\config.json';
+	var configNix = process.cwd()+'/lib/config.json';
+	var configBackupW32 = process.cwd()+'/lib/config.json.backup';
+	var configBackupNix = process.cwd()+'\lib\config.json.backup';
 	function puts(error, stdout, stderr) { 
 		console.log(stdout);
 		botConsole();
 	}
 	if(argument.toUpperCase() == 'SHOW') {
-		console.log(currentPath);
 		if (systemOS === "win32") {
-			exec('type '+currentPath+'\lib\config.json', puts);
+			exec('more '+configW32, puts);
 		} else {		
-			exec('cat '+currentPath+'/lib/config.json', puts);
+			exec('cat '+configNix, puts);
 		}
 	}
 	if(argument.toUpperCase() == 'BACKUP') {
 		if (systemOS === "win32") {
-			exec('copy '+currentPath+'/lib/config.json '+currentPath+'/lib/config.json.backup', puts);
+			exec('copy '+configW32 configBackupW32, puts);
 		} else {		
-			exec('cp '+currentPath+'/lib/config.json '+currentPath+'/lib/config.json.backup', puts);
+			exec('cp '+configNix configBackupNix, puts);
 		}
 	}	
 	if(argument.toUpperCase() == 'WIPE') {
 		if (systemOS === "win32") {
-			exec('del '+currentPath+'/lib/config.json', puts);
+			exec('del '+configW32, puts);
 		} else {		
-			exec('rm '+currentPath+'/lib/config.json', puts);
+			exec('del '+configNix, puts);
 		}
 	}	
 }
