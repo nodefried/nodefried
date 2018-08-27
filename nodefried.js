@@ -63,6 +63,33 @@ function ping(host) {
 /* END */
 // END SUB: Ping
 
+// START SUB: Git Log History
+/* START */
+function git(argument) {
+	var sys = require('util');
+	var exec = require('child_process').exec;
+	function puts(error, stdout, stderr) { 
+		console.log(stdout);
+		botConsole();
+	}
+	if(argument.toUpperCase() == 'HISTORY') {
+		if (systemOS === "win32") {
+			exec('git log --pretty=format:"%h - %an (%ae): %s" --shortstat  -n 3', puts);
+		} else {		
+			exec('git log --pretty=format:"%h - %an (%ae): %s" --shortstat  -n 3', puts);
+		}
+	}
+	if(argument.toUpperCase() == 'PULL') {
+		if (systemOS === "win32") {
+			exec('git stash; git pull', puts);
+		} else {		
+			exec('git stash; git pull', puts);
+		}
+	}	
+}
+/* END */
+// END SUB: Git Log History
+
 // START SUB: System Shell
 // COMMENT: Super, super dangerous. You have been warned.
 // COMMENT: But just in case, it's disabled by default.
@@ -121,6 +148,10 @@ function botConsole() {
 			console.log(timeStampLog()+'Pinging host, please wait...');
 			let host = arguments[2];
 			ping(host);
+		} else if(arguments[0].toUpperCase() == "GIT") {
+			console.log(timeStampLog()+'Working with repository, please wait...');
+			let argument = arguments[2];
+			git(argument);
 		} else if (arguments[0].toUpperCase() == "DOCS") {
 			generateDocumentation();
 		} else {
@@ -142,17 +173,17 @@ function webServer(action) {
 		web.get('/', (req,res) => {
 			res.send('Web server started successfully...');
 		});
-		web.get('/api/'+bot_api_key+'/close', (req,res) => {
+		web.get('/api/'+init.bot_api_key+'/close', (req,res) => {
 			server.close();
 		});
-		web.get('/api/'+bot_api_key+'/status', (req,res) => {
+		web.get('/api/'+init.bot_api_key+'/status', (req,res) => {
 			res.send('Web server IS online...');
 		});
 		console.log(timeStampLog()+'Web server started successfully!'.green);
 		botConsole();
 	} else if(action.toUpperCase() == "STOP") {
-		var webBackendClose = 'http:\/\/localhost:'+init.bot_web_port+'/api/'+bot_api_key+'/close';
-		var webBackendStatus = 'http:\/\/localhost:'+init.bot_web_port+'/api/'+bot_api_key+'/status';
+		var webBackendClose = 'http:\/\/localhost:'+init.bot_web_port+'/api/'+init.bot_api_key+'/close';
+		var webBackendStatus = 'http:\/\/localhost:'+init.bot_web_port+'/api/'+init.bot_api_key+'/status';
 		request({
 			url: webBackendClose,
 			timeout: 5000
@@ -161,7 +192,7 @@ function webServer(action) {
 			botConsole();
 		})
 	} else if(action.toUpperCase() == "STATUS") {
-                var webBackendStatus = 'http:\/\/localhost:'+init.bot_web_port+'/api/'+bot_api_key+'/status';
+                var webBackendStatus = 'http:\/\/localhost:'+init.bot_web_port+'/api/'+init.bot_api_key+'/status';
                 request({
                         url: webBackendStatus,
                         timeout: 1000
