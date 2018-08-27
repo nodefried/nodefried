@@ -138,7 +138,7 @@ function botConsole() {
 function webServer(action) {
 	const web = express();
 	if (action.toUpperCase() == "START") {
-		const server = web.listen(bot_web_port);
+		const server = web.listen(init.bot_web_port);
 		web.get('/', (req,res) => {
 			res.send('Web server started successfully...');
 		});
@@ -151,8 +151,8 @@ function webServer(action) {
 		console.log(timeStampLog()+'Web server started successfully!'.green);
 		botConsole();
 	} else if(action.toUpperCase() == "STOP") {
-		var webBackendClose = 'http:\/\/localhost:'+bot_web_port+'/api/'+bot_api_key+'/close';
-		var webBackendStatus = 'http:\/\/localhost:'+bot_web_port+'/api/'+bot_api_key+'/status';
+		var webBackendClose = 'http:\/\/localhost:'+init.bot_web_port+'/api/'+bot_api_key+'/close';
+		var webBackendStatus = 'http:\/\/localhost:'+init.bot_web_port+'/api/'+bot_api_key+'/status';
 		request({
 			url: webBackendClose,
 			timeout: 5000
@@ -161,7 +161,7 @@ function webServer(action) {
 			botConsole();
 		})
 	} else if(action.toUpperCase() == "STATUS") {
-                var webBackendStatus = 'http:\/\/localhost:'+bot_web_port+'/api/'+bot_api_key+'/status';
+                var webBackendStatus = 'http:\/\/localhost:'+init.bot_web_port+'/api/'+bot_api_key+'/status';
                 request({
                         url: webBackendStatus,
                         timeout: 1000
