@@ -95,43 +95,41 @@ function git(argument) {
 function config(argument) {
 	var sys = require('util');
 	var exec = require('child_process').exec;
-	var configW32 = process.cwd()+'/lib/config.json';
-	var configNix = process.cwd()+'/lib/config.json';
-	var configBackupW32 = process.cwd()+'/lib/config.json.backup';
-	var configBackupNix = process.cwd()+'\lib\config.json.backup';
+	var config = process.cwd()+'/lib/config.json';
+	var configBackup = process.cwd()+'/lib/config.json.backup';
 	function puts(error, stdout, stderr) { 
 		console.log(stdout);
 		botConsole();
 	}
 	if(argument.toUpperCase() == 'SHOW') {
-		if (systemOS === "win32") {
-
-	fs.readFile('./lib/config.json', 'utf8', function (err,data) {
-		if (err) {
-			console.log(timeStampLog()+err);
-		}
-		console.log(data);
-	});
-
-
-
-		} else {		
-			exec('cat '+configNix, puts);
-		}
+		fs.readFile('./lib/config.json', 'utf8', function (err,data) {
+			if (err) {
+				console.log(timeStampLog()+err);
+			}
+			console.log(data);
+			botConsole();
+		});
 	}
 	if(argument.toUpperCase() == 'BACKUP') {
-		if (systemOS === "win32") {
-			exec('copy '+configW32+' '+configBackupW32, puts);
-		} else {		
-			exec('cp '+configNix+' '+configBackupNix, puts);
-		}
-	}	
+		fs.readFile(config, 'utf8', function (err,data) {
+			if (err) {
+				return console.log(timeStampLog()+err);
+			}
+			fs.writeFile(configBackup, data, 'utf8', function (err) {
+				if (err) return console.log(timeStampLog()+err);
+				console.log(timeStampLog()+'Successfully backed up config to lib/config.json.backup!'.bold.green);
+				botConsole();
+			});
+		});
+	}
 	if(argument.toUpperCase() == 'WIPE') {
-		if (systemOS === "win32") {
-			exec('del '+configW32, puts);
-		} else {		
-			exec('del '+configNix, puts);
-		}
+		fs.readFile('./lib/config.json', 'utf8', function (err,data) {
+			if (err) {
+				console.log(timeStampLog()+err);
+			}
+			console.log(data);
+			botConsole();
+		});
 	}	
 }
 /* END */
