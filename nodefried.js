@@ -17,7 +17,7 @@ const path = require('path');
 const express = require('express');
 const request = require('request');
 const http = require('http');
-const init = require('./init.js');
+const init = require('./lib/init.js');
 /* END */
 // END SUB: Constants
 
@@ -221,7 +221,7 @@ function generateDocumentation() {
 // COMMENT: This doesn't do much. It will create a basic config and launch the console.
 // COMMENT: Once in the console you can call any of the functions via built-in commands.
 /* START */
-if (fs.existsSync('config.json')) {
+if (fs.existsSync('./lib/config.json')) {
 	botConsole();
 }
 /* END */
