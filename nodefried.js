@@ -23,7 +23,7 @@ const bot_nickname = config.bot_nickname;
 const setup = require('./setup.js');
 //const { bot_nickname,bot_api_key,bot_web_port } = config;
 /* END */
-// END SUB: Variables
+// END SUB: Constants
 
 // END SECTION: SYSTEM
 

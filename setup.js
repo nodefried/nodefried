@@ -1,11 +1,15 @@
+// START SECTION: CONFIGURATION
+
+// START SUB: Constants
+/* START */
 const colors = require('colors');
 const fs = require('fs');
+//const { bot_nickname,bot_api_key,bot_web_port } = config;
+/* END */
+// END SUB: Constants
 
-// START SUB: Initial Prompt and Console
-// COMMENT: You must adhere to the comment policy in order for the documentation function to work.
-// COMMENT: It's a pain in the ass but it works.
+// START SUB: Config Check/Setup Function
 /* START */
-
 module.exports = {
 	
 	setupConfig: function setupConfig(query, status) {
@@ -25,4 +29,6 @@ module.exports = {
 	}
 }
 /* END */
-// END SUB: Initial Prompt and Console
+// END SUB: Config Check/Setup Function
+
+// END SECTION: CONFIGURATION
