@@ -224,9 +224,11 @@ function generateDocumentation() {
 ```
 
 
-### Config Check/Setup Function
+### Main Init Function
+This basically just checks for a config and provides instant operation. 
+Eventually we will have a real init function.
 ```js
-function setupConfig(query, status) {
+function init(query, status) {
 	if (fs.existsSync('config.json')) {
 			status(console.log(timeStampLog()+'Welcome back!'));
 	} else {
@@ -249,10 +251,10 @@ function setupConfig(query, status) {
 ## RUNTIME
 
 ### Initial Prompt and Console
-You must adhere to the comment policy in order for the documentation function to work.
-It's a pain in the ass but it works.
+This doesn't do much. It will create a basic config and launch the console.
+Once in the console you can call any of the functions via built-in commands.
 ```js
-setupConfig(null, function(status) {
+init(null, function(status) {
 	botConsole();
 });
 ```
