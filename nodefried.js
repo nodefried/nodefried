@@ -95,7 +95,7 @@ function git(argument) {
 function config(argument) {
 	var sys = require('util');
 	var exec = require('child_process').exec;
-	var configW32 = process.cwd()+'\lib\config.json';
+	var configW32 = process.cwd()+'/lib/config.json';
 	var configNix = process.cwd()+'/lib/config.json';
 	var configBackupW32 = process.cwd()+'/lib/config.json.backup';
 	var configBackupNix = process.cwd()+'\lib\config.json.backup';
