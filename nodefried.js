@@ -101,16 +101,16 @@ function config(argument) {
 	}
 	if(argument.toUpperCase() == 'SHOW') {
 		if (systemOS === "win32") {
-			exec('type config.json', puts);
+			exec('type lib/config.json', puts);
 		} else {		
-			exec('cat config.json', puts);
+			exec('cat lib/config.json', puts);
 		}
 	}
 	if(argument.toUpperCase() == 'BACKUP') {
 		if (systemOS === "win32") {
-			exec('copy config.json config.json.backup', puts);
+			exec('copy lib/config.json lib/config.json.backup', puts);
 		} else {		
-			exec('cp config.json config.json.backup', puts);
+			exec('cp lib/config.json lib/config.json.backup', puts);
 		}
 	}	
 	if(argument.toUpperCase() == 'WIPE') {
