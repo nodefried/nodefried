@@ -1,114 +1,63 @@
-#!/usr/bin/env node
+# Welcome to the Nodefried Documentation
+## INIT
 
-// START SECTION: SYSTEM
+### Constants
+```js
+const sys = require('util');
+const exec = require('child_process').exec;
+const cluster = require('cluster');
+const os = require('os');
+const systemOS = os.platform();
+const prettySize = require('prettysize');
+const prettyMs = require('pretty-ms');
+const ffmpeg = require('fluent-ffmpeg');
+const colors = require('colors');
+const fs = require('fs');
+const path = require('path');
+const express = require('express');
+const request = require("request");
+const http = require("http");
+const config = require('./config.json');
+const { bot_nickname, bot_api_key, bot_web_port } = config;
+```
 
-// START SUB: Variables
-/* START */
-try {	
-	var sys = require('util');
-	var exec = require('child_process').exec;
-	var cluster = require('cluster');
-	var os = require('os');
-	var systemOS = os.platform();
-	var prettySize = require('prettysize');
-	var prettyMs = require('pretty-ms');
-	var ffmpeg = require('fluent-ffmpeg');
-	var colors = require('colors');
-} catch(error) {
-	var fs = require('fs');
-	console.log(timeStampLog()+'Could not load a required package, exiting!'.bold.red);
-	fs.readFile('example.config.json', 'utf8', function (err,data) {
-		if (err) {
-			return console.log(err);
-		}
-		var result = data
-			.replace(/#!\/usr\/bin\/env node/g,
-				'# Welcome to the '+bot_nickname+' Documentation')
-			.replace(/\/\/ START SECTION: /g,
-				'## ')
-			.replace(/\/\/ END SECTION: (.+)/g,
-				'')
-			.replace(/\/\/ START SUB: /g,
-				'### ')
-			.replace(/\/\/ END SUB: (.+)/g,
-				'')
-			.replace(/\/\/ COMMENT: /g,
-				'')
-			.replace(/\/\* START \*\//g,
-				'```js')
-			.replace(/\/\* END \*\//g,
-				'```');
-		fs.writeFile('config.json', result, 'utf8', function (err) {
-			if (err) return console.log(err);
-		});
-	});
-	console.log(timeStampLog()+'Documentation generation done!'.bold.green);
-	process.exit();
-}
-/* END */
-// END SUB: Variables
 
-// START SUB: Constants
-/* START */
-try {
-	const config = require('./config.json');
-} catch(error) {
-	console.log(timeStampLog()+'No config.json found, exiting!'.bold.red);
-	process.exit();
-}
-try {
-	const fs = require('fs');
-	const path = require('path');
-	const express = require('express');
-	const request = require("request");
-	const http = require("http");
-	bot_nickname = "Nodefried";
-	bot_web_port = config.bot_web_port;
-	bot_api_key = config.bot_api_key;
-} catch(error) {
-	console.log(timeStampLog()+'Could not load a required package, exiting!'.bold.red);
-	process.exit();
-}
 
-/* END */
-// END SUB: Constants
 
-// END SECTION: SYSTEM
+## FUNCTIONS
 
-// START SECTION: FUNCTIONS
-
-// START SUB: Write Operator Data
-/* START */
+### Write Operator Data
+```js
 function operatorSave(operator) {
 	fs.writeFile('operator', operator, function(err) {
 	});
 	console.log(timeStampLog()+'Wrote operator name and DNA to record...'.gray);
 }
-/* END */
-// END SUB: Write Operator Data
+```
 
-// START SUB: Timestamp Log
-/* START */
+
+### Timestamp Log
+```js
 function timeStampLog() {
 	var dateTime = require('node-datetime');
 	var dt = dateTime.create();
 	return dt.format('Y-m-d H:M:S').bold.green+'| ';
 }
-/* END */
-// END SUB: Timestamp Log
+```
 
-// START SUB: Timestamp Normal
-/* START */
+
+### Timestamp Normal
+```js
 function timeStamp() {
 	var dateTime = require('node-datetime');
 	var dt = dateTime.create();
 	return dt.format('Y-m-d H:M:S');
 }
-/* END */
-// END SUB: Timestamp Normal
+```
 
-// START SUB: Ping
-/* START */
+
+### Ping
+```js
 function ping(host) {
 	var sys = require('util');
 	var exec = require('child_process').exec;
@@ -122,13 +71,13 @@ function ping(host) {
 		exec("ping -c 5 "+host, puts);
 	}
 }
-/* END */
-// END SUB: Ping
+```
 
-// START SUB: System Shell
-// COMMENT: Super, super dangerous. You have been warned.
-// COMMENT: But just in case, it's disabled by default.
-/* START */
+
+### System Shell
+Super, super dangerous. You have been warned.
+But just in case, it's disabled by default.
+```js
 function shell(command) {
 	var sys = require('util');
 	var exec = require('child_process').exec;
@@ -142,11 +91,11 @@ function shell(command) {
 		exec(command, puts);
 	}
 }
-/* END */
-// END SUB: Sytem Shell
+```
 
-// START SUB: Prompt
-/* START */
+
+### Prompt
+```js
 function prompt(question, callback) {
 	var stdin = process.stdin,
 	stdout = process.stdout;
@@ -158,19 +107,19 @@ function prompt(question, callback) {
 		callback(data.toString().trim());
 	});
 }
-/* END */
-// END SUB: Prompt
+```
 
-// START SUB: Console Prompt
-/* START */
+
+### Console Prompt
+```js
 function botConsolePrompt() {
 	return bot_nickname.toLowerCase().yellow+'@localhost'.yellow+' ##_\ '.trap.bold.cyan;
 }
-/* END */
-// END SUB: Console Prompt
+```
 
-// START SUB: Console
-/* START */
+
+### Console
+```js
 function botConsole() {
 	prompt(timeStampLog()+botConsolePrompt(), function(botCommand) {
 		var arguments = botCommand.split(/(\s+)/);
@@ -192,11 +141,11 @@ function botConsole() {
 		}
 	})
 }
-/* END */
-// END SUB: Console
+```
 
-// START SUB: Web Server
-/* START */
+
+### Web Server
+```js
 function webServer(action) {
 	const web = express();
 	if (action.toUpperCase() == "START") {
@@ -237,11 +186,11 @@ function webServer(action) {
                 })
         }
 }
-/* END */
-// END SUB: Web Server
+```
 
-// START SUB: Documentation Generator
-/* START */
+
+### Documentation Generator
+```js
 function generateDocumentation() {
 	console.log(timeStampLog()+'Documentation generation beginning... please wait...'.yellow);
 	fs.readFile('nodefried.js', 'utf8', function (err,data) {
@@ -272,35 +221,41 @@ function generateDocumentation() {
 	console.log(timeStampLog()+'Documentation generation done!'.bold.green);
 	botConsole();
 }
-/* END */
-// END SUB: Main Generator
+```
 
-// END SECTION: FUNCTIONS
 
-// START SECTION: RUNTIME
-
-// START SUB: Initial Prompt and Console
-// COMMENT: You must adhere to the comment policy in order for the documentation function to work.
-// COMMENT: It's a pain in the ass but it works.
-/* START */
-if (fs.existsSync('operator')) {
-	var readStream = fs.createReadStream(path.join(__dirname, '/') + 'operator', 'utf8');
-	let data = ''
-	readStream.on('data', function(chunk) {
-		data += chunk;
-	}).on('end', function() {
-		console.log(timeStampLog()+'Welcome back '+data+'!');
-		botConsole();
-	});
-} else {
-
-	prompt(timeStampLog()+'What is my operators name? ', function (var_operator_name) {
-		operatorSave(var_operator_name);
-		console.log(timeStampLog()+'Hello '+var_operator_name+', I am '+bot_nickname+'.');
-		botConsole();
-	});
+### Config Check/Setup Function
+```js
+function setupConfig(query, status) {
+	if (fs.existsSync('config.json')) {
+			status(console.log(timeStampLog()+'Welcome back!'));
+	} else {
+			fs.readFile('example.config.json', 'utf8', function (err,data) {
+					if (err) {
+							return console.log(err);
+					}
+					fs.writeFile('config.json', data, 'utf8', function (err) {
+							if (err) return console.log(err);
+							status(console.log(timeStampLog()+'Config generation done!'.bold.green));
+					});
+			});	
+	}
 }
-/* END */
-// END SUB: Initial Prompt and Console
+```
 
-// END SECTION: RUNTIME
+
+
+
+## RUNTIME
+
+### Initial Prompt and Console
+You must adhere to the comment policy in order for the documentation function to work.
+It's a pain in the ass but it works.
+```js
+setupConfig(null, function(status) {
+	botConsole();
+});
+```
+
+
+

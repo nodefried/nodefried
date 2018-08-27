@@ -1,6 +1,5 @@
 #!/usr/bin/env node
-
-// START SECTION: SYSTEM
+// START SECTION: INIT
 
 // START SUB: Constants
 /* START */
@@ -23,7 +22,7 @@ const { bot_nickname, bot_api_key, bot_web_port } = config;
 /* END */
 // END SUB: Constants
 
-// END SECTION: SYSTEM
+// END SECTION: INIT
 
 // START SECTION: FUNCTIONS
 
