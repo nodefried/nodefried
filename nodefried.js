@@ -18,10 +18,8 @@ const path = require('path');
 const express = require('express');
 const request = require("request");
 const http = require("http");
-const config = ('./config.json');
-const bot_nickname = config.bot_nickname;
-const setup = require('./setup.js');
-//const { bot_nickname,bot_api_key,bot_web_port } = config;
+const config = require('./config.json');
+const { bot_nickname, bot_api_key, bot_web_port } = config;
 /* END */
 // END SUB: Constants
 
@@ -116,7 +114,7 @@ function prompt(question, callback) {
 // START SUB: Console Prompt
 /* START */
 function botConsolePrompt() {
-	return 'Nodefried'.toLowerCase().yellow+'@localhost'.yellow+' ##_\ '.trap.bold.cyan;
+	return bot_nickname.toLowerCase().yellow+'@localhost'.yellow+' ##_\ '.trap.bold.cyan;
 }
 /* END */
 // END SUB: Console Prompt
@@ -227,6 +225,26 @@ function generateDocumentation() {
 /* END */
 // END SUB: Main Generator
 
+// START SUB: Config Check/Setup Function
+/* START */
+function setupConfig(query, status) {
+	if (fs.existsSync('config.json')) {
+			status(console.log(timeStampLog()+'Welcome back!'));
+	} else {
+			fs.readFile('example.config.json', 'utf8', function (err,data) {
+					if (err) {
+							return console.log(err);
+					}
+					fs.writeFile('config.json', data, 'utf8', function (err) {
+							if (err) return console.log(err);
+							status(console.log(timeStampLog()+'Config generation done!'.bold.green));
+					});
+			});	
+	}
+}
+/* END */
+// END SUB: Config Check/Setup Function
+
 // END SECTION: FUNCTIONS
 
 // START SECTION: RUNTIME
@@ -235,7 +253,7 @@ function generateDocumentation() {
 // COMMENT: You must adhere to the comment policy in order for the documentation function to work.
 // COMMENT: It's a pain in the ass but it works.
 /* START */
-setup.setupConfig(null, function(status) {
+setupConfig(null, function(status) {
 	botConsole();
 });
 /* END */
