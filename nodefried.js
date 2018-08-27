@@ -63,7 +63,7 @@ function ping(host) {
 /* END */
 // END SUB: Ping
 
-// START SUB: Git Log History
+// START SUB: Git Operations
 /* START */
 function git(argument) {
 	var sys = require('util');
@@ -88,7 +88,41 @@ function git(argument) {
 	}	
 }
 /* END */
-// END SUB: Git Log History
+// END SUB: Git Operations
+
+// START SUB: Config Operations
+/* START */
+function config(argument) {
+	var sys = require('util');
+	var exec = require('child_process').exec;
+	function puts(error, stdout, stderr) { 
+		console.log(stdout);s
+		botConsole();
+	}
+	if(argument.toUpperCase() == 'SHOW') {
+		if (systemOS === "win32") {
+			exec('type config.json', puts);
+		} else {		
+			exec('cat config.json', puts);
+		}
+	}
+	if(argument.toUpperCase() == 'BACKUP') {
+		if (systemOS === "win32") {
+			exec('copy config.json config.json.backup', puts);
+		} else {		
+			exec('cp config.json config.json.backup', puts);
+		}
+	}	
+	if(argument.toUpperCase() == 'WIPE') {
+		if (systemOS === "win32") {
+			exec('del config.json', puts);
+		} else {		
+			exec('rm config.json', puts);
+		}
+	}	
+}
+/* END */
+// END SUB: Config Operations
 
 // START SUB: System Shell
 // COMMENT: Super, super dangerous. You have been warned.
@@ -144,6 +178,8 @@ function botConsole() {
 				process.exit();
 		} else if(arguments[0].toUpperCase() == "WEB") {
 			webServer(arguments[2]);
+		} else if(arguments[0].toUpperCase() == "CONFIG") {
+			config(arguments[2]);
 		} else if(arguments[0].toUpperCase() == "PING") {
 			console.log(timeStampLog()+'Pinging host, please wait...');
 			let host = arguments[2];
