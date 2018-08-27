@@ -2,28 +2,76 @@
 
 // START SECTION: SYSTEM
 
-// START SUB: Constants
+// START SUB: Variables
 /* START */
-const sys = require('util');
-const exec = require('child_process').exec;
-const cluster = require('cluster');
-const os = require('os');
-const systemOS = os.platform();
-const prettySize = require('prettysize');
-const prettyMs = require('pretty-ms');
-const ffmpeg = require('fluent-ffmpeg');
-const colors = require('colors');
-const fs = require('fs');
-const path = require('path');
-const express = require('express');
-const request = require("request");
-const http = require("http");
-const config = ('./config.json');
-const bot_nickname = config.bot_nickname;
-const setup = require('./setup.js');
-//const { bot_nickname,bot_api_key,bot_web_port } = config;
+try {	
+	var sys = require('util');
+	var exec = require('child_process').exec;
+	var cluster = require('cluster');
+	var os = require('os');
+	var systemOS = os.platform();
+	var prettySize = require('prettysize');
+	var prettyMs = require('pretty-ms');
+	var ffmpeg = require('fluent-ffmpeg');
+	var colors = require('colors');
+} catch(error) {
+	var fs = require('fs');
+	console.log(timeStampLog()+'Could not load a required package, exiting!'.bold.red);
+	fs.readFile('example.config.json', 'utf8', function (err,data) {
+		if (err) {
+			return console.log(err);
+		}
+		var result = data
+			.replace(/#!\/usr\/bin\/env node/g,
+				'# Welcome to the '+bot_nickname+' Documentation')
+			.replace(/\/\/ START SECTION: /g,
+				'## ')
+			.replace(/\/\/ END SECTION: (.+)/g,
+				'')
+			.replace(/\/\/ START SUB: /g,
+				'### ')
+			.replace(/\/\/ END SUB: (.+)/g,
+				'')
+			.replace(/\/\/ COMMENT: /g,
+				'')
+			.replace(/\/\* START \*\//g,
+				'```js')
+			.replace(/\/\* END \*\//g,
+				'```');
+		fs.writeFile('config.json', result, 'utf8', function (err) {
+			if (err) return console.log(err);
+		});
+	});
+	console.log(timeStampLog()+'Documentation generation done!'.bold.green);
+	process.exit();
+}
 /* END */
 // END SUB: Variables
+
+// START SUB: Constants
+/* START */
+try {
+	const config = require('./config.json');
+} catch(error) {
+	console.log(timeStampLog()+'No config.json found, exiting!'.bold.red);
+	process.exit();
+}
+try {
+	const fs = require('fs');
+	const path = require('path');
+	const express = require('express');
+	const request = require("request");
+	const http = require("http");
+	bot_nickname = "Nodefried";
+	bot_web_port = config.bot_web_port;
+	bot_api_key = config.bot_api_key;
+} catch(error) {
+	console.log(timeStampLog()+'Could not load a required package, exiting!'.bold.red);
+	process.exit();
+}
+
+/* END */
+// END SUB: Constants
 
 // END SECTION: SYSTEM
 
@@ -116,7 +164,7 @@ function prompt(question, callback) {
 // START SUB: Console Prompt
 /* START */
 function botConsolePrompt() {
-	return 'Nodefried'.toLowerCase().yellow+'@localhost'.yellow+' ##_\ '.trap.bold.cyan;
+	return bot_nickname.toLowerCase().yellow+'@localhost'.yellow+' ##_\ '.trap.bold.cyan;
 }
 /* END */
 // END SUB: Console Prompt
@@ -235,9 +283,23 @@ function generateDocumentation() {
 // COMMENT: You must adhere to the comment policy in order for the documentation function to work.
 // COMMENT: It's a pain in the ass but it works.
 /* START */
-setup.setupConfig(null, function(status) {
-	botConsole();
-});
+if (fs.existsSync('operator')) {
+	var readStream = fs.createReadStream(path.join(__dirname, '/') + 'operator', 'utf8');
+	let data = ''
+	readStream.on('data', function(chunk) {
+		data += chunk;
+	}).on('end', function() {
+		console.log(timeStampLog()+'Welcome back '+data+'!');
+		botConsole();
+	});
+} else {
+
+	prompt(timeStampLog()+'What is my operators name? ', function (var_operator_name) {
+		operatorSave(var_operator_name);
+		console.log(timeStampLog()+'Hello '+var_operator_name+', I am '+bot_nickname+'.');
+		botConsole();
+	});
+}
 /* END */
 // END SUB: Initial Prompt and Console
 
