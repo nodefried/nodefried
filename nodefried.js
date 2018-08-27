@@ -70,8 +70,6 @@ function git(argument) {
 	var exec = require('child_process').exec;
 	function puts(error, stdout, stderr) { 
 		console.log(stdout);
-		console.log(error);
-		console.log(stderr);		
 		botConsole();
 	}
 	if(argument.toUpperCase() == 'HISTORY') {
@@ -83,9 +81,9 @@ function git(argument) {
 	}
 	if(argument.toUpperCase() == 'PULL') {
 		if (systemOS === "win32") {
-			exec('git stash; git pull', puts);
+			exec('git stash && git pull', puts);
 		} else {		
-			exec('git stash; git pull', puts);
+			exec('git stash && git pull', puts);
 		}
 	}	
 }
