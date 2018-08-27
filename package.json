@@ -1,0 +1,35 @@
+{
+  "name": "Nodefried",
+  "version": "1.0.0",
+  "description": "An all purpose bot.",
+  "entry point:": "nodefried.js",
+  "scripts": {
+    "test": "echo \"All systems go!\""
+  },
+  "bin": {
+    "nodefried": "./nodefried.js"
+  },
+  "author": "Nodefried and Roy",
+  "license": "MIT",
+  "repository": "https://github.com/nodefried/nodefried.git",
+  "dependencies": {
+    "ansi-256-colors": "^1.1.0",
+    "asyncblock": "^2.2.12",
+    "child_process": "^1.0.2",
+    "cluster": "^0.7.7",
+    "exec": "^0.2.1",
+    "express": "^4.16.3",
+    "fluent-ffmpeg": "^2.1.2",
+    "fs": "0.0.1-security",
+    "g": "^2.0.1",
+    "http": "0.0.0",
+    "node-datetime": "^2.0.9",
+    "os": "^0.1.1",
+    "path": "^0.12.7",
+    "pretty-ms": "^3.2.0",
+    "prettysize": "^1.1.0",
+    "prompt": "^1.0.0",
+    "request": "^2.88.0",
+    "util": "^0.11.0"
+  }
+}
