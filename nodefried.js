@@ -127,9 +127,9 @@ function config(argument) {
 			if (err) {
 				console.log(timeStampLog()+err);
 			}
-			console.log(timeStampLog()+'Sucessfully wiped the config, exiting the program!'.bold.red);
-			process.exit();
 		});
+		console.log(timeStampLog()+'Sucessfully wiped the config, exiting the program!'.bold.red);
+		process.exit();
 	}	
 }
 /* END */
