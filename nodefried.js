@@ -105,7 +105,16 @@ function config(argument) {
 	}
 	if(argument.toUpperCase() == 'SHOW') {
 		if (systemOS === "win32") {
-			exec('cat '+configW32, puts);
+
+	fs.readFile('./lib/config.json', 'utf8', function (err,data) {
+		if (err) {
+			console.log(timeStampLog()+err);
+		}
+		console.log(data);
+	});
+
+
+
 		} else {		
 			exec('cat '+configNix, puts);
 		}
