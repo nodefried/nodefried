@@ -15,26 +15,15 @@ const colors = require('colors');
 const fs = require('fs');
 const path = require('path');
 const express = require('express');
-const request = require("request");
-const http = require("http");
-const config = require('./config.json');
-const { bot_nickname, bot_api_key, bot_web_port } = config;
+const request = require('request');
+const http = require('http');
+const init = require('./init.js');
 /* END */
 // END SUB: Constants
 
 // END SECTION: INIT
 
 // START SECTION: FUNCTIONS
-
-// START SUB: Write Operator Data
-/* START */
-function operatorSave(operator) {
-	fs.writeFile('operator', operator, function(err) {
-	});
-	console.log(timeStampLog()+'Wrote operator name and DNA to record...'.gray);
-}
-/* END */
-// END SUB: Write Operator Data
 
 // START SUB: Timestamp Log
 /* START */
@@ -113,7 +102,7 @@ function prompt(question, callback) {
 // START SUB: Console Prompt
 /* START */
 function botConsolePrompt() {
-	return bot_nickname.toLowerCase().yellow+'@localhost'.yellow+' ##_\ '.trap.bold.cyan;
+	return init.bot_nickname.toLowerCase().yellow+'@localhost'.yellow+' ##_\ '.trap.bold.cyan;
 }
 /* END */
 // END SUB: Console Prompt
@@ -224,28 +213,6 @@ function generateDocumentation() {
 /* END */
 // END SUB: Main Generator
 
-// START SUB: Main Init Function
-// COMMENT: This basically just checks for a config and provides instant operation. 
-// COMMENT: Eventually we will have a real init function.
-/* START */
-function init(query, status) {
-	if (fs.existsSync('config.json')) {
-			status(console.log(timeStampLog()+'Welcome back!'));
-	} else {
-			fs.readFile('example.config.json', 'utf8', function (err,data) {
-					if (err) {
-							return console.log(err);
-					}
-					fs.writeFile('config.json', data, 'utf8', function (err) {
-							if (err) return console.log(err);
-							status(console.log(timeStampLog()+'Config generation done!'.bold.green));
-					});
-			});	
-	}
-}
-/* END */
-// END SUB: Main Init Function
-
 // END SECTION: FUNCTIONS
 
 // START SECTION: RUNTIME
@@ -254,9 +221,9 @@ function init(query, status) {
 // COMMENT: This doesn't do much. It will create a basic config and launch the console.
 // COMMENT: Once in the console you can call any of the functions via built-in commands.
 /* START */
-init(null, function(status) {
+if (fs.existsSync('config.json')) {
 	botConsole();
-});
+}
 /* END */
 // END SUB: Initial Prompt and Console
 
