@@ -112,9 +112,9 @@ function config(argument) {
 	}
 	if(argument.toUpperCase() == 'BACKUP') {
 		if (systemOS === "win32") {
-			exec('copy '+configW32 configBackupW32, puts);
+			exec('copy '+configW32+' '+configBackupW32, puts);
 		} else {		
-			exec('cp '+configNix configBackupNix, puts);
+			exec('cp '+configNix+' '+configBackupNix, puts);
 		}
 	}	
 	if(argument.toUpperCase() == 'WIPE') {
