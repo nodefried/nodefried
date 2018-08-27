@@ -123,12 +123,12 @@ function config(argument) {
 		});
 	}
 	if(argument.toUpperCase() == 'WIPE') {
-		fs.readFile('./lib/config.json', 'utf8', function (err,data) {
+		fs.unlinkSync('./lib/config.json', 'utf8', function (err,data) {
 			if (err) {
 				console.log(timeStampLog()+err);
 			}
-			console.log(data);
-			botConsole();
+			console.log(timeStampLog()+'Sucessfully wiped the config, exiting the program!'.bold.red);
+			process.exit();
 		});
 	}	
 }
