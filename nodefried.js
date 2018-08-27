@@ -105,7 +105,7 @@ function config(argument) {
 	}
 	if(argument.toUpperCase() == 'SHOW') {
 		if (systemOS === "win32") {
-			exec('more '+configW32, puts);
+			exec('cat '+configW32, puts);
 		} else {		
 			exec('cat '+configNix, puts);
 		}
