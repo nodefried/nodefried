@@ -15,26 +15,15 @@ const colors = require('colors');
 const fs = require('fs');
 const path = require('path');
 const express = require('express');
-const request = require("request");
-const http = require("http");
-const config = require('./config.json');
-const { bot_nickname, bot_api_key, bot_web_port } = config;
+const request = require('request');
+const http = require('http');
+const init = require('./init.js');
 ```
 
 
 
 
 ## FUNCTIONS
-
-### Write Operator Data
-```js
-function operatorSave(operator) {
-	fs.writeFile('operator', operator, function(err) {
-	});
-	console.log(timeStampLog()+'Wrote operator name and DNA to record...'.gray);
-}
-```
-
 
 ### Timestamp Log
 ```js
@@ -113,7 +102,7 @@ function prompt(question, callback) {
 ### Console Prompt
 ```js
 function botConsolePrompt() {
-	return bot_nickname.toLowerCase().yellow+'@localhost'.yellow+' ##_\ '.trap.bold.cyan;
+	return init.bot_nickname.toLowerCase().yellow+'@localhost'.yellow+' ##_\ '.trap.bold.cyan;
 }
 ```
 
@@ -199,7 +188,7 @@ function generateDocumentation() {
 		}
 		var result = data
 			.replace(/#!\/usr\/bin\/env node/g,
-				'# Welcome to the '+bot_nickname+' Documentation')
+				'# Welcome to the '+init.bot_nickname+' Documentation')
 			.replace(/\/\/ START SECTION: /g,
 				'## ')
 			.replace(/\/\/ END SECTION: (.+)/g,
@@ -224,28 +213,6 @@ function generateDocumentation() {
 ```
 
 
-### Main Init Function
-This basically just checks for a config and provides instant operation. 
-Eventually we will have a real init function.
-```js
-function init(query, status) {
-	if (fs.existsSync('config.json')) {
-			status(console.log(timeStampLog()+'Welcome back!'));
-	} else {
-			fs.readFile('example.config.json', 'utf8', function (err,data) {
-					if (err) {
-							return console.log(err);
-					}
-					fs.writeFile('config.json', data, 'utf8', function (err) {
-							if (err) return console.log(err);
-							status(console.log(timeStampLog()+'Config generation done!'.bold.green));
-					});
-			});	
-	}
-}
-```
-
-
 
 
 ## RUNTIME
@@ -254,9 +221,9 @@ function init(query, status) {
 This doesn't do much. It will create a basic config and launch the console.
 Once in the console you can call any of the functions via built-in commands.
 ```js
-init(null, function(status) {
+if (fs.existsSync('config.json')) {
 	botConsole();
-});
+}
 ```
 
 

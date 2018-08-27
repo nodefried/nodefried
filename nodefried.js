@@ -188,7 +188,7 @@ function generateDocumentation() {
 		}
 		var result = data
 			.replace(/#!\/usr\/bin\/env node/g,
-				'# Welcome to the '+bot_nickname+' Documentation')
+				'# Welcome to the '+init.bot_nickname+' Documentation')
 			.replace(/\/\/ START SECTION: /g,
 				'## ')
 			.replace(/\/\/ END SECTION: (.+)/g,
