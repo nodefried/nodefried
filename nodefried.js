@@ -96,7 +96,7 @@ function config(argument) {
 	var sys = require('util');
 	var exec = require('child_process').exec;
 	function puts(error, stdout, stderr) { 
-		console.log(stdout);s
+		console.log(stdout);
 		botConsole();
 	}
 	if(argument.toUpperCase() == 'SHOW') {
