@@ -70,6 +70,8 @@ function git(argument) {
 	var exec = require('child_process').exec;
 	function puts(error, stdout, stderr) { 
 		console.log(stdout);
+		console.log(error);
+		console.log(stderr);		
 		botConsole();
 	}
 	if(argument.toUpperCase() == 'HISTORY') {
