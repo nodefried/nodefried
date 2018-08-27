@@ -101,23 +101,23 @@ function config(argument) {
 	}
 	if(argument.toUpperCase() == 'SHOW') {
 		if (systemOS === "win32") {
-			exec('type lib/config.json', puts);
+			exec('type ./lib/config.json', puts);
 		} else {		
-			exec('cat lib/config.json', puts);
+			exec('cat ./lib/config.json', puts);
 		}
 	}
 	if(argument.toUpperCase() == 'BACKUP') {
 		if (systemOS === "win32") {
-			exec('copy lib/config.json lib/config.json.backup', puts);
+			exec('copy ./lib/config.json lib/config.json.backup', puts);
 		} else {		
-			exec('cp lib/config.json lib/config.json.backup', puts);
+			exec('cp ./lib/config.json lib/config.json.backup', puts);
 		}
 	}	
 	if(argument.toUpperCase() == 'WIPE') {
 		if (systemOS === "win32") {
-			exec('del config.json', puts);
+			exec('del ./lib/config.json', puts);
 		} else {		
-			exec('rm config.json', puts);
+			exec('rm ./lib/config.json', puts);
 		}
 	}	
 }
