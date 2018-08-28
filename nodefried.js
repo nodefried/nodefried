@@ -421,7 +421,7 @@ function generateDocumentation() {
 // COMMENT: This doesn't do much. It will create a basic config and launch the console.
 // COMMENT: Once in the console you can call any of the functions via built-in commands.
 /* START */
-if (fs.existsSync('./lib/config.json')) {
+if (fs.existsSync(__dirname+'/lib/config.json')) {
 	//botConsole();
 	ee.emit('botConsole');
 }
