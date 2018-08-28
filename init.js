@@ -319,8 +319,10 @@ function webServer(action) {
 		console.log(timeStampLog()+'Web server started successfully!'.green);
 		ee.emit('botConsole');
 	} else if(action.toUpperCase() == "STOP") {
-		var webBackendClose = 'http:\/\/localhost:'+conf.bot_web_port+'/api/'+conf.bot_api_key+'/close';
-		var webBackendStatus = 'http:\/\/localhost:'+conf.bot_web_port+'/api/'+conf.bot_api_key+'/status';
+		var webBackendClose = 
+			'http:\/\/localhost:'+conf.bot_web_port+'/api/'+conf.bot_api_key+'/close';
+		var webBackendStatus = 
+			'http:\/\/localhost:'+conf.bot_web_port+'/api/'+conf.bot_api_key+'/status';
 		request({
 			url: webBackendClose,
 			timeout: 5000
@@ -329,7 +331,8 @@ function webServer(action) {
 			ee.emit('botConsole');
 		})
 	} else if(action.toUpperCase() == "STATUS") {
-                var webBackendStatus = 'http:\/\/localhost:'+conf.bot_web_port+'/api/'+conf.bot_api_key+'/status';
+                var webBackendStatus = 
+			'http:\/\/localhost:'+conf.bot_web_port+'/api/'+conf.bot_api_key+'/status';
                 request({
                         url: webBackendStatus,
                         timeout: 1000
@@ -350,7 +353,7 @@ function webServer(action) {
 /* START */
 function generateDocumentation() {
 	console.log(timeStampLog()+'Documentation generation beginning... please wait...'.yellow);
-	fs.readFile('config.js', 'utf8', function (err,data) {
+	fs.readFile('init.js', 'utf8', function (err,data) {
 		if (err) {
 			return console.log(timeStampLog()+err);
 		}
