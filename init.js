@@ -2,6 +2,7 @@
 // START SECTION: INIT
 
 // START SUB: Constants
+/* START */
 const sys = require('util');
 const exec = require('child_process').exec;
 const cluster = require('cluster');

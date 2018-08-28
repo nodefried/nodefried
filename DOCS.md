@@ -2,6 +2,7 @@
 ## INIT
 
 ### Constants
+```js
 const sys = require('util');
 const exec = require('child_process').exec;
 const cluster = require('cluster');
