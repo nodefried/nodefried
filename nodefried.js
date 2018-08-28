@@ -148,7 +148,7 @@ function shell(command) {
 	}
 	
 	var whiteList = "ls, dir, cat, nslookup, dig, tracert, cp, copy, mv, dir, del";
-	if(whiteList.indexOf(command)!=-1) 
+	if(whiteList.indexOf(command)!=-1) {
 		exec(command, puts);
 	} else {		
 		console.log(timeStampLog()+'This command is blackisted you wicked little devil!');
