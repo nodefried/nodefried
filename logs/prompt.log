@@ -1,0 +1,650 @@
+OUT: ^[[?1049h^[[22;0;0t^[[?1h^[=^[[1;70r^[[?25l^[[1;1H^[[H^[[2J^[[?1000h^[[?1002h^[[?1003h^[[?1005h^[[23;63H^[[?12l^[[?25h^[7^[[?25l^[[32;1H^[[59C^[(0lq^[[1C^[[34m^[(BPrompt^[[1C^[[m^[(0qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqk^[[33;1H^[[33;60Hx^[[1C^[(BQuestion?^[[106C^[(0x^[[34;1H^[[34;60Hx^[[116Cx^[[35;1H^[[35;60Hx^[[116Cx^[[36;1H^[[36;60Hx^[[2C^[[40m^[(B                                                                                                                ^[[2C^[[m^[(0x^[[37;1H^[[37;60Hx^[[116Cx^[[38;1H^[[38;60Hx^[[2C^[[40m^[(B Okay ^[[2CCancel  ^[[98C^[[m^[(0x^[[39;1H^[[39;60Hmqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqj^[(B^[8^[[?12l^[[?25h^[[13B
+-
+IN: t
+-
+OUT: ^[[23;64H^[7^[[?25l^[[36;1H^[[36;63H^[[40mt^[[m^[8^[[?12l^[[?25h^[[13B
+-
+IN: e
+-
+OUT: ^[[23;65H^[7^[[?25l^[[36;1H^[[36;64H^[[40me^[[m^[8^[[?12l^[[?25h^[[13B
+-
+IN: s
+-
+OUT: ^[[23;66H^[7^[[?25l^[[36;1H^[[36;65H^[[40ms^[[m^[8^[[?12l^[[?25h^[[13B
+-
+IN: t
+-
+OUT: ^[[23;67H^[7^[[?25l^[[36;1H^[[36;66H^[[40mt^[[m^[8^[[?12l^[[?25h^[[13B
+-
+IN: \r
+-
+OUT: ^[[?25l^[7^[[32;1H^[[59C  ^[[1C      ^[[1C                                                                                                            ^[[33;1H^[[33;60H ^[[1C         ^[[106C ^[[34;1H^[[34;60H^[(0lq^[[1C^[[34m^[(BQuestion^[[1C^[[m^[(0qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqk^[[35;1H^[[35;62H^[(BQuestion?^[[36;1H^[[36;63H                                                                                                                ^[[37;1H^[[37;63H^[[40m Okay ^[[2CCancel  ^[[m^[[38;1H^[[38;60H^[(0mqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqj^[[39;1H^[[39;60H^[(B                                                                                                                      ^[8
+-
+IN: \t
+-
+IN: ^[[MC;8^[[MC57
+-
+IN: ^[[MC36
+-
+IN: ^[[MC25
+-
+IN: ^[[MC16
+-
+IN: ^[[MC17
+-
+IN: ^[[MC19
+-
+IN: ^[[MC2;
+-
+IN: ^[[MC3=
+-
+IN: ^[[MC5?
+-
+IN: ^[[MC7A
+-
+IN: ^[[MC8C
+-
+IN: ^[[MC:D
+-
+IN: ^[[MC;E
+-
+IN: ^[[MC<G
+-
+IN: ^[[MC=G
+-
+IN: ^[[MC>H
+-
+IN: ^[[MC?I
+-
+IN: ^[[MC@J
+-
+IN: ^[[MCAK
+-
+IN: ^[[MCBK
+-
+IN: ^[[MCCK
+-
+IN: ^[[MCFL
+-
+IN: ^[[MCGL
+-
+IN: ^[[MCJL
+-
+IN: ^[[MCLL
+-
+IN: ^[[MCNL
+-
+IN: ^[[MCOL
+-
+IN: ^[[MCPL
+-
+IN: ^[[MCQL
+-
+IN: ^[[MCQK
+-
+IN: ^[[MCRK
+-
+IN: ^[[MCSJ
+-
+IN: ^[[MCSI
+-
+IN: ^[[MCSH
+-
+IN: ^[[MCSG
+-
+IN: ^[[MCTG
+-
+IN: ^[[MCTF
+-
+IN: ^[[MCUE
+-
+IN: ^[[MCVE
+-
+IN: ^[[MCWE
+-
+IN: ^[[MCXE
+-
+IN: ^[[MCYE
+-
+IN: ^[[MCZE
+-
+IN: ^[[MC[E
+-
+IN: ^[[MC\E
+-
+IN: ^[[MC]E
+-
+IN: ^[[MC^E
+-
+IN: ^[[MC_E
+-
+OUT: ^[7^[[37;1H^[[37;63H^[[44m Okay ^[[m^[8
+-
+IN: ^[[MC`E
+-
+IN: ^[[M `E
+-
+OUT: ^[7^[[37;1H^[[37;63H^[[40m Okay ^[[m^[8
+-
+IN: ^[[M#`E
+-
+OUT: ^[7^[[34;1H^[[59C  ^[[1C        ^[[1C                                                                                                          ^[[35;1H^[[35;60H^[(0lq^[(B ^[[34mMessage^[[m ^[(0qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqk^[[36;1H^[[36;61H^[(BHello^[[1Cworld!^[[37;1H^[[37;60H^[(0mqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqj^[[38;1H^[[38;60H^[(B                                                                                                                      ^[8
+-
+IN: ^[[MC`E
+-
+IN: ^[[MCaE
+-
+IN: ^[[MCbE
+-
+IN: ^[[MCcE
+-
+IN: ^[[MCdE
+-
+IN: ^[[MCeE
+-
+IN: ^[[MCgE
+-
+IN: ^[[MCiE
+-
+IN: ^[[MCkE
+-
+IN: ^[[MCmE
+-
+IN: ^[[MCoE
+-
+IN: ^[[MCqE
+-
+IN: ^[[MCsE
+-
+IN: ^[[MCuF
+-
+IN: ^[[MCvF
+-
+IN: ^[[MCwF
+-
+IN: ^[[MCxF
+-
+IN: ^[[MCwF
+-
+IN: ^[[MCxF
+-
+IN: ^[[MCwF
+-
+IN: ^[[MCxF
+-
+IN: ^[[MCxE
+-
+IN: ^[[MCyE
+-
+IN: ^[[MCyD
+-
+IN: ^[[M yD
+-
+IN: ^[[M#yD
+-
+IN: ^[[MCyD
+-
+IN: ^[[MCxD
+-
+IN: ^[[MCxE
+-
+IN: ^[[MCwE
+-
+IN: ^[[MCvF
+-
+OUT: ^[7^[[35;1H^[[59C  ^[[1C       ^[[1C                                                                                                           ^[[36;1H^[[36;60H      ^[[1C      ^[[104C ^[[37;1H^[[37;60H                                                                                                                      ^[8^[7^[[35;1H^[[59C^[(0lq^[[1C^[[34m^[(BMessage^[[1C^[[m^[(0qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqk^[[36;1H^[[36;60Hx^[(BHello^[[1Cworld^[[1Cagain!^[[98C^[(0x^[[37;1H^[[37;60Hmqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqj^[(B^[8
+-
+IN: ^[[MCuF
+-
+IN: ^[[MCuG
+-
+IN: ^[[MCtG
+-
+IN: ^[[MCsG
+-
+IN: ^[[MCsH
+-
+IN: ^[[MCrH
+-
+IN: ^[[MCqH
+-
+IN: ^[[MCpH
+-
+IN: ^[[MCpG
+-
+IN: ^[[MCoG
+-
+IN: ^[[MCoF
+-
+IN: ^[[MCnF
+-
+IN: ^[[MCmF
+-
+IN: ^[[MClG
+-
+IN: ^[[MCjG
+-
+IN: ^[[MChG
+-
+IN: ^[[MCfG
+-
+IN: ^[[MCdH
+-
+IN: ^[[MCaH
+-
+IN: ^[[MC^I
+-
+IN: ^[[MCZJ
+-
+IN: ^[[MCVK
+-
+IN: ^[[MCSK
+-
+IN: ^[[MCOL
+-
+IN: ^[[MCKM
+-
+IN: ^[[MCGN
+-
+IN: ^[[MCDO
+-
+IN: ^[[MC@P
+-
+IN: ^[[MC=Q
+-
+IN: ^[[MC9S^[[MC6S^[[MC3T
+-
+IN: ^[[MC0U
+-
+IN: ^[[MC.V
+-
+IN: ^[[MC,V
+-
+IN: ^[[MC+V
+-
+IN: ^[[MC)W
+-
+IN: ^[[MC(W
+-
+IN: ^[[MC'W
+-
+IN: ^[[MC&X
+-
+IN: ^[[MC%X
+-
+IN: ^[[MC$X
+-
+IN: ^[[MC#Y
+-
+IN: ^[[MC"Y
+-
+IN: ^[[MC5T
+-
+IN: ^[[MC7S
+-
+IN: ^[[MC9R
+-
+IN: ^[[MC:P
+-
+IN: ^[[MC;N
+-
+IN: ^[[MC=L
+-
+IN: ^[[MC>K
+-
+IN: ^[[MC@J
+-
+IN: ^[[MCAI
+-
+IN: ^[[MCBH
+-
+IN: ^[[MCCG
+-
+IN: ^[[MCEF
+-
+IN: ^[[MCFF
+-
+IN: ^[[MCGF
+-
+IN: ^[[MCHF
+-
+IN: ^[[MCIF
+-
+IN: ^[[MCJF
+-
+IN: ^[[MCKG
+-
+IN: ^[[MCMG
+-
+IN: ^[[MCNG
+-
+IN: ^[[MCPH
+-
+IN: ^[[MCQH
+-
+IN: ^[[MCSH
+-
+IN: ^[[MCTH
+-
+IN: ^[[MCWH
+-
+IN: ^[[MCZH
+-
+IN: ^[[MC^H
+-
+IN: ^[[MCbH
+-
+IN: ^[[MCeH
+-
+IN: ^[[MCgH
+-
+IN: ^[[MCjH
+-
+IN: ^[[MClG
+-
+IN: ^[[MCnG
+-
+IN: ^[[MCqG
+-
+IN: ^[[MCsG
+-
+IN: ^[[MCuG
+-
+IN: ^[[MCvG
+-
+IN: ^[[MCwG
+-
+IN: ^[[M#wG
+-
+IN: \r
+-
+OUT: ^[7^[[35;1H^[[59C  ^[[1C       ^[[1C                                                                                                           ^[[36;1H^[[36;60H      ^[[1C     ^[[1C      ^[[98C ^[[37;1H^[[37;60H                                                                                                                      ^[8
+-
+OUT: ^[7^[[34;1H^[[59C^[(0lq^[[1C^[[34m^[(BLoader^[[1C^[[m^[(0qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqk^[[35;1H^[[35;60Hx^[(BLoading...^[[106C^[(0x^[[36;1H^[[36;60Hx^[[116Cx^[[37;1H^[[37;60Hx^[[1C^[(B/^[[114C^[(0x^[[38;1H^[[38;60Hmqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqj^[(B^[8
+-
+OUT: ^[7^[[37;1H^[[37;62H-^[8
+-
+OUT: ^[7^[[37;1H^[[37;62H\^[8
+-
+OUT: ^[7^[[37;1H^[[37;62H|^[8
+-
+OUT: ^[7^[[37;1H^[[37;62H/^[8
+-
+OUT: ^[7^[[37;1H^[[37;62H-^[8
+-
+OUT: ^[7^[[37;1H^[[37;62H\^[8
+-
+OUT: ^[7^[[37;1H^[[37;62H|^[8
+-
+OUT: ^[7^[[37;1H^[[37;62H/^[8
+-
+OUT: ^[7^[[37;1H^[[37;62H-^[8
+-
+OUT: ^[7^[[37;1H^[[37;62H\^[8
+-
+OUT: ^[7^[[37;1H^[[37;62H|^[8
+-
+OUT: ^[7^[[37;1H^[[37;62H/^[8
+-
+OUT: ^[7^[[37;1H^[[37;62H-^[8
+-
+OUT: ^[7^[[34;1H^[[59C  ^[[1C      ^[[1C                                                                                                            ^[[35;1H^[[35;60H           ^[[106C ^[[36;1H^[[36;60H ^[[116C ^[[37;1H^[[37;60H ^[[1C ^[[114C ^[[38;1H^[[38;60H                                                                                                                      ^[8^[[?1l^[>^[[?12l^[[?25h^[[H^[[2J^[[?1000l^[[?1002l^[[?1003l^[[?1005l^[[?1049l^[[23;0;0t
+-
+OUT: ^[[32m^[[1m2018-08-28 06:13:43^[[22m^[[39m| ^[[33mnodefried^[[39m^[[33m@localhost^[[39m^[[36m^[[1m ##_ ^[[22m^[[39m
+-
+IN: ls\n
+-
+OUT: DOCS.md\nREADME.md\nlib\nlogs\nnode_modules\nnodefried.js\npackage-lock.json\npackage.json\n\n
+-
+OUT: ^[[32m^[[1m2018-08-28 06:14:03^[[22m^[[39m| ^[[33mnodefried^[[39m^[[33m@localhost^[[39m^[[36m^[[1m ##_ ^[[22m^[[39m
+-
+IN: dir\n
+-
+OUT: DOCS.md    lib\t node_modules  package-lock.json\nREADME.md  logs  nodefried.js  package.json\n\n
+-
+OUT: ^[[32m^[[1m2018-08-28 06:14:04^[[22m^[[39m| ^[[33mnodefried^[[39m^[[33m@localhost^[[39m^[[36m^[[1m ##_ ^[[22m^[[39m
+-
+IN: clear\n
+-
+OUT: ^[[32m^[[1m2018-08-28 06:14:05^[[22m^[[39m| This command is blackisted you wicked little devil!\n
+-
+OUT: ^[[32m^[[1m2018-08-28 06:14:05^[[22m^[[39m| ^[[33mnodefried^[[39m^[[33m@localhost^[[39m^[[36m^[[1m ##_ ^[[22m^[[39m
+-
+IN: web start\n
+-
+OUT: ^[[32m^[[1m2018-08-28 06:14:06^[[22m^[[39m| ^[[32mWeb server started successfully!^[[39m\n
+-
+OUT: ^[[32m^[[1m2018-08-28 06:14:06^[[22m^[[39m| ^[[33mnodefried^[[39m^[[33m@localhost^[[39m^[[36m^[[1m ##_ ^[[22m^[[39m
+-
+IN: web status\n
+-
+OUT: ^[[32m^[[1m2018-08-28 06:14:09^[[22m^[[39m| ^[[32m^[[1mWeb Server IS online...^[[22m^[[39m\n
+-
+OUT: ^[[32m^[[1m2018-08-28 06:14:09^[[22m^[[39m| ^[[33mnodefried^[[39m^[[33m@localhost^[[39m^[[36m^[[1m ##_ ^[[22m^[[39m
+-
+IN: web stop\n
+-
+OUT: ^[[32m^[[1m2018-08-28 06:14:21^[[22m^[[39m| ^[[31mWeb server stopped successfully!^[[39m\n
+-
+OUT: ^[[32m^[[1m2018-08-28 06:14:21^[[22m^[[39m| ^[[33mnodefried^[[39m^[[33m@localhost^[[39m^[[36m^[[1m ##_ ^[[22m^[[39m
+-
+IN: web start\n
+-
+OUT: ^[[32m^[[1m2018-08-28 06:14:24^[[22m^[[39m| ^[[32mWeb server started successfully!^[[39m\n
+-
+OUT: ^[[32m^[[1m2018-08-28 06:14:24^[[22m^[[39m| ^[[33mnodefried^[[39m^[[33m@localhost^[[39m^[[36m^[[1m ##_ ^[[22m^[[39m
+-
+IN: web stop\n
+-
+OUT: ^[[32m^[[1m2018-08-28 06:14:32^[[22m^[[39m| ^[[31mWeb server stopped successfully!^[[39m\n
+-
+OUT: ^[[32m^[[1m2018-08-28 06:14:32^[[22m^[[39m| ^[[33mnodefried^[[39m^[[33m@localhost^[[39m^[[36m^[[1m ##_ ^[[22m^[[39m
+-
+IN: ls\n
+-
+OUT: DOCS.md\nREADME.md\nlib\nlogs\nnode_modules\nnodefried.js\npackage-lock.json\npackage.json\n\n
+-
+OUT: ^[[32m^[[1m2018-08-28 06:15:01^[[22m^[[39m| ^[[33mnodefried^[[39m^[[33m@localhost^[[39m^[[36m^[[1m ##_ ^[[22m^[[39m
+-
+IN: dir\n
+-
+OUT: DOCS.md    lib\t node_modules  package-lock.json\nREADME.md  logs  nodefried.js  package.json\n\n
+-
+OUT: ^[[32m^[[1m2018-08-28 06:15:03^[[22m^[[39m| ^[[33mnodefried^[[39m^[[33m@localhost^[[39m^[[36m^[[1m ##_ ^[[22m^[[39m
+-
+IN: cat DOCS.md\n
+-
+OUT: ^[[32m^[[1m2018-08-28 06:15:05^[[22m^[[39m| This command is blackisted you wicked little devil!\n
+-
+OUT: ^[[32m^[[1m2018-08-28 06:15:05^[[22m^[[39m| ^[[33mnodefried^[[39m^[[33m@localhost^[[39m^[[36m^[[1m ##_ ^[[22m^[[39m
+-
+IN: cat\n
+-
+OUT: \n
+-
+OUT: ^[[32m^[[1m2018-08-28 06:15:08^[[22m^[[39m| ^[[33mnodefried^[[39m^[[33m@localhost^[[39m^[[36m^[[1m ##_ ^[[22m^[[39m
+-
+IN: ls\n
+-
+OUT: DOCS.md\nREADME.md\nlib\nlogs\nnode_modules\nnodefried.js\npackage-lock.json\npackage.json\n\n
+-
+OUT: ^[[32m^[[1m2018-08-28 06:15:09^[[22m^[[39m| ^[[33mnodefried^[[39m^[[33m@localhost^[[39m^[[36m^[[1m ##_ ^[[22m^[[39m
+-
+IN: dir\n
+-
+OUT: DOCS.md    lib\t node_modules  package-lock.json\nREADME.md  logs  nodefried.js  package.json\n\n
+-
+OUT: ^[[32m^[[1m2018-08-28 06:15:10^[[22m^[[39m| ^[[33mnodefried^[[39m^[[33m@localhost^[[39m^[[36m^[[1m ##_ ^[[22m^[[39m
+-
+IN: exit\n
+-
+IN: ^[[MCIF
+-
+IN: ^[[MCJF
+-
+IN: ^[[MCKG
+-
+IN: ^[[MCMG
+-
+IN: ^[[MCNG
+-
+IN: ^[[MCPH
+-
+IN: ^[[MCQH
+-
+IN: ^[[MCSH
+-
+IN: ^[[MCTH
+-
+IN: ^[[MCWH
+-
+IN: ^[[MCZH
+-
+IN: ^[[MC^H
+-
+IN: ^[[MCbH
+-
+IN: ^[[MCeH
+-
+IN: ^[[MCgH
+-
+IN: ^[[MCjH
+-
+IN: ^[[MClG
+-
+IN: ^[[MCnG
+-
+IN: ^[[MCqG
+-
+IN: ^[[MCsG
+-
+IN: ^[[MCuG
+-
+IN: ^[[MCvG
+-
+IN: ^[[MCwG
+-
+IN: ^[[M#wG
+-
+IN: \r
+-
+OUT: ^[7^[[35;1H^[[59C  ^[[1C       ^[[1C                                                                                                           ^[[36;1H^[[36;60H      ^[[1C     ^[[1C      ^[[98C ^[[37;1H^[[37;60H                                                                                                                      ^[8
+-
+OUT: ^[7^[[34;1H^[[59C^[(0lq^[[1C^[[34m^[(BLoader^[[1C^[[m^[(0qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqk^[[35;1H^[[35;60Hx^[(BLoading...^[[106C^[(0x^[[36;1H^[[36;60Hx^[[116Cx^[[37;1H^[[37;60Hx^[[1C^[(B/^[[114C^[(0x^[[38;1H^[[38;60Hmqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqj^[(B^[8
+-
+OUT: ^[7^[[37;1H^[[37;62H-^[8
+-
+OUT: ^[7^[[37;1H^[[37;62H\^[8
+-
+OUT: ^[7^[[37;1H^[[37;62H|^[8
+-
+OUT: ^[7^[[37;1H^[[37;62H/^[8
+-
+OUT: ^[7^[[37;1H^[[37;62H-^[8
+-
+OUT: ^[7^[[37;1H^[[37;62H\^[8
+-
+OUT: ^[7^[[37;1H^[[37;62H|^[8
+-
+OUT: ^[7^[[37;1H^[[37;62H/^[8
+-
+OUT: ^[7^[[37;1H^[[37;62H-^[8
+-
+OUT: ^[7^[[37;1H^[[37;62H\^[8
+-
+OUT: ^[7^[[37;1H^[[37;62H|^[8
+-
+OUT: ^[7^[[37;1H^[[37;62H/^[8
+-
+OUT: ^[7^[[37;1H^[[37;62H-^[8
+-
+OUT: ^[7^[[34;1H^[[59C  ^[[1C      ^[[1C                                                                                                            ^[[35;1H^[[35;60H           ^[[106C ^[[36;1H^[[36;60H ^[[116C ^[[37;1H^[[37;60H ^[[1C ^[[114C ^[[38;1H^[[38;60H                                                                                                                      ^[8^[[?1l^[>^[[?12l^[[?25h^[[H^[[2J^[[?1000l^[[?1002l^[[?1003l^[[?1005l^[[?1049l^[[23;0;0t
+-
+OUT: ^[[32m^[[1m2018-08-28 06:13:43^[[22m^[[39m| ^[[33mnodefried^[[39m^[[33m@localhost^[[39m^[[36m^[[1m ##_ ^[[22m^[[39m
+-
+IN: ls\n
+-
+OUT: DOCS.md\nREADME.md\nlib\nlogs\nnode_modules\nnodefried.js\npackage-lock.json\npackage.json\n\n
+-
+OUT: ^[[32m^[[1m2018-08-28 06:14:03^[[22m^[[39m| ^[[33mnodefried^[[39m^[[33m@localhost^[[39m^[[36m^[[1m ##_ ^[[22m^[[39m
+-
+IN: dir\n
+-
+OUT: DOCS.md    lib\t node_modules  package-lock.json\nREADME.md  logs  nodefried.js  package.json\n\n
+-
+OUT: ^[[32m^[[1m2018-08-28 06:14:04^[[22m^[[39m| ^[[33mnodefried^[[39m^[[33m@localhost^[[39m^[[36m^[[1m ##_ ^[[22m^[[39m
+-
+IN: clear\n
+-
+OUT: ^[[32m^[[1m2018-08-28 06:14:05^[[22m^[[39m| This command is blackisted you wicked little devil!\n
+-
+OUT: ^[[32m^[[1m2018-08-28 06:14:05^[[22m^[[39m| ^[[33mnodefried^[[39m^[[33m@localhost^[[39m^[[36m^[[1m ##_ ^[[22m^[[39m
+-
+IN: web start\n
+-
+OUT: ^[[32m^[[1m2018-08-28 06:14:06^[[22m^[[39m| ^[[32mWeb server started successfully!^[[39m\n
+-
+OUT: ^[[32m^[[1m2018-08-28 06:14:06^[[22m^[[39m| ^[[33mnodefried^[[39m^[[33m@localhost^[[39m^[[36m^[[1m ##_ ^[[22m^[[39m
+-
+IN: web status\n
+-
+OUT: ^[[32m^[[1m2018-08-28 06:14:09^[[22m^[[39m| ^[[32m^[[1mWeb Server IS online...^[[22m^[[39m\n
+-
+OUT: ^[[32m^[[1m2018-08-28 06:14:09^[[22m^[[39m| ^[[33mnodefried^[[39m^[[33m@localhost^[[39m^[[36m^[[1m ##_ ^[[22m^[[39m
+-
+IN: web stop\n
+-
+OUT: ^[[32m^[[1m2018-08-28 06:14:21^[[22m^[[39m| ^[[31mWeb server stopped successfully!^[[39m\n
+-
+OUT: ^[[32m^[[1m2018-08-28 06:14:21^[[22m^[[39m| ^[[33mnodefried^[[39m^[[33m@localhost^[[39m^[[36m^[[1m ##_ ^[[22m^[[39m
+-
+IN: web start\n
+-
+OUT: ^[[32m^[[1m2018-08-28 06:14:24^[[22m^[[39m| ^[[32mWeb server started successfully!^[[39m\n
+-
+OUT: ^[[32m^[[1m2018-08-28 06:14:24^[[22m^[[39m| ^[[33mnodefried^[[39m^[[33m@localhost^[[39m^[[36m^[[1m ##_ ^[[22m^[[39m
+-
+IN: web stop\n
+-
+OUT: ^[[32m^[[1m2018-08-28 06:14:32^[[22m^[[39m| ^[[31mWeb server stopped successfully!^[[39m\n
+-
+OUT: ^[[32m^[[1m2018-08-28 06:14:32^[[22m^[[39m| ^[[33mnodefried^[[39m^[[33m@localhost^[[39m^[[36m^[[1m ##_ ^[[22m^[[39m
+-
+IN: ls\n
+-
+OUT: DOCS.md\nREADME.md\nlib\nlogs\nnode_modules\nnodefried.js\npackage-lock.json\npackage.json\n\n
+-
+OUT: ^[[32m^[[1m2018-08-28 06:15:01^[[22m^[[39m| ^[[33mnodefried^[[39m^[[33m@localhost^[[39m^[[36m^[[1m ##_ ^[[22m^[[39m
+-
+IN: dir\n
+-
+OUT: DOCS.md    lib\t node_modules  package-lock.json\nREADME.md  logs  nodefried.js  package.json\n\n
+-
+OUT: ^[[32m^[[1m2018-08-28 06:15:03^[[22m^[[39m| ^[[33mnodefried^[[39m^[[33m@localhost^[[39m^[[36m^[[1m ##_ ^[[22m^[[39m
+-
+IN: cat DOCS.md\n
+-
+OUT: ^[[32m^[[1m2018-08-28 06:15:05^[[22m^[[39m| This command is blackisted you wicked little devil!\n
+-
+OUT: ^[[32m^[[1m2018-08-28 06:15:05^[[22m^[[39m| ^[[33mnodefried^[[39m^[[33m@localhost^[[39m^[[36m^[[1m ##_ ^[[22m^[[39m
+-
+IN: cat\n
+-
+OUT: \n
+-
+OUT: ^[[32m^[[1m2018-08-28 06:15:08^[[22m^[[39m| ^[[33mnodefried^[[39m^[[33m@localhost^[[39m^[[36m^[[1m ##_ ^[[22m^[[39m
+-
+IN: ls\n
+-
+OUT: DOCS.md\nREADME.md\nlib\nlogs\nnode_modules\nnodefried.js\npackage-lock.json\npackage.json\n\n
+-
+OUT: ^[[32m^[[1m2018-08-28 06:15:09^[[22m^[[39m| ^[[33mnodefried^[[39m^[[33m@localhost^[[39m^[[36m^[[1m ##_ ^[[22m^[[39m
+-
+IN: dir\n
+-
+OUT: DOCS.md    lib\t node_modules  package-lock.json\nREADME.md  logs  nodefried.js  package.json\n\n
+-
+OUT: ^[[32m^[[1m2018-08-28 06:15:10^[[22m^[[39m| ^[[33mnodefried^[[39m^[[33m@localhost^[[39m^[[36m^[[1m ##_ ^[[22m^[[39m
+-
+IN: exit\n
+-

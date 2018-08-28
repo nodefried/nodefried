@@ -17,6 +17,11 @@ const express = require('express');
 const request = require('request');
 const http = require('http');
 const init = require('./lib/init.js');
+const blessed = require('blessed');
+var eventEmitter = require('events').EventEmitter;
+var ee = new eventEmitter;
+ee.on('botConsole', botConsole);
+process.on("SIGINT", function() {  } );
 /* END */
 // END SUB: Constants
 
@@ -51,7 +56,8 @@ function ping(host) {
 	var exec = require('child_process').exec;
 	function puts(error, stdout, stderr) { 
 		console.log(stdout);
-		botConsole();
+		//botConsole();
+		ee.emit('botConsole');
 	}
 	if (systemOS === "win32") {
 		exec("ping -n 5 "+host, puts);
@@ -69,8 +75,10 @@ function git(argument) {
 	var exec = require('child_process').exec;
 	function puts(error, stdout, stderr) { 
 		console.log(stdout);
-		botConsole();
-	} else if(argument.toUpperCase() == 'HISTORY') {
+		//botConsole();
+		ee.emit('botConsole');
+	} 
+	if(argument.toUpperCase() == 'HISTORY') {
 		if (systemOS === "win32") {
 			exec('git log --pretty=format:"%h - %an (%ae): %s" --shortstat  -n 3', puts);
 		} else {		
@@ -84,7 +92,8 @@ function git(argument) {
 		}
 	} else {
 				console.log(timeStampLog()+'Usage: git history/pull'.bold.green);
-				botConsole();		
+				//botConsole();		
+				ee.emit('botConsole');
 	}	
 }
 /* END */
@@ -99,7 +108,8 @@ function config(argument) {
 	var configBackup = process.cwd()+'/lib/config.json.backup';
 	function puts(error, stdout, stderr) { 
 		console.log(stdout);
-		botConsole();
+		//botConsole();
+		ee.emit('botConsole');
 	}
 	if(argument.toUpperCase() == 'SHOW') {
 		fs.readFile('./lib/config.json', 'utf8', function (err,data) {
@@ -107,7 +117,8 @@ function config(argument) {
 				console.log(timeStampLog()+err);
 			}
 			console.log(data);
-			botConsole();
+			//botConsole();
+			ee.emit('botConsole');
 		});
 	} else if(argument.toUpperCase() == 'BACKUP') {
 		fs.readFile(config, 'utf8', function (err,data) {
@@ -117,7 +128,8 @@ function config(argument) {
 			fs.writeFile(configBackup, data, 'utf8', function (err) {
 				if (err) return console.log(timeStampLog()+err);
 				console.log(timeStampLog()+'Successfully backed up config to lib/config.json.backup!'.bold.green);
-				botConsole();
+				//botConsole();
+				ee.emit('botConsole');
 			});
 		});
 	} else if(argument.toUpperCase() == 'WIPE') {
@@ -130,11 +142,104 @@ function config(argument) {
 		process.exit();
 	} else {
 				console.log(timeStampLog()+'Usage: config show/backup/wipe'.bold.green);
-				botConsole();		
+				//botConsole();		
+				ee.emit('botConsole');
 	}
 }
 /* END */
 // END SUB: Config Operations
+
+
+function doSomething() {
+var screen = blessed.screen({
+  tput: true,
+  smartCSR: true,
+  dump: __dirname + '/logs/prompt.log',
+  autoPadding: true,
+  warnings: true
+});
+
+var prompt = blessed.prompt({
+  parent: screen,
+  border: 'line',
+  height: 'shrink',
+  width: 'half',
+  top: 'center',
+  left: 'center',
+  label: ' {blue-fg}Prompt{/blue-fg} ',
+  tags: true,
+  keys: true,
+  vi: true
+});
+
+var question = blessed.question({
+  parent: screen,
+  border: 'line',
+  height: 'shrink',
+  width: 'half',
+  top: 'center',
+  left: 'center',
+  label: ' {blue-fg}Question{/blue-fg} ',
+  tags: true,
+  keys: true,
+  vi: true
+});
+
+var msg = blessed.message({
+  parent: screen,
+  border: 'line',
+  height: 'shrink',
+  width: 'half',
+  top: 'center',
+  left: 'center',
+  label: ' {blue-fg}Message{/blue-fg} ',
+  tags: true,
+  keys: true,
+  hidden: true,
+  vi: true
+});
+
+var loader = blessed.loading({
+  parent: screen,
+  border: 'line',
+  height: 'shrink',
+  width: 'half',
+  top: 'center',
+  left: 'center',
+  label: ' {blue-fg}Loader{/blue-fg} ',
+  tags: true,
+  keys: true,
+  hidden: true,
+  vi: true
+});
+
+prompt.input('Question?', '', function(err, value) {
+  question.ask('Question?', function(err, value) {
+    msg.display('Hello world!', 3, function(err) {
+      msg.display('Hello world again!', -1, function(err) {
+        loader.load('Loading...');
+        setTimeout(function() {
+          loader.stop();
+          screen.destroy();
+	  //botConsole();
+	  ee.emit('botConsole');
+        }, 3000);
+      });
+    });
+  });
+});
+
+screen.key('q', function() {
+  screen.destroy();
+  //botConsole();
+  ee.emit('botConsole');	
+});
+
+screen.render();
+
+}
+
+
 
 // START SUB: System Shell
 // COMMENT: Super, super dangerous. You have been warned.
@@ -142,17 +247,15 @@ function config(argument) {
 /* START */
 function shell(command) {
 	var sys = require('util');
-	var exec = require('child_process').exec;
+	//var exec = require('child_process').exec;
 	function puts(error, stdout, stderr) { 
 		console.log(stdout);
-		botConsole();
 	}
 	
 	if(init.bot_shell_whitelist.indexOf(command)!=-1) {
 		exec(command, puts);
 	} else {		
 		console.log(timeStampLog()+'This command is blackisted you wicked little devil!');
-		botConsole();
 	}
 }
 /* END */
@@ -163,10 +266,8 @@ function shell(command) {
 function prompt(question, callback) {
 	var stdin = process.stdin,
 	stdout = process.stdout;
-
 	stdin.resume();
 	stdout.write(question);
-
 	stdin.once('data', function (data) {
 		callback(data.toString().trim());
 	});
@@ -204,10 +305,26 @@ function botConsole() {
 			git(argument);
 		} else if (arguments[0].toUpperCase() == "DOCS") {
 			generateDocumentation();
+		} else if (arguments[0].toUpperCase() == "DO") {
+			doSomething();
+		} else if (arguments == "" || !arguments) {
+			console.log(timeStampLog()+'Need to enter a command...'.yellow);
+			ee.emit('botConsole');
 		} else {
-			shell(botCommand);
+			var sys = require('util');
+			var exec = require('child_process').exec;
+			function puts(error, stdout, stderr) { 
+				console.log(stdout);
+				ee.emit('botConsole');
+			}
+			if(init.bot_shell_whitelist.indexOf(botCommand)!=-1) {
+				exec(botCommand, puts);
+			} else {		
+				console.log(timeStampLog()+'This command is blackisted you wicked little devil!');	
+				ee.emit('botConsole');
+			}
 		}
-	})
+	});
 }
 /* END */
 // END SUB: Console
@@ -228,7 +345,8 @@ function webServer(action) {
 			res.send('Web server IS online...');
 		});
 		console.log(timeStampLog()+'Web server started successfully!'.green);
-		botConsole();
+		//botConsole();
+		ee.emit('botConsole');
 	} else if(action.toUpperCase() == "STOP") {
 		var webBackendClose = 'http:\/\/localhost:'+init.bot_web_port+'/api/'+init.bot_api_key+'/close';
 		var webBackendStatus = 'http:\/\/localhost:'+init.bot_web_port+'/api/'+init.bot_api_key+'/status';
@@ -237,7 +355,8 @@ function webServer(action) {
 			timeout: 5000
 		}, function (error,response,body) {
 			console.log(timeStampLog()+'Web server stopped successfully!'.red);
-			botConsole();
+			//botConsole();
+			ee.emit('botConsole');
 		})
 	} else if(action.toUpperCase() == "STATUS") {
                 var webBackendStatus = 'http:\/\/localhost:'+init.bot_web_port+'/api/'+init.bot_api_key+'/status';
@@ -250,7 +369,8 @@ function webServer(action) {
 			} else {
 				console.log(timeStampLog()+'Web Server IS online...'.bold.green);
 			}
-                        botConsole();
+                        //botConsole();
+			ee.emit('botConsole');
                 })
         }
 }
@@ -287,7 +407,8 @@ function generateDocumentation() {
 		});
 	});
 	console.log(timeStampLog()+'Documentation generation done!'.bold.green);
-	botConsole();
+	//botConsole();
+	ee.emit('botConsole');
 }
 /* END */
 // END SUB: Main Generator
@@ -301,7 +422,8 @@ function generateDocumentation() {
 // COMMENT: Once in the console you can call any of the functions via built-in commands.
 /* START */
 if (fs.existsSync('./lib/config.json')) {
-	botConsole();
+	//botConsole();
+	ee.emit('botConsole');
 }
 /* END */
 // END SUB: Initial Prompt and Console
