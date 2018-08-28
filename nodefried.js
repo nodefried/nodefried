@@ -2,10 +2,6 @@
 // START SECTION: INIT
 
 // START SUB: Constants
-/* START */
-import React, {Component} from 'react';
-import blessed from 'blessed';
-import {render} from 'react-blessed';
 const sys = require('util');
 const exec = require('child_process').exec;
 const cluster = require('cluster');
