@@ -21,7 +21,7 @@ const blessed = require('blessed');
 var eventEmitter = require('events').EventEmitter;
 var ee = new eventEmitter;
 ee.on('botConsole', botConsole);
-process.on("SIGINT", function() {  } );
+//process.on("SIGINT", function() {  } );
 /* END */
 // END SUB: Constants
 
@@ -104,15 +104,15 @@ function git(argument) {
 function config(argument) {
 	var sys = require('util');
 	var exec = require('child_process').exec;
-	var config = process.cwd()+'/lib/config.json';
-	var configBackup = process.cwd()+'/lib/config.json.backup';
+	var config = process.cwd()+'/config/config.json';
+	var configBackup = process.cwd()+'/config/config.json.backup';
 	function puts(error, stdout, stderr) { 
 		console.log(stdout);
 		//botConsole();
 		ee.emit('botConsole');
 	}
 	if(argument.toUpperCase() == 'SHOW') {
-		fs.readFile('./lib/config.json', 'utf8', function (err,data) {
+		fs.readFile('./config/config.json', 'utf8', function (err,data) {
 			if (err) {
 				console.log(timeStampLog()+err);
 			}
@@ -127,13 +127,13 @@ function config(argument) {
 			}
 			fs.writeFile(configBackup, data, 'utf8', function (err) {
 				if (err) return console.log(timeStampLog()+err);
-				console.log(timeStampLog()+'Successfully backed up config to lib/config.json.backup!'.bold.green);
+				console.log(timeStampLog()+'Successfully backed up config to config/config.json.backup!'.bold.green);
 				//botConsole();
 				ee.emit('botConsole');
 			});
 		});
 	} else if(argument.toUpperCase() == 'WIPE') {
-		fs.unlinkSync('./lib/config.json', 'utf8', function (err,data) {
+		fs.unlinkSync('./config/config.json', 'utf8', function (err,data) {
 			if (err) {
 				console.log(timeStampLog()+err);
 			}
