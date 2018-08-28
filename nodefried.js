@@ -70,20 +70,21 @@ function git(argument) {
 	function puts(error, stdout, stderr) { 
 		console.log(stdout);
 		botConsole();
-	}
-	if(argument.toUpperCase() == 'HISTORY') {
+	} else if(argument.toUpperCase() == 'HISTORY') {
 		if (systemOS === "win32") {
 			exec('git log --pretty=format:"%h - %an (%ae): %s" --shortstat  -n 3', puts);
 		} else {		
 			exec('git log --pretty=format:"%h - %an (%ae): %s" --shortstat  -n 3', puts);
 		}
-	}
-	if(argument.toUpperCase() == 'PULL') {
+	} else if(argument.toUpperCase() == 'PULL') {
 		if (systemOS === "win32") {
 			exec('git stash && git pull', puts);
 		} else {		
 			exec('git stash && git pull', puts);
 		}
+	} else {
+				console.log(timeStampLog()+'Usage: git history/pull'.bold.green);
+				botConsole();		
 	}	
 }
 /* END */
@@ -108,8 +109,7 @@ function config(argument) {
 			console.log(data);
 			botConsole();
 		});
-	}
-	if(argument.toUpperCase() == 'BACKUP') {
+	} else if(argument.toUpperCase() == 'BACKUP') {
 		fs.readFile(config, 'utf8', function (err,data) {
 			if (err) {
 				return console.log(timeStampLog()+err);
@@ -120,8 +120,7 @@ function config(argument) {
 				botConsole();
 			});
 		});
-	}
-	if(argument.toUpperCase() == 'WIPE') {
+	} else if(argument.toUpperCase() == 'WIPE') {
 		fs.unlinkSync('./lib/config.json', 'utf8', function (err,data) {
 			if (err) {
 				console.log(timeStampLog()+err);
@@ -129,7 +128,10 @@ function config(argument) {
 		});
 		console.log(timeStampLog()+'Sucessfully wiped the config, exiting the program!'.bold.red);
 		process.exit();
-	}	
+	} else {
+				console.log(timeStampLog()+'Usage: config show/backup/wipe'.bold.green);
+				botConsole();		
+	}
 }
 /* END */
 // END SUB: Config Operations
