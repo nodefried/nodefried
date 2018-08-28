@@ -359,7 +359,7 @@ function webServer(action) {
 /* START */
 function generateDocumentation() {
 	console.log(timeStampLog()+'Documentation generation beginning... please wait...'.yellow);
-	fs.readFile('nodefried.js', 'utf8', function (err,data) {
+	fs.readFile('init.js', 'utf8', function (err,data) {
 		if (err) {
 			return console.log(timeStampLog()+err);
 		}
