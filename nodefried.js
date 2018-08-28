@@ -147,11 +147,11 @@ function shell(command) {
 		botConsole();
 	}
 	
-	var whiteList = "ls, dir, cat, nslookup, dig, tracert, cp, copy, mv, dir, del";
-	if(whiteList.indexOf(command)!=-1) {
+	if(init.bot_shell_whitelist.indexOf(command)!=-1) {
 		exec(command, puts);
 	} else {		
 		console.log(timeStampLog()+'This command is blackisted you wicked little devil!');
+		botConsole();
 	}
 }
 /* END */
@@ -205,8 +205,6 @@ function botConsole() {
 			generateDocumentation();
 		} else {
 			shell(botCommand);
-			/*console.log(timeStampLog()+'Not a command...');*/
-			botConsole();
 		}
 	})
 }
