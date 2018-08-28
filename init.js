@@ -399,7 +399,7 @@ if (fs.existsSync(__dirname+'/config/config.json')) {
 		console.log("---------------------------");
 		//A();
 	});
-	client.login(bot_token);
+	client.login(discord_token_bot);
 }
 /* END */
 // END SUB: Initial Prompt and Console
