@@ -61,7 +61,6 @@ function ping(host) {
 	var exec = require('child_process').exec;
 	function puts(error, stdout, stderr) { 
 		console.log(stdout);
-		//botConsole();
 		ee.emit('botConsole');
 	}
 	if (systemOS === "win32") {
@@ -80,7 +79,6 @@ function git(argument) {
 	var exec = require('child_process').exec;
 	function puts(error, stdout, stderr) { 
 		console.log(stdout);
-		//botConsole();
 		ee.emit('botConsole');
 	} 
 	if(argument.toUpperCase() == 'HISTORY') {
@@ -97,7 +95,6 @@ function git(argument) {
 		}
 	} else {
 				console.log(timeStampLog()+'Usage: git history/pull'.bold.green);
-				//botConsole();		
 				ee.emit('botConsole');
 	}	
 }
@@ -113,7 +110,6 @@ function config(argument) {
 	var configBackup = process.cwd()+'/config/config.json.backup';
 	function puts(error, stdout, stderr) { 
 		console.log(stdout);
-		//botConsole();
 		ee.emit('botConsole');
 	}
 	if(argument.toUpperCase() == 'SHOW') {
@@ -122,7 +118,6 @@ function config(argument) {
 				console.log(timeStampLog()+err);
 			}
 			console.log(data);
-			//botConsole();
 			ee.emit('botConsole');
 		});
 	} else if(argument.toUpperCase() == 'BACKUP') {
@@ -132,8 +127,8 @@ function config(argument) {
 			}
 			fs.writeFile(configBackup, data, 'utf8', function (err) {
 				if (err) return console.log(timeStampLog()+err);
-				console.log(timeStampLog()+'Successfully backed up config to config/config.json.backup!'.bold.green);
-				//botConsole();
+				console.log(timeStampLog()+
+					'Backup saved to config/config.json.backup!'.bold.green);
 				ee.emit('botConsole');
 			});
 		});
@@ -147,7 +142,6 @@ function config(argument) {
 		process.exit();
 	} else {
 				console.log(timeStampLog()+'Usage: config show/backup/wipe'.bold.green);
-				//botConsole();		
 				ee.emit('botConsole');
 	}
 }
@@ -226,7 +220,6 @@ prompt.input('Question?', '', function(err, value) {
         setTimeout(function() {
           loader.stop();
           screen.destroy();
-	  //botConsole();
 	  ee.emit('botConsole');
         }, 3000);
       });
@@ -236,7 +229,6 @@ prompt.input('Question?', '', function(err, value) {
 
 screen.key('q', function() {
   screen.destroy();
-  //botConsole();
   ee.emit('botConsole');	
 });
 
@@ -328,7 +320,6 @@ function webServer(action) {
 			res.send('Web server IS online...');
 		});
 		console.log(timeStampLog()+'Web server started successfully!'.green);
-		//botConsole();
 		ee.emit('botConsole');
 	} else if(action.toUpperCase() == "STOP") {
 		var webBackendClose = 'http:\/\/localhost:'+init.bot_web_port+'/api/'+init.bot_api_key+'/close';
@@ -338,7 +329,6 @@ function webServer(action) {
 			timeout: 5000
 		}, function (error,response,body) {
 			console.log(timeStampLog()+'Web server stopped successfully!'.red);
-			//botConsole();
 			ee.emit('botConsole');
 		})
 	} else if(action.toUpperCase() == "STATUS") {
@@ -352,7 +342,6 @@ function webServer(action) {
 			} else {
 				console.log(timeStampLog()+'Web Server IS online...'.bold.green);
 			}
-                        //botConsole();
 			ee.emit('botConsole');
                 })
         }
@@ -390,7 +379,6 @@ function generateDocumentation() {
 		});
 	});
 	console.log(timeStampLog()+'Documentation generation done!'.bold.green);
-	//botConsole();
 	ee.emit('botConsole');
 }
 /* END */
@@ -405,7 +393,6 @@ function generateDocumentation() {
 // COMMENT: Once in the console you can call any of the functions via built-in commands.
 /* START */
 if (fs.existsSync(__dirname+'/config/config.json')) {
-	//botConsole();
 	ee.emit('botConsole');
 }
 /* END */
