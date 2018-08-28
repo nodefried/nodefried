@@ -2,12 +2,12 @@
   "name": "Nodefried",
   "version": "1.0.0",
   "description": "An all purpose bot.",
-  "entry point:": "init.js",
+  "entry point:": "nodefried.js",
   "scripts": {
     "test": "echo \"All systems go!\""
   },
   "bin": {
-    "nodefried": "./init.js"
+    "nodefried": "./nodefried.js"
   },
   "author": "Nodefried and Roy",
   "license": "MIT",
