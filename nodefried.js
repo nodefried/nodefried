@@ -239,28 +239,6 @@ screen.render();
 
 }
 
-
-
-// START SUB: System Shell
-// COMMENT: Super, super dangerous. You have been warned.
-// COMMENT: But just in case, it's disabled by default.
-/* START */
-function shell(command) {
-	var sys = require('util');
-	//var exec = require('child_process').exec;
-	function puts(error, stdout, stderr) { 
-		console.log(stdout);
-	}
-	
-	if(init.bot_shell_whitelist.indexOf(command)!=-1) {
-		exec(command, puts);
-	} else {		
-		console.log(timeStampLog()+'This command is blackisted you wicked little devil!');
-	}
-}
-/* END */
-// END SUB: Sytem Shell
-
 // START SUB: Prompt
 /* START */
 function prompt(question, callback) {
@@ -317,7 +295,7 @@ function botConsole() {
 				console.log(stdout);
 				ee.emit('botConsole');
 			}
-			if(init.bot_shell_whitelist.indexOf(botCommand)!=-1) {
+			if(init.bot_shell_whitelist.indexOf(arguments[0])!=-1) {
 				exec(botCommand, puts);
 			} else {		
 				console.log(timeStampLog()+'This command is blackisted you wicked little devil!');	
