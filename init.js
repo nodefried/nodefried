@@ -21,6 +21,7 @@ const blessed = require('blessed');
 var eventEmitter = require('events').EventEmitter;
 var ee = new eventEmitter;
 ee.on('botConsole', botConsole);
+//Doesn't Work on Win32 (No Signals)
 process.on("SIGINT", function() { console.log('' ); console.log('Received SIGINT, killing current command...'); } );
 /* END */
 // END SUB: Constants
