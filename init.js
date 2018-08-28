@@ -3,6 +3,8 @@
 
 // START SUB: Constants
 /* START */
+const { Client } = require('discord.js');
+client = new Client();
 const sys = require('util');
 const exec = require('child_process').exec;
 const cluster = require('cluster');
@@ -17,7 +19,7 @@ const path = require('path');
 const express = require('express');
 const request = require('request');
 const http = require('http');
-const init = require('./lib/init.js');
+const init = require('./lib/main.js');
 const blessed = require('blessed');
 var eventEmitter = require('events').EventEmitter;
 var ee = new eventEmitter;
@@ -389,6 +391,15 @@ function generateDocumentation() {
 /* START */
 if (fs.existsSync(__dirname+'/config/config.json')) {
 	ee.emit('botConsole');
+	client.on('ready', () => {
+		console.log("\n\n\n");
+		console.log(bot_nickname+" is ready for you!");
+		console.log("---------------------------");
+		console.log("Bot is Ready!");
+		console.log("---------------------------");
+		//A();
+	});
+	client.login(bot_token);
 }
 /* END */
 // END SUB: Initial Prompt and Console
