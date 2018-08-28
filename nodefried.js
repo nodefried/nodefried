@@ -146,10 +146,12 @@ function shell(command) {
 		console.log(stdout);
 		botConsole();
 	}
-	if (systemOS === "win32") {
+	
+	var whiteList = "ls, dir, cat, nslookup, dig, tracert, cp, copy, mv, dir, del";
+	if(whiteList.indexOf(command)!=-1) 
 		exec(command, puts);
 	} else {		
-		exec(command, puts);
+		console.log(timeStampLog()+'This command is blackisted you wicked little devil!');
 	}
 }
 /* END */
@@ -202,8 +204,8 @@ function botConsole() {
 		} else if (arguments[0].toUpperCase() == "DOCS") {
 			generateDocumentation();
 		} else {
-			/*shell(botCommand);*/
-			console.log(timeStampLog()+'Not a command...');
+			shell(botCommand);
+			/*console.log(timeStampLog()+'Not a command...');*/
 			botConsole();
 		}
 	})
