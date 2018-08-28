@@ -19,7 +19,7 @@ const path = require('path');
 const express = require('express');
 const request = require('request');
 const http = require('http');
-const init = require('./lib/main.js');
+const conf = require('./lib/main.js');
 const blessed = require('blessed');
 var eventEmitter = require('events').EventEmitter;
 var ee = new eventEmitter;
@@ -250,7 +250,7 @@ function prompt(question, callback) {
 // START SUB: Console Prompt
 /* START */
 function botConsolePrompt() {
-	return init.bot_nickname.toLowerCase().yellow+'@localhost'.yellow+' ##_\ '.trap.bold.cyan;
+	return conf.bot_nickname.toLowerCase().yellow+'@localhost'.yellow+' ##_\ '.trap.bold.cyan;
 }
 /* END */
 // END SUB: Console Prompt
@@ -289,7 +289,7 @@ function botConsole() {
 				console.log(stdout);
 				ee.emit('botConsole');
 			}
-			if(init.bot_shell_whitelist.indexOf(arguments[0])!=-1) {
+			if(conf.bot_shell_whitelist.indexOf(arguments[0])!=-1) {
 				exec(botCommand, puts);
 			} else {		
 				console.log(timeStampLog()+'This command is blackisted!');	
@@ -306,21 +306,21 @@ function botConsole() {
 function webServer(action) {
 	const web = express();
 	if (action.toUpperCase() == "START") {
-		const server = web.listen(init.bot_web_port);
+		const server = web.listen(conf.bot_web_port);
 		web.get('/', (req,res) => {
 			res.send('Web server started successfully...');
 		});
-		web.get('/api/'+init.bot_api_key+'/close', (req,res) => {
+		web.get('/api/'+conf.bot_api_key+'/close', (req,res) => {
 			server.close();
 		});
-		web.get('/api/'+init.bot_api_key+'/status', (req,res) => {
+		web.get('/api/'+conf.bot_api_key+'/status', (req,res) => {
 			res.send('Web server IS online...');
 		});
 		console.log(timeStampLog()+'Web server started successfully!'.green);
 		ee.emit('botConsole');
 	} else if(action.toUpperCase() == "STOP") {
-		var webBackendClose = 'http:\/\/localhost:'+init.bot_web_port+'/api/'+init.bot_api_key+'/close';
-		var webBackendStatus = 'http:\/\/localhost:'+init.bot_web_port+'/api/'+init.bot_api_key+'/status';
+		var webBackendClose = 'http:\/\/localhost:'+conf.bot_web_port+'/api/'+conf.bot_api_key+'/close';
+		var webBackendStatus = 'http:\/\/localhost:'+conf.bot_web_port+'/api/'+conf.bot_api_key+'/status';
 		request({
 			url: webBackendClose,
 			timeout: 5000
@@ -329,7 +329,7 @@ function webServer(action) {
 			ee.emit('botConsole');
 		})
 	} else if(action.toUpperCase() == "STATUS") {
-                var webBackendStatus = 'http:\/\/localhost:'+init.bot_web_port+'/api/'+init.bot_api_key+'/status';
+                var webBackendStatus = 'http:\/\/localhost:'+conf.bot_web_port+'/api/'+conf.bot_api_key+'/status';
                 request({
                         url: webBackendStatus,
                         timeout: 1000
@@ -350,13 +350,13 @@ function webServer(action) {
 /* START */
 function generateDocumentation() {
 	console.log(timeStampLog()+'Documentation generation beginning... please wait...'.yellow);
-	fs.readFile('init.js', 'utf8', function (err,data) {
+	fs.readFile('config.js', 'utf8', function (err,data) {
 		if (err) {
 			return console.log(timeStampLog()+err);
 		}
 		var result = data
 			.replace(/#!\/usr\/bin\/env node/g,
-				'# Welcome to the '+init.bot_nickname+' Documentation')
+				'# Welcome to the '+conf.bot_nickname+' Documentation')
 			.replace(/\/\/ START SECTION: /g,
 				'## ')
 			.replace(/\/\/ END SECTION: (.+)/g,
@@ -393,13 +393,13 @@ if (fs.existsSync(__dirname+'/config/config.json')) {
 	ee.emit('botConsole');
 	client.on('ready', () => {
 		console.log("\n\n\n");
-		console.log(bot_nickname+" is ready for you!");
+		console.log(conf.bot_nickname+" is ready for you!");
 		console.log("---------------------------");
 		console.log("Bot is Ready!");
 		console.log("---------------------------");
 		//A();
 	});
-	client.login(discord_token_bot);
+	client.login(conf.discord_token_bot);
 }
 /* END */
 // END SUB: Initial Prompt and Console
