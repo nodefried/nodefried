@@ -1,7 +1,7 @@
-<h1>Welcome to the Nodefried Documentation</h1>Welcome to the Nodefried Documentation
-#<h1>Welcome to the Nodefried Documentation</h1>INIT
+# Welcome to the Nodefried Documentation
+<hr><br /> INIT
 
-##<h1>Welcome to the Nodefried Documentation</h1>Constants
+#<hr><br /> Constants
 <pre>
 const sys = require('util');
 const exec = require('child_process').exec;
@@ -23,7 +23,7 @@ const { Client } = require('discord.js');
 </pre>
 
 
-##<h1>Welcome to the Nodefried Documentation</h1>Events and Signals
+#<hr><br /> Events and Signals
 <pre>
 var eventEmitter = require('events').EventEmitter;
 var ee = new eventEmitter;
@@ -38,9 +38,9 @@ process.on("SIGINT", function() {
 
 
 
-#<h1>Welcome to the Nodefried Documentation</h1>FUNCTIONS
+<hr><br /> FUNCTIONS
 
-##<h1>Welcome to the Nodefried Documentation</h1>Timestamp Log
+#<hr><br /> Timestamp Log
 <pre>
 function timeStampLog() {
 	var dateTime = require('node-datetime');
@@ -50,7 +50,7 @@ function timeStampLog() {
 </pre>
 
 
-##<h1>Welcome to the Nodefried Documentation</h1>Timestamp Normal
+#<hr><br /> Timestamp Normal
 <pre>
 function timeStamp() {
 	var dateTime = require('node-datetime');
@@ -60,7 +60,7 @@ function timeStamp() {
 </pre>
 
 
-##<h1>Welcome to the Nodefried Documentation</h1>Ping
+#<hr><br /> Ping
 <pre>
 function ping(host) {
 	var sys = require('util');
@@ -78,7 +78,7 @@ function ping(host) {
 </pre>
 
 
-##<h1>Welcome to the Nodefried Documentation</h1>Git Operations
+#<hr><br /> Git Operations
 <pre>
 function git(argument) {
 	var sys = require('util');
@@ -107,7 +107,7 @@ function git(argument) {
 </pre>
 
 
-##<h1>Welcome to the Nodefried Documentation</h1>Config Operations
+#<hr><br /> Config Operations
 <pre>
 function config(argument) {
 	var sys = require('util');
@@ -154,7 +154,7 @@ function config(argument) {
 </pre>
 
 
-##<h1>Welcome to the Nodefried Documentation</h1>Blessed Example
+#<hr><br /> Blessed Example
 <pre>
 function doSomething() {
 	var screen = blessed.screen({
@@ -237,7 +237,7 @@ function doSomething() {
 </pre>
 
 
-##<h1>Welcome to the Nodefried Documentation</h1>Prompt
+#<hr><br /> Prompt
 <pre>
 function prompt(question, callback) {
 	var stdin = process.stdin,
@@ -251,7 +251,7 @@ function prompt(question, callback) {
 </pre>
 
 
-##<h1>Welcome to the Nodefried Documentation</h1>Console Prompt
+#<hr><br /> Console Prompt
 <pre>
 function botConsolePrompt() {
 	return conf.bot_nickname.toLowerCase().yellow+'@localhost'.yellow+' ##_\ '.trap.bold.cyan;
@@ -259,7 +259,7 @@ function botConsolePrompt() {
 </pre>
 
 
-##<h1>Welcome to the Nodefried Documentation</h1>Discord Bot Controller
+#<hr><br /> Discord Bot Controller
 <pre>
 function botDiscord(type,operation) {
 	if(operation == "START") {
@@ -283,7 +283,7 @@ function botDiscord(type,operation) {
 </pre>
 
 
-##<h1>Welcome to the Nodefried Documentation</h1>Console
+#<hr><br /> Console
 <pre>
 function botConsole() {
 	if (fs.existsSync(__dirname+'/config/config.json')) {
@@ -333,7 +333,7 @@ function botConsole() {
 </pre>
 
 
-##<h1>Welcome to the Nodefried Documentation</h1>Web Server
+#<hr><br /> Web Server
 <pre>
 function webServer(action) {
 	const web = express();
@@ -381,7 +381,7 @@ function webServer(action) {
 </pre>
 
 
-##<h1>Welcome to the Nodefried Documentation</h1>Documentation Generator
+#<hr><br /> Documentation Generator
 <pre>
 function generateDocumentation() {
 	console.log(timeStampLog()+'Documentation generation beginning... please wait...'.yellow);
@@ -391,13 +391,13 @@ function generateDocumentation() {
 		}
 		var result = data
 			.replace(/#!\/usr\/bin\/env node/g,
-				'<h1>Welcome to the Nodefried Documentation</h1>Welcome to the '+conf.bot_nickname+' Documentation')
+				'# Welcome to the '+conf.bot_nickname+' Documentation')
 			.replace(/\/\/ START SECTION: /g,
-				'#<h1>Welcome to the Nodefried Documentation</h1>')
+				'<hr><br /> ')
 			.replace(/\/\/ END SECTION: (.+)/g,
 				'')
 			.replace(/\/\/ START SUB: /g,
-				'##<h1>Welcome to the Nodefried Documentation</h1>')
+				'#<hr><br /> ')
 			.replace(/\/\/ END SUB: (.+)/g,
 				'')
 			.replace(/\/\/ COMMENT: /g,
@@ -410,26 +410,26 @@ function generateDocumentation() {
 			if (err) return console.log(timeStampLog()+err);
 		});
 	});
-	fs.readFile('init.js', 'utf8', function (err,data) {
+	fs.readFile('DOCS.md', 'utf8', function (err,data) {
 		if (err) {
 			return console.log(timeStampLog()+err);
 		}
 		var result = data
-			.replace(/#!\/usr\/bin\/env node/g,
-				'<h1>Welcome to the '+conf.bot_nickname+' Documentation</h1>')
-			.replace(/\/\/ START SECTION: /g,
-				'<div style="background-color:#ffffcc;"> ')
+			.replace(/<h1>Welcome to the my Documentation</h1>/g,
+				'<h1>Welcome to the my Documentation</h1>')
+			.replace(/<hr><br /> /g,
+				'<hr><br /> ')
 			.replace(/\/\/ END SECTION: (.+)/g,
-				'</div>')
+				'')
 			.replace(/\/\/ START SUB: /g,
-				'<h3> ')
+				'')
 			.replace(/\/\/ END SUB: (.+)/g,
 				'')
 			.replace(/\/\/ COMMENT: /g,
 				'')
-			.replace(/\/\* START \*\//g,
+			.replace(/<pre>/g,
 				'<pre>')
-			.replace(/\/\* END \*\//g,
+			.replace(/</pre>/g,
 				'</pre>');
 		fs.writeFile('DOCS.html', result, 'utf8', function (err) {
 			if (err) return console.log(timeStampLog()+err);
@@ -443,9 +443,9 @@ function generateDocumentation() {
 
 
 
-#<h1>Welcome to the Nodefried Documentation</h1>RUNTIME
+<hr><br /> RUNTIME
 
-##<h1>Welcome to the Nodefried Documentation</h1>Initial Prompt and Console
+#<hr><br /> Initial Prompt and Console
 Calls the console, which everything else calls back too... kinda.
 <pre>
 ee.emit('botConsole');

@@ -391,7 +391,7 @@ function generateDocumentation() {
 		}
 		var result = data
 			.replace(/#!\/usr\/bin\/env node/g,
-				'# Welcome to the '+conf.bot_nickname+' Documentation')
+				'# Welcome to the my Documentation')
 			.replace(/\/\/ START SECTION: /g,
 				'## ')
 			.replace(/\/\/ END SECTION: (.+)/g,
@@ -415,8 +415,8 @@ function generateDocumentation() {
 			return console.log(timeStampLog()+err);
 		}
 		var result = data
-			.replace(/# /g,
-				'<h1>Welcome to the '+conf.bot_nickname+' Documentation</h1>')
+			.replace(/# Welcome to the my Documentation/g,
+				'<h1>Welcome to the my Documentation</h1>')
 			.replace(/## /g,
 				'<hr><br /> ')
 			.replace(/\/\/ END SECTION: (.+)/g,
