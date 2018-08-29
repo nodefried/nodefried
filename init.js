@@ -280,11 +280,13 @@ function botDiscord(type,operation) {
 			});
 		});
 		client.login(token);
-		console.log(timeStampLog()+"Discord "+type.toLowerCase()+" started successfully!".underline.green);
+		var msg = "Discord "+type.toLowerCase()+" started successfully!";
+		console.log(timeStampLog()+msg.underline.green);
 		botConsole();	
 	} else if(operation == "STOP") {
+		var msg = "Discord "+type.toLowerCase()+" stopped successfully!";
 		client.destroy();
-		console.log(timeStampLog()+"Discord "+type.toLowerCase()+" stopped successfully!".underline.red);
+		console.log(timeStampLog()+msg.underline.red);
 		botConsole();		
 	}
 }
