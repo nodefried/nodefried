@@ -261,36 +261,22 @@ function botConsolePrompt() {
 
 ### Discord Bot Controller
 ```js
-function botDiscordBot(operation) {
+function botDiscord(type,operation) {
 	if(operation == "START") {
-		discordBot = new Client();
-		discordBot.on('ready', () => {
-			console.log(timeStampLog()+conf.bot_nickname+" Discord BOT is ready for you!");
+		if(type == "SELF") { 
+			token = conf.discord_token_self; 
+		} else if(type == "BOT") { 
+			token = conf.discord_token_bot; 
+		}
+		client = new Client();
+		client.on('ready', () => {
+			console.log(timeStampLog()+conf.bot_nickname+" Discord "+type+" is ready for you!");
 			ee.emit('botConsole');
 		});
-		discordBot.login(conf.discord_token_bot);	
+		client.login(token);	
 	} else if(operation == "STOP") {
-		discordBot.destroy();
-		console.log(timeStampLog()+conf.bot_nickname+" Discord BOT has terminated!");
-		ee.emit('botConsole');
-	}
-}
-```
-
-
-### Discord Human Controller
-```js
-function botDiscordHuman(operation) {
-	if(operation == "START") {
-		discordHuman = new Client();
-		discordHuman.on('ready', () => {
-			console.log(timeStampLog()+conf.bot_nickname+" Discord BOT is ready for you!");
-			ee.emit('botConsole');
-		});
-		discordHuman.login(conf.discord_token_human);	
-	} else if(operation == "STOP") {
-		discordHuman.destroy();
-		console.log(timeStampLog()+conf.bot_nickname+" Discord BOT has terminated!");
+		client.destroy();
+		console.log(timeStampLog()+conf.bot_nickname+" Discord "+type+" has terminated!");
 		ee.emit('botConsole');
 	}
 }
@@ -308,11 +294,9 @@ function botConsole() {
 				process.exit();
 		} else if(arguments[0] == "WEB") {
 			webServer(arguments[2]);
-		} else if(arguments[0] == "DISCORDBOT") {
-			botDiscordBot(arguments[2]);
-		} else if(arguments[0] == "DISCORDHUMAN") {
-                        botDiscordHuman(arguments[2]);
-                } else if(arguments[0] == "CONFIG") {
+		} else if(arguments[0] == "DISCORD") {
+			botDiscord(arguments[2],arguments[4]);
+		} else if(arguments[0] == "CONFIG") {
 			config(arguments[2]);
 		} else if(arguments[0] == "PING") {
 			console.log(timeStampLog()+'Pinging host, please wait...');
@@ -336,10 +320,10 @@ function botConsole() {
 				console.log(stdout);
 				ee.emit('botConsole');
 			}
-			if(conf.bot_shell_whitelist.indexOf(arguments[0])!=-1) {
+			if(conf.bot_shell_whitelist.indexOf(arguments[0].toLowerCase())!=-1) {
 				exec(botCommand, puts);
 			} else {		
-				console.log(timeStampLog()+'This command is blackisted!');	
+				console.log(timeStampLog()+'This command is blacklisted!');	
 				ee.emit('botConsole');
 			}
 		}
@@ -354,7 +338,7 @@ function botConsole() {
 function webServer(action) {
 	const web = express();
 	if (action == "START") {
-		const server = web.listen(conf.bot_web_port);
+		const server = web.listen(conf.bot_port_web);
 		web.get('/', (req,res) => {
 			res.send('Web server started successfully...');
 		});
@@ -368,9 +352,9 @@ function webServer(action) {
 		ee.emit('botConsole');
 	} else if(action == "STOP") {
 		var webBackendClose = 
-			'http:\/\/localhost:'+conf.bot_web_port+'/api/'+conf.bot_api_key+'/close';
+			'http:\/\/localhost:'+conf.bot_port_web+'/api/'+conf.bot_api_key+'/close';
 		var webBackendStatus = 
-			'http:\/\/localhost:'+conf.bot_web_port+'/api/'+conf.bot_api_key+'/status';
+			'http:\/\/localhost:'+conf.bot_port_web+'/api/'+conf.bot_api_key+'/status';
 		request({
 			url: webBackendClose,
 			timeout: 5000
@@ -380,7 +364,7 @@ function webServer(action) {
 		})
 	} else if(action == "STATUS") {
                 var webBackendStatus = 
-			'http:\/\/localhost:'+conf.bot_web_port+'/api/'+conf.bot_api_key+'/status';
+			'http:\/\/localhost:'+conf.bot_port_web+'/api/'+conf.bot_api_key+'/status';
                 request({
                         url: webBackendStatus,
                         timeout: 1000
