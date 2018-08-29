@@ -17,7 +17,7 @@ const path = require('path');
 const express = require('express');
 const request = require('request');
 const http = require('http');
-const conf = require('./lib/main.js');
+const conf = require('./lib/config.js');
 const blessed = require('blessed');
 const { Client } = require('discord.js');
 /* END */
