@@ -23,8 +23,8 @@ Windows, osX, Linux
 Python 2.7, Node.js 8+, NPM
 ### Installation
 1) `git clone https://github.com/nodefried/nodefried.git`
-2) `cd alfred; npm install -g`
-3) `node nodefried.js` or just `nodefried` (all OS's)
+2) `cd nodefried; npm install -g`
+3) `node init.js` or just `nodefried` (all OS's)
 
 ## Documentation
 The documentation is [auto-generated](../master/DOCS.md).
