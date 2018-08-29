@@ -418,11 +418,11 @@ function generateDocumentation() {
 			.replace(/#!\/usr\/bin\/env node/g,
 				'<h1>Welcome to the '+conf.bot_nickname+' Documentation</h1>')
 			.replace(/\/\/ START SECTION: /g,
-				'## ')
+				'<div style="background-color:#ffffcc;"> ')
 			.replace(/\/\/ END SECTION: (.+)/g,
-				'')
+				'</div>')
 			.replace(/\/\/ START SUB: /g,
-				'### ')
+				'<h3> ')
 			.replace(/\/\/ END SUB: (.+)/g,
 				'')
 			.replace(/\/\/ COMMENT: /g,
