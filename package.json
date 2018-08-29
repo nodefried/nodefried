@@ -1,7 +1,8 @@
 {
   "name": "nodefried",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "I think therefore I am. Prompt style controller for bots.",
+  "keywords": "bot,discord,irc,prompt,express,controller,rpc,blessed",
   "entry point:": "init.js",
   "scripts": {
     "test": "echo \"All systems go!\""
