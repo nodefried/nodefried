@@ -3,8 +3,6 @@
 
 // START SUB: Constants
 /* START */
-const { Client } = require('discord.js');
-client = new Client();
 const sys = require('util');
 const exec = require('child_process').exec;
 const cluster = require('cluster');
@@ -21,16 +19,23 @@ const request = require('request');
 const http = require('http');
 const conf = require('./lib/main.js');
 const blessed = require('blessed');
+const { Client } = require('discord.js');
+/* END */
+// END SUB: Constants
+
+// START SUB: Events and Signals
+/* START */
 var eventEmitter = require('events').EventEmitter;
 var ee = new eventEmitter;
 ee.on('botConsole', botConsole);
+ee.on('botDiscord', botDiscord);
 //Doesn't Work on Win32 (No Signals)
 process.on("SIGINT", function() { 
 	console.log('' ); 
 	console.log('Received SIGINT, killing current command...'); 
 });
 /* END */
-// END SUB: Constants
+// END SUB: Events and Signals
 
 // END SECTION: INIT
 
@@ -83,13 +88,13 @@ function git(argument) {
 		console.log(stdout);
 		ee.emit('botConsole');
 	} 
-	if(argument.toUpperCase() == 'HISTORY') {
+	if(argument == 'HISTORY') {
 		if (systemOS === "win32") {
 			exec('git log --pretty=format:"%h - %an (%ae): %s" --shortstat  -n 3', puts);
 		} else {		
 			exec('git log --pretty=format:"%h - %an (%ae): %s" --shortstat  -n 3', puts);
 		}
-	} else if(argument.toUpperCase() == 'PULL') {
+	} else if(argument == 'PULL') {
 		if (systemOS === "win32") {
 			exec('git stash && git pull', puts);
 		} else {		
@@ -114,7 +119,7 @@ function config(argument) {
 		console.log(stdout);
 		ee.emit('botConsole');
 	}
-	if(argument.toUpperCase() == 'SHOW') {
+	if(argument == 'SHOW') {
 		fs.readFile('./config/config.json', 'utf8', function (err,data) {
 			if (err) {
 				console.log(timeStampLog()+err);
@@ -122,7 +127,7 @@ function config(argument) {
 			console.log(data);
 			ee.emit('botConsole');
 		});
-	} else if(argument.toUpperCase() == 'BACKUP') {
+	} else if(argument == 'BACKUP') {
 		fs.readFile(config, 'utf8', function (err,data) {
 			if (err) {
 				return console.log(timeStampLog()+err);
@@ -134,7 +139,7 @@ function config(argument) {
 				ee.emit('botConsole');
 			});
 		});
-	} else if(argument.toUpperCase() == 'WIPE') {
+	} else if(argument == 'WIPE') {
 		fs.unlinkSync('./config/config.json', 'utf8', function (err,data) {
 			if (err) {
 				console.log(timeStampLog()+err);
@@ -255,29 +260,63 @@ function botConsolePrompt() {
 /* END */
 // END SUB: Console Prompt
 
+// START SUB: Discord Controller
+/* START */
+function botDiscord(operation) {
+	if(operation == "START") {
+		client = new Client();
+		client.on('ready', () => {
+			console.log('');
+			console.log("test"+" Discord BOT is ready for you!");
+			console.log('');
+			ee.emit('botConsole');
+			//ee.on('discordBotStop', discordBotStop);
+			//function discordBotStop() {
+			//		client.destroy();
+			//		console.log('');
+			//		console.log('Discord BOT has disconnected!');
+			//		console.log('');
+			//		//callback(true);
+			//		ee.emit('botConsole');
+			//}	
+		});
+		client.login("NDg0MTI0MTUzMzIzMDYxMjQ4.DmdbcA.4_sqdvuuOh2ZQ4Gv6gaUMYxHFZ8");	
+	} else if(operation == "STOP") {
+		client.destroy();
+		console.log('');
+		console.log("test"+" Discord BOT has terminated!");
+		console.log('');		
+		ee.emit('botConsole');
+	}
+}
+/* END */
+// END SUB: Discord Controller
+
 // START SUB: Console
 /* START */
 function botConsole() {
 	prompt(timeStampLog()+botConsolePrompt(), function(botCommand) {
-		var arguments = botCommand.split(/(\s+)/);
-		if(arguments[0].toUpperCase() == "EXIT") {
+		var arguments = botCommand.toUpperCase().split(/(\s+)/);
+		if(arguments[0] == "EXIT") {
 				console.log(timeStampLog()+'Exiting back to console...');
 				process.exit();
-		} else if(arguments[0].toUpperCase() == "WEB") {
+		} else if(arguments[0] == "WEB") {
 			webServer(arguments[2]);
-		} else if(arguments[0].toUpperCase() == "CONFIG") {
+		} else if(arguments[0] == "DISCORDBOT") {
+			botDiscord(arguments[2]);
+		} else if(arguments[0] == "CONFIG") {
 			config(arguments[2]);
-		} else if(arguments[0].toUpperCase() == "PING") {
+		} else if(arguments[0] == "PING") {
 			console.log(timeStampLog()+'Pinging host, please wait...');
 			let host = arguments[2];
 			ping(host);
-		} else if(arguments[0].toUpperCase() == "GIT") {
+		} else if(arguments[0] == "GIT") {
 			console.log(timeStampLog()+'Working with repository, please wait...');
 			let argument = arguments[2];
 			git(argument);
-		} else if (arguments[0].toUpperCase() == "DOCS") {
+		} else if (arguments[0] == "DOCS") {
 			generateDocumentation();
-		} else if (arguments[0].toUpperCase() == "DO") {
+		} else if (arguments[0] == "DO") {
 			doSomething();
 		} else if (arguments == "" || !arguments) {
 			console.log(timeStampLog()+'Need to enter a command...'.yellow);
@@ -305,7 +344,7 @@ function botConsole() {
 /* START */
 function webServer(action) {
 	const web = express();
-	if (action.toUpperCase() == "START") {
+	if (action == "START") {
 		const server = web.listen(conf.bot_web_port);
 		web.get('/', (req,res) => {
 			res.send('Web server started successfully...');
@@ -318,7 +357,7 @@ function webServer(action) {
 		});
 		console.log(timeStampLog()+'Web server started successfully!'.green);
 		ee.emit('botConsole');
-	} else if(action.toUpperCase() == "STOP") {
+	} else if(action == "STOP") {
 		var webBackendClose = 
 			'http:\/\/localhost:'+conf.bot_web_port+'/api/'+conf.bot_api_key+'/close';
 		var webBackendStatus = 
@@ -330,7 +369,7 @@ function webServer(action) {
 			console.log(timeStampLog()+'Web server stopped successfully!'.red);
 			ee.emit('botConsole');
 		})
-	} else if(action.toUpperCase() == "STATUS") {
+	} else if(action == "STATUS") {
                 var webBackendStatus = 
 			'http:\/\/localhost:'+conf.bot_web_port+'/api/'+conf.bot_api_key+'/status';
                 request({
@@ -394,15 +433,6 @@ function generateDocumentation() {
 /* START */
 if (fs.existsSync(__dirname+'/config/config.json')) {
 	ee.emit('botConsole');
-	client.on('ready', () => {
-		console.log("\n\n\n");
-		console.log(conf.bot_nickname+" is ready for you!");
-		console.log("---------------------------");
-		console.log("Bot is Ready!");
-		console.log("---------------------------");
-		//A();
-	});
-	client.login(conf.discord_token_bot);
 }
 /* END */
 // END SUB: Initial Prompt and Console
