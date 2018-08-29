@@ -1,8 +1,8 @@
-# Welcome to the Nodefried Documentation
+<h1>Welcome to the Nodefried Documentation</h1>
 ## INIT
 
 ### Constants
-```js
+<pre>
 const sys = require('util');
 const exec = require('child_process').exec;
 const cluster = require('cluster');
@@ -20,11 +20,11 @@ const http = require('http');
 const conf = require('./lib/config.js');
 const blessed = require('blessed');
 const { Client } = require('discord.js');
-```
+</pre>
 
 
 ### Events and Signals
-```js
+<pre>
 var eventEmitter = require('events').EventEmitter;
 var ee = new eventEmitter;
 ee.on('botConsole', botConsole);
@@ -33,7 +33,7 @@ process.on("SIGINT", function() {
 	console.log('' ); 
 	console.log('Received SIGINT, killing current command...'); 
 });
-```
+</pre>
 
 
 
@@ -41,27 +41,27 @@ process.on("SIGINT", function() {
 ## FUNCTIONS
 
 ### Timestamp Log
-```js
+<pre>
 function timeStampLog() {
 	var dateTime = require('node-datetime');
 	var dt = dateTime.create();
 	return dt.format('Y-m-d H:M:S').bold.green+'| ';
 }
-```
+</pre>
 
 
 ### Timestamp Normal
-```js
+<pre>
 function timeStamp() {
 	var dateTime = require('node-datetime');
 	var dt = dateTime.create();
 	return dt.format('Y-m-d H:M:S');
 }
-```
+</pre>
 
 
 ### Ping
-```js
+<pre>
 function ping(host) {
 	var sys = require('util');
 	var exec = require('child_process').exec;
@@ -75,11 +75,11 @@ function ping(host) {
 		exec("ping -c 5 "+host, puts);
 	}
 }
-```
+</pre>
 
 
 ### Git Operations
-```js
+<pre>
 function git(argument) {
 	var sys = require('util');
 	var exec = require('child_process').exec;
@@ -104,11 +104,11 @@ function git(argument) {
 				ee.emit('botConsole');
 	}	
 }
-```
+</pre>
 
 
 ### Config Operations
-```js
+<pre>
 function config(argument) {
 	var sys = require('util');
 	var exec = require('child_process').exec;
@@ -151,11 +151,11 @@ function config(argument) {
 				ee.emit('botConsole');
 	}
 }
-```
+</pre>
 
 
 ### Blessed Example
-```js
+<pre>
 function doSomething() {
 	var screen = blessed.screen({
 		tput: true,
@@ -234,11 +234,11 @@ function doSomething() {
 	});
 	screen.render();
 }
-```
+</pre>
 
 
 ### Prompt
-```js
+<pre>
 function prompt(question, callback) {
 	var stdin = process.stdin,
 	stdout = process.stdout;
@@ -248,19 +248,19 @@ function prompt(question, callback) {
 		callback(data.toString().trim());
 	});
 }
-```
+</pre>
 
 
 ### Console Prompt
-```js
+<pre>
 function botConsolePrompt() {
 	return conf.bot_nickname.toLowerCase().yellow+'@localhost'.yellow+' ##_\ '.trap.bold.cyan;
 }
-```
+</pre>
 
 
 ### Discord Bot Controller
-```js
+<pre>
 function botDiscord(type,operation) {
 	if(operation == "START") {
 		if(type == "SELF") { 
@@ -280,11 +280,11 @@ function botDiscord(type,operation) {
 		ee.emit('botConsole');
 	}
 }
-```
+</pre>
 
 
 ### Console
-```js
+<pre>
 function botConsole() {
 	if (fs.existsSync(__dirname+'/config/config.json')) {
 	prompt(timeStampLog()+botConsolePrompt(), function(botCommand) {
@@ -330,11 +330,11 @@ function botConsole() {
 	});
 	}
 }
-```
+</pre>
 
 
 ### Web Server
-```js
+<pre>
 function webServer(action) {
 	const web = express();
 	if (action == "START") {
@@ -378,11 +378,11 @@ function webServer(action) {
                 })
         }
 }
-```
+</pre>
 
 
 ### Documentation Generator
-```js
+<pre>
 function generateDocumentation() {
 	console.log(timeStampLog()+'Documentation generation beginning... please wait...'.yellow);
 	fs.readFile('init.js', 'utf8', function (err,data) {
@@ -416,7 +416,7 @@ function generateDocumentation() {
 		}
 		var result = data
 			.replace(/#!\/usr\/bin\/env node/g,
-				'# Welcome to the '+conf.bot_nickname+' Documentation')
+				'<h1>Welcome to the '+conf.bot_nickname+' Documentation</h1>')
 			.replace(/\/\/ START SECTION: /g,
 				'## ')
 			.replace(/\/\/ END SECTION: (.+)/g,
@@ -428,9 +428,9 @@ function generateDocumentation() {
 			.replace(/\/\/ COMMENT: /g,
 				'')
 			.replace(/\/\* START \*\//g,
-				'```js')
+				'<pre>')
 			.replace(/\/\* END \*\//g,
-				'```');
+				'</pre>');
 		fs.writeFile('DOCS.html', result, 'utf8', function (err) {
 			if (err) return console.log(timeStampLog()+err);
 		});
@@ -438,7 +438,7 @@ function generateDocumentation() {
 	console.log(timeStampLog()+'Documentation generation done!'.bold.green);
 	ee.emit('botConsole');
 }
-```
+</pre>
 
 
 
@@ -447,9 +447,9 @@ function generateDocumentation() {
 
 ### Initial Prompt and Console
 Calls the console, which everything else calls back too... kinda.
-```js
+<pre>
 ee.emit('botConsole');
-```
+</pre>
 
 
 

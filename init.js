@@ -416,7 +416,7 @@ function generateDocumentation() {
 		}
 		var result = data
 			.replace(/#!\/usr\/bin\/env node/g,
-				'# Welcome to the '+conf.bot_nickname+' Documentation')
+				'<h1>Welcome to the '+conf.bot_nickname+' Documentation</h1>')
 			.replace(/\/\/ START SECTION: /g,
 				'## ')
 			.replace(/\/\/ END SECTION: (.+)/g,
@@ -428,9 +428,9 @@ function generateDocumentation() {
 			.replace(/\/\/ COMMENT: /g,
 				'')
 			.replace(/\/\* START \*\//g,
-				'```js')
+				'<pre>')
 			.replace(/\/\* END \*\//g,
-				'```');
+				'</pre>');
 		fs.writeFile('DOCS.html', result, 'utf8', function (err) {
 			if (err) return console.log(timeStampLog()+err);
 		});
