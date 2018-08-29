@@ -267,13 +267,6 @@ function botDiscordBot(operation) {
 		discordBot.on('ready', () => {
 			console.log(timeStampLog()+conf.bot_nickname+" Discord BOT is ready for you!");
 			ee.emit('botConsole');
-			//ee.on('discordBotStop', discordBotStop);
-			//function discordBotStop() {
-			//		client.destroy();
-			//		console.log('Discord BOT has disconnected!');
-			//		//callback(true);
-			//		ee.emit('botConsole');
-			//}	
 		});
 		discordBot.login(conf.discord_token_bot);	
 	} else if(operation == "STOP") {
@@ -293,13 +286,6 @@ function botDiscordHuman(operation) {
 		discordHuman.on('ready', () => {
 			console.log(timeStampLog()+conf.bot_nickname+" Discord BOT is ready for you!");
 			ee.emit('botConsole');
-			//ee.on('discordBotStop', discordBotStop);
-			//function discordBotStop() {
-			//		client.destroy();
-			//		console.log('Discord BOT has disconnected!');
-			//		//callback(true);
-			//		ee.emit('botConsole');
-			//}	
 		});
 		discordHuman.login(conf.discord_token_human);	
 	} else if(operation == "STOP") {
@@ -440,6 +426,31 @@ function generateDocumentation() {
 			if (err) return console.log(timeStampLog()+err);
 		});
 	});
+	fs.readFile('init.js', 'utf8', function (err,data) {
+		if (err) {
+			return console.log(timeStampLog()+err);
+		}
+		var result = data
+			.replace(/#!\/usr\/bin\/env node/g,
+				'# Welcome to the '+conf.bot_nickname+' Documentation')
+			.replace(/\/\/ START SECTION: /g,
+				'## ')
+			.replace(/\/\/ END SECTION: (.+)/g,
+				'')
+			.replace(/\/\/ START SUB: /g,
+				'### ')
+			.replace(/\/\/ END SUB: (.+)/g,
+				'')
+			.replace(/\/\/ COMMENT: /g,
+				'')
+			.replace(/\/\* START \*\//g,
+				'```js')
+			.replace(/\/\* END \*\//g,
+				'```');
+		fs.writeFile('DOCS.html', result, 'utf8', function (err) {
+			if (err) return console.log(timeStampLog()+err);
+		});
+	});	
 	console.log(timeStampLog()+'Documentation generation done!'.bold.green);
 	ee.emit('botConsole');
 }
