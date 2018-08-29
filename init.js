@@ -4,6 +4,7 @@
 // START SUB: Constants
 /* START */
 const sys = require('util');
+//const keyboard = require('node-key-sender');
 const exec = require('child_process').exec;
 const cluster = require('cluster');
 const os = require('os');
@@ -25,9 +26,10 @@ const { Client } = require('discord.js');
 
 // START SUB: Events and Signals
 /* START */
-var eventEmitter = require('events').EventEmitter;
-var ee = new eventEmitter;
-ee.on('botConsole', botConsole);
+//var eventEmitter = require('events').EventEmitter;
+//var ee = new eventEmitter;
+//ee.on('botConsole', botConsole);
+//ee.on('botConsolePrompt', botConsolePrompt);
 //Doesn't Work on Win32 (No Signals)
 process.on("SIGINT", function() { 
 	console.log('' ); 
@@ -67,7 +69,7 @@ function ping(host) {
 	var exec = require('child_process').exec;
 	function puts(error, stdout, stderr) { 
 		console.log(stdout);
-		ee.emit('botConsole');
+		botConsole();		
 	}
 	if (systemOS === "win32") {
 		exec("ping -n 5 "+host, puts);
@@ -85,7 +87,7 @@ function git(argument) {
 	var exec = require('child_process').exec;
 	function puts(error, stdout, stderr) { 
 		console.log(stdout);
-		ee.emit('botConsole');
+		botConsole();		
 	} 
 	if(argument == 'HISTORY') {
 		if (systemOS === "win32") {
@@ -101,7 +103,7 @@ function git(argument) {
 		}
 	} else {
 				console.log(timeStampLog()+'Usage: git history/pull'.bold.green);
-				ee.emit('botConsole');
+				botConsole();		
 	}	
 }
 /* END */
@@ -116,7 +118,7 @@ function config(argument) {
 	var configBackup = process.cwd()+'/config/config.json.backup';
 	function puts(error, stdout, stderr) { 
 		console.log(stdout);
-		ee.emit('botConsole');
+		botConsole();		
 	}
 	if(argument == 'SHOW') {
 		fs.readFile('./config/config.json', 'utf8', function (err,data) {
@@ -124,7 +126,7 @@ function config(argument) {
 				console.log(timeStampLog()+err);
 			}
 			console.log(data);
-			ee.emit('botConsole');
+			botConsole();		
 		});
 	} else if(argument == 'BACKUP') {
 		fs.readFile(config, 'utf8', function (err,data) {
@@ -135,7 +137,7 @@ function config(argument) {
 				if (err) return console.log(timeStampLog()+err);
 				console.log(timeStampLog()+
 					'Backup saved to config/config.json.backup!'.bold.green);
-				ee.emit('botConsole');
+				botConsole();		
 			});
 		});
 	} else if(argument == 'WIPE') {
@@ -148,7 +150,7 @@ function config(argument) {
 		process.exit();
 	} else {
 				console.log(timeStampLog()+'Usage: config show/backup/wipe'.bold.green);
-				ee.emit('botConsole');
+				botConsole();		
 	}
 }
 /* END */
@@ -222,7 +224,7 @@ function doSomething() {
 					setTimeout(function() {
 						loader.stop();
 						screen.destroy();
-						ee.emit('botConsole');
+						botConsole();		
 					}, 3000);
 				});
 			});
@@ -230,7 +232,7 @@ function doSomething() {
 	});
 	screen.key('q', function() {
 		screen.destroy();
-		ee.emit('botConsole');	
+		botConsole();		
 	});
 	screen.render();
 }
@@ -270,14 +272,20 @@ function botDiscord(type,operation) {
 		}
 		client = new Client();
 		client.on('ready', () => {
-			console.log(timeStampLog()+conf.bot_nickname+" Discord "+type+" is ready for you!");
-			ee.emit('botConsole');
+			//console.log(timeStampLog()+"Discord "+type+" is ready for you!");
+			//ee.emit('botConsole');
 		});
-		client.login(token);	
+		client.on('message', msg => {
+			fs.appendFile('logs/discord.log', msg.content+'\n', 'utf8', function(err) {
+			});
+		});
+		client.login(token);
+		console.log(timeStampLog()+"Discord "+type+" is ready for you!");
+		botConsole();		
 	} else if(operation == "STOP") {
 		client.destroy();
-		console.log(timeStampLog()+conf.bot_nickname+" Discord "+type+" has terminated!");
-		ee.emit('botConsole');
+		console.log(timeStampLog()+"Discord "+type+" has terminated!");
+		botConsole();		
 	}
 }
 /* END */
@@ -312,19 +320,19 @@ function botConsole() {
 			doSomething();
 		} else if (arguments == "" || !arguments) {
 			console.log(timeStampLog()+'Need to enter a command...'.yellow);
-			ee.emit('botConsole');
+			botConsole();		
 		} else {
 			var sys = require('util');
 			var exec = require('child_process').exec;
 			function puts(error, stdout, stderr) { 
 				console.log(stdout);
-				ee.emit('botConsole');
+				botConsole();		
 			}
 			if(conf.bot_shell_whitelist.indexOf(arguments[0].toLowerCase())!=-1) {
 				exec(botCommand, puts);
 			} else {		
 				console.log(timeStampLog()+'This command is blacklisted!');	
-				ee.emit('botConsole');
+				botConsole();		
 			}
 		}
 	});
@@ -349,7 +357,7 @@ function webServer(action) {
 			res.send('Web server IS online...');
 		});
 		console.log(timeStampLog()+'Web server started successfully!'.green);
-		ee.emit('botConsole');
+		botConsole();		
 	} else if(action == "STOP") {
 		var webBackendClose = 
 			'http:\/\/localhost:'+conf.bot_port_web+'/api/'+conf.bot_api_key+'/close';
@@ -360,7 +368,7 @@ function webServer(action) {
 			timeout: 5000
 		}, function (error,response,body) {
 			console.log(timeStampLog()+'Web server stopped successfully!'.red);
-			ee.emit('botConsole');
+			botConsole();		
 		})
 	} else if(action == "STATUS") {
                 var webBackendStatus = 
@@ -374,7 +382,7 @@ function webServer(action) {
 			} else {
 				console.log(timeStampLog()+'Web Server IS online...'.bold.green);
 			}
-			ee.emit('botConsole');
+			botConsole();		
                 })
         }
 }
@@ -447,7 +455,7 @@ function generateDocumentation(type) {
 			console.log(timeStampLog()+'Must do'+' '+'docs markup'.inverse+' '+'first, then'+' '+'docs html'.inverse+'!');
 		}
 	}
-	ee.emit('botConsole');
+	botConsole();		
 }
 /* END */
 // END SUB: Main Generator
@@ -459,7 +467,7 @@ function generateDocumentation(type) {
 // START SUB: Initial Prompt and Console
 // COMMENT: Calls the console, which everything else calls back too... kinda.
 /* START */
-ee.emit('botConsole');
+botConsole();		
 /* END */
 // END SUB: Initial Prompt and Console
 
