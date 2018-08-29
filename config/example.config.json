@@ -13,5 +13,6 @@
 "discord_token_self" : "",
 "discord_invite_link" : "",
 "web_title" : "",
-"web_favicon" : ""
+"web_favicon" : "",
+"dropbox_token" : ""
 }

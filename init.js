@@ -20,7 +20,7 @@ const request = require('request');
 const http = require('http');
 const conf = require('./lib/config.js');
 const blessed = require('blessed');
-const mega = require('mega');
+var node_dropbox = require('node-dropbox-v2');
 const { Client } = require('discord.js');
 /* END */
 // END SUB: Constants
@@ -307,6 +307,8 @@ function botConsole() {
 			webServer(arguments[2]);
 		} else if(arguments[0] == "DISCORD") {
 			botDiscord(arguments[2],arguments[4]);
+		} else if(arguments[0] == "DROPBOX") {
+			dropboxAPI(arguments[2]);
 		} else if(arguments[0] == "CONFIG") {
 			config(arguments[2]);
 		} else if(arguments[0] == "PING") {
@@ -403,6 +405,26 @@ function webServer(action) {
 }
 /* END */
 // END SUB: Web Server
+
+// START SUB: Dropbox API
+/* START */
+function dropboxAPI(operation) {
+	if(operation == "ACCOUNT") {
+		console.log(timeStampLog()+'Querying DropBox account information, please wait...');
+		api = node_dropbox.api(conf.dropbox_token);
+		api.account(function(err, res, body) {
+			if(!err) {
+				console.log(body);
+				botConsole();
+			} else {
+				console.log(timeStampLog()+err);
+				botConsole();
+			}
+		});
+	}
+}
+/* END */
+// END SUB: Dropbox API
 
 // START SUB: Documentation Generator
 /* START */

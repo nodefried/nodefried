@@ -14,6 +14,7 @@ An all purpose Node.js bot with built with console + prompt + misc other things.
 - [x] Auto-updating
 - [ ] Invite-able (promiscuous)
 - [x] Auto-generates Documentation (Kinda)
+- [x] Dropbox API v2 Storage/Manipulation
 ## Operation
 ### Compatibility
 Windows, osX, Linux
