@@ -1,3 +1,5 @@
+!WARNING NOT SECURE!
+
 ## Description
 An all purpose Node.js bot with built with console + prompt + misc other things.
 
