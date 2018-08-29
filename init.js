@@ -347,9 +347,20 @@ function webServer(action) {
 	const web = express();
 	if (action == "START") {
 		const server = web.listen(conf.bot_port_web);
-		web.get('/', (req,res) => {
-			res.send('Web server started successfully...');
-		});
+		web.use(express.static(path.join(__dirname, 'assets/web/public')));
+		web.set('views', path.join(__dirname, 'assets/web/views'));
+		web.set('view engine', 'ejs');
+		web.get('/', (req, res) => res.render('assets/web/pages/index', { 
+			'web_title': web_title,
+			'web_favicon': web_favicon,
+			'bot_nickname': bot_nickname,
+			'bot_logo_long': bot_logo_long,
+			'bot_logo_square': bot_logo_square,
+			'bot_info_website': bot_info_website,
+			'bot_info_copyright': bot_info_copyright,
+			'discord_invite_link': discord_invite_link,
+			'theme': 'default'
+		}));
 		web.get('/api/'+conf.bot_api_key+'/close', (req,res) => {
 			server.close();
 		});
