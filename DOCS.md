@@ -1,4 +1,4 @@
-# Welcome to the my Documentation
+# Welcome to my Documentation
 ## INIT
 
 ### Constants
@@ -307,7 +307,7 @@ function botConsole() {
 			let argument = arguments[2];
 			git(argument);
 		} else if (arguments[0] == "DOCS") {
-			generateDocumentation();
+			generateDocumentation(arguments[2]);
 		} else if (arguments[0] == "DO") {
 			doSomething();
 		} else if (arguments == "" || !arguments) {
@@ -383,59 +383,70 @@ function webServer(action) {
 
 ### Documentation Generator
 ```js
-function generateDocumentation() {
-	console.log(timeStampLog()+'Documentation generation beginning... please wait...'.yellow);
-	fs.readFile('init.js', 'utf8', function (err,data) {
-		if (err) {
-			return console.log(timeStampLog()+err);
-		}
-		var result = data
-			.replace(/#!\/usr\/bin\/env node/g,
-				'# Welcome to the my Documentation')
-			.replace(/\/\/ START SECTION: /g,
-				'## ')
-			.replace(/\/\/ END SECTION: (.+)/g,
-				'')
-			.replace(/\/\/ START SUB: /g,
-				'### ')
-			.replace(/\/\/ END SUB: (.+)/g,
-				'')
-			.replace(/\/\/ COMMENT: /g,
-				'')
-			.replace(/\/\* START \*\//g,
-				'```js')
-			.replace(/\/\* END \*\//g,
-				'```');
-		fs.writeFile('DOCS.md', result, 'utf8', function (err) {
-			if (err) return console.log(timeStampLog()+err);
+function generateDocumentation(type) {
+	if(type == "MARKUP") {
+	console.log(timeStampLog()+'Documentation generation beginning, please wait...'.yellow);
+		fs.readFile('init.js', 'utf8', function (err,data) {
+			if (err) {
+				return console.log(timeStampLog()+err);
+			}
+			var result = data
+				.replace(/#!\/usr\/bin\/env node/g,
+					'# Welcome to my Documentation')
+				.replace(/\/\/ START SECTION: /g,
+					'## ')
+				.replace(/\/\/ END SECTION: (.+)/g,
+					'')
+				.replace(/\/\/ START SUB: /g,
+					'### ')
+				.replace(/\/\/ END SUB: (.+)/g,
+					'')
+				.replace(/\/\/ COMMENT: /g,
+					'')
+				.replace(/\/\* START \*\//g,
+					'```js')
+				.replace(/\/\* END \*\//g,
+					'```');
+			fs.writeFile('DOCS.md', result, 'utf8', function (err) {
+				if (err) { 
+					return console.log(timeStampLog()+err); 
+				}
+			});
 		});
-	});
-	fs.readFile('DOCS.md', 'utf8', function (err,data) {
-		if (err) {
-			return console.log(timeStampLog()+err);
+		console.log(timeStampLog()+'Documentation (markup) generation done!'.bold.green);
+	} else if(type == "HTML") {
+	console.log(timeStampLog()+'Documentation generation beginning, please wait...'.yellow);
+		if (fs.existsSync(__dirname+'/DOCS.md')) {
+			fs.readFile('DOCS.md', 'utf8', function (err,data) {
+				if (err) {
+					return console.log(timeStampLog()+err);
+				}
+				var result = data
+					.replace(/# Welcome to my Documentation/g,
+						'<h1>Welcome to my Documentation</h1>')
+					.replace(/## /g,
+						'<hr><br /> ')
+					.replace(/\/\/ END SECTION: (.+)/g,
+						'')
+					.replace(/\/\/ START SUB: /g,
+						'')
+					.replace(/\/\/ END SUB: (.+)/g,
+						'')
+					.replace(/\/\/ COMMENT: /g,
+						'')
+					.replace(/```js/g,
+						'<pre>')
+					.replace(/```/g,
+						'</pre>');
+				fs.writeFile('DOCS.html', result, 'utf8', function (err) {
+					if (err) return console.log(timeStampLog()+err);
+				});
+			});	
+			console.log(timeStampLog()+'Documentation (html) generation done!'.bold.green);			
+		} else {
+			console.log(timeStampLog()+'Must do'+' '+'docs markup'.inverse+' '+'first, then'+' '+'docs html'.inverse+'!');
 		}
-		var result = data
-			.replace(/# Welcome to the my Documentation/g,
-				'<h1>Welcome to the my Documentation</h1>')
-			.replace(/## /g,
-				'<hr><br /> ')
-			.replace(/\/\/ END SECTION: (.+)/g,
-				'')
-			.replace(/\/\/ START SUB: /g,
-				'')
-			.replace(/\/\/ END SUB: (.+)/g,
-				'')
-			.replace(/\/\/ COMMENT: /g,
-				'')
-			.replace(/```js/g,
-				'<pre>')
-			.replace(/```/g,
-				'</pre>');
-		fs.writeFile('DOCS.html', result, 'utf8', function (err) {
-			if (err) return console.log(timeStampLog()+err);
-		});
-	});	
-	console.log(timeStampLog()+'Documentation generation done!'.bold.green);
+	}
 	ee.emit('botConsole');
 }
 ```
