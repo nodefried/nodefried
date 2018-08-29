@@ -4,5 +4,5 @@
     "bot_api_key" : "0101",
     "bot_shell_whitelist" : "ls, dir, cat, nslookup, dig, tracert, cp, copy, mv, dir, del",
     "discord_token_bot" : "",
-    "discord_token_human" : ""
+    "discord_token_self" : ""
 }

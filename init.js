@@ -261,14 +261,18 @@ function botConsolePrompt() {
 
 // START SUB: Discord Bot Controller
 /* START */
-function botDiscordBot(operation) {
+function botDiscord(type,operation) {
 	if(operation == "START") {
 		discordBot = new Client();
 		discordBot.on('ready', () => {
 			console.log(timeStampLog()+conf.bot_nickname+" Discord BOT is ready for you!");
 			ee.emit('botConsole');
 		});
-		discordBot.login(conf.discord_token_bot);	
+		if(type == "BOT") {
+			discordBot.login(conf.discord_token_bot);	
+		} else if(type == "SELF") {
+			discordBot.login(conf.discord_token_self);	
+		}
 	} else if(operation == "STOP") {
 		discordBot.destroy();
 		console.log(timeStampLog()+conf.bot_nickname+" Discord BOT has terminated!");
@@ -277,25 +281,6 @@ function botDiscordBot(operation) {
 }
 /* END */
 // END SUB: Discord Bot Controller
-
-// START SUB: Discord Human Controller
-/* START */
-function botDiscordHuman(operation) {
-	if(operation == "START") {
-		discordHuman = new Client();
-		discordHuman.on('ready', () => {
-			console.log(timeStampLog()+conf.bot_nickname+" Discord BOT is ready for you!");
-			ee.emit('botConsole');
-		});
-		discordHuman.login(conf.discord_token_human);	
-	} else if(operation == "STOP") {
-		discordHuman.destroy();
-		console.log(timeStampLog()+conf.bot_nickname+" Discord BOT has terminated!");
-		ee.emit('botConsole');
-	}
-}
-/* END */
-// END SUB: Discord Human Controller
 
 // START SUB: Console
 /* START */
@@ -308,11 +293,9 @@ function botConsole() {
 				process.exit();
 		} else if(arguments[0] == "WEB") {
 			webServer(arguments[2]);
-		} else if(arguments[0] == "DISCORDBOT") {
-			botDiscordBot(arguments[2]);
-		} else if(arguments[0] == "DISCORDHUMAN") {
-                        botDiscordHuman(arguments[2]);
-                } else if(arguments[0] == "CONFIG") {
+		} else if(arguments[0] == "DISCORD") {
+			botDiscord(arguments[2],arguments[3]);
+		} else if(arguments[0] == "CONFIG") {
 			config(arguments[2]);
 		} else if(arguments[0] == "PING") {
 			console.log(timeStampLog()+'Pinging host, please wait...');
