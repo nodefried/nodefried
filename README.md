@@ -27,5 +27,5 @@ Python 2.7, Node.js 8+, NPM
 3) `node init.js` or just `nodefried` (all OS's)
 
 ## Documentation
-The documentation is [auto-generated](../master/DOCS.md).
+The documentation is [auto-generated](../master/docs/DOCS.md).
 

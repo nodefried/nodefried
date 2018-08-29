@@ -426,7 +426,7 @@ function generateDocumentation(type) {
 					'```js')
 				.replace(/\/\* END \*\//g,
 					'```');
-			fs.writeFile(__dirname+'/DOCS.md', result, 'utf8', function (err) {
+			fs.writeFile(__dirname+'/docs/DOCS.md', result, 'utf8', function (err) {
 				if (err) { 
 					return console.log(timeStampLog()+err); 
 				}
@@ -435,8 +435,8 @@ function generateDocumentation(type) {
 		console.log(timeStampLog()+'Documentation (markup) generation done!'.bold.green);
 	} else if(type == "HTML") {
 	console.log(timeStampLog()+'Documentation generation beginning, please wait...'.yellow);
-		if (fs.existsSync(__dirname+'/DOCS.md')) {
-			fs.readFile(__dirname+'/DOCS.md', 'utf8', function (err,data) {
+		if (fs.existsSync(__dirname+'/docs/DOCS.md')) {
+			fs.readFile(__dirname+'/docs/DOCS.md', 'utf8', function (err,data) {
 				if (err) {
 					return console.log(timeStampLog()+err);
 				}
@@ -457,7 +457,7 @@ function generateDocumentation(type) {
 						'<pre>')
 					.replace(/```/g,
 						'</pre>');
-				fs.writeFile(__dirname+'/DOCS.html', result, 'utf8', function (err) {
+				fs.writeFile(__dirname+'/docs/DOCS.html', result, 'utf8', function (err) {
 					if (err) return console.log(timeStampLog()+err);
 				});
 			});	
