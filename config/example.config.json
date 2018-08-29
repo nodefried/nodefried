@@ -8,6 +8,7 @@
 "bot_info_website" : "",
 "bot_info_copyright" : "",
 "bot_shell_whitelist" : "ls, dir, cat, nslookup, dig, tracert, cp, copy, mv, dir, del, clear",
+"bot_motd_disable": "",
 "discord_token_bot" : "",
 "discord_token_self" : "",
 "discord_invite_link" : "",

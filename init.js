@@ -281,12 +281,12 @@ function botDiscord(type,operation) {
 		});
 		client.login(token);
 		var msg = "Discord "+type.toLowerCase()+" started successfully!";
-		console.log(timeStampLog()+msg.underline.green);
+		console.log(timeStampLog()+msg.green);
 		botConsole();	
 	} else if(operation == "STOP") {
 		var msg = "Discord "+type.toLowerCase()+" stopped successfully!";
 		client.destroy();
-		console.log(timeStampLog()+msg.underline.red);
+		console.log(timeStampLog()+msg.red);
 		botConsole();		
 	}
 }
@@ -370,7 +370,7 @@ function webServer(action) {
 		web.get('/api/'+conf.bot_api_key+'/status', (req,res) => {
 			res.send('Web server IS online...');
 		});
-		console.log(timeStampLog()+'Web server started successfully!'.underline.green);
+		console.log(timeStampLog()+'Web server started successfully!'.green);
 		botConsole();		
 	} else if(action == "STOP") {
 		var webBackendClose = 
@@ -381,7 +381,7 @@ function webServer(action) {
 			url: webBackendClose
 			//timeout: 500
 		}, function (error,response,body) {
-			console.log(timeStampLog()+'Web server stopped successfully!'.underline.red);
+			console.log(timeStampLog()+'Web server stopped successfully!'.red);
 			botConsole();		
 		})
 	} else if(action == "STATUS") {
@@ -392,9 +392,9 @@ function webServer(action) {
                         timeout: 1000
                 }, function (error,response,body) {
 			if (error) { 
-				console.log(timeStampLog()+'Web Server IS NOT online...'.bold.red);
+				console.log(timeStampLog()+'Web Server IS NOT online...'.red);
 			} else {
-				console.log(timeStampLog()+'Web Server IS online...'.bold.green);
+				console.log(timeStampLog()+'Web Server IS online...'.green);
 			}
 			botConsole();		
                 })
