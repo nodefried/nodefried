@@ -28,7 +28,6 @@ const { Client } = require('discord.js');
 var eventEmitter = require('events').EventEmitter;
 var ee = new eventEmitter;
 ee.on('botConsole', botConsole);
-ee.on('botDiscord', botDiscord);
 //Doesn't Work on Win32 (No Signals)
 process.on("SIGINT", function() { 
 	console.log('' ); 
@@ -260,41 +259,62 @@ function botConsolePrompt() {
 /* END */
 // END SUB: Console Prompt
 
-// START SUB: Discord Controller
+// START SUB: Discord Bot Controller
 /* START */
-function botDiscord(operation) {
+function botDiscordBot(operation) {
 	if(operation == "START") {
-		client = new Client();
-		client.on('ready', () => {
-			console.log('');
-			console.log("test"+" Discord BOT is ready for you!");
-			console.log('');
+		discordBot = new Client();
+		discordBot.on('ready', () => {
+			console.log(timeStampLog()+conf.bot_nickname+" Discord BOT is ready for you!");
 			ee.emit('botConsole');
 			//ee.on('discordBotStop', discordBotStop);
 			//function discordBotStop() {
 			//		client.destroy();
-			//		console.log('');
 			//		console.log('Discord BOT has disconnected!');
-			//		console.log('');
 			//		//callback(true);
 			//		ee.emit('botConsole');
 			//}	
 		});
-		client.login("NDg0MTI0MTUzMzIzMDYxMjQ4.DmdbcA.4_sqdvuuOh2ZQ4Gv6gaUMYxHFZ8");	
+		discordBot.login(conf.discord_token_bot);	
 	} else if(operation == "STOP") {
-		client.destroy();
-		console.log('');
-		console.log("test"+" Discord BOT has terminated!");
-		console.log('');		
+		discordBot.destroy();
+		console.log(timeStampLog()+conf.bot_nickname+" Discord BOT has terminated!");
 		ee.emit('botConsole');
 	}
 }
 /* END */
-// END SUB: Discord Controller
+// END SUB: Discord Bot Controller
+
+// START SUB: Discord Human Controller
+/* START */
+function botDiscordHuman(operation) {
+	if(operation == "START") {
+		discordHuman = new Client();
+		discordHuman.on('ready', () => {
+			console.log(timeStampLog()+conf.bot_nickname+" Discord BOT is ready for you!");
+			ee.emit('botConsole');
+			//ee.on('discordBotStop', discordBotStop);
+			//function discordBotStop() {
+			//		client.destroy();
+			//		console.log('Discord BOT has disconnected!');
+			//		//callback(true);
+			//		ee.emit('botConsole');
+			//}	
+		});
+		discordHuman.login(conf.discord_token_human);	
+	} else if(operation == "STOP") {
+		discordHuman.destroy();
+		console.log(timeStampLog()+conf.bot_nickname+" Discord BOT has terminated!");
+		ee.emit('botConsole');
+	}
+}
+/* END */
+// END SUB: Discord Human Controller
 
 // START SUB: Console
 /* START */
 function botConsole() {
+	if (fs.existsSync(__dirname+'/config/config.json')) {
 	prompt(timeStampLog()+botConsolePrompt(), function(botCommand) {
 		var arguments = botCommand.toUpperCase().split(/(\s+)/);
 		if(arguments[0] == "EXIT") {
@@ -303,8 +323,10 @@ function botConsole() {
 		} else if(arguments[0] == "WEB") {
 			webServer(arguments[2]);
 		} else if(arguments[0] == "DISCORDBOT") {
-			botDiscord(arguments[2]);
-		} else if(arguments[0] == "CONFIG") {
+			botDiscordBot(arguments[2]);
+		} else if(arguments[0] == "DISCORDHUMAN") {
+                        botDiscordHuman(arguments[2]);
+                } else if(arguments[0] == "CONFIG") {
 			config(arguments[2]);
 		} else if(arguments[0] == "PING") {
 			console.log(timeStampLog()+'Pinging host, please wait...');
@@ -336,6 +358,7 @@ function botConsole() {
 			}
 		}
 	});
+	}
 }
 /* END */
 // END SUB: Console
@@ -428,12 +451,9 @@ function generateDocumentation() {
 // START SECTION: RUNTIME
 
 // START SUB: Initial Prompt and Console
-// COMMENT: This doesn't do much. It will create a basic config and launch the console.
-// COMMENT: Once in the console you can call any of the functions via built-in commands.
+// COMMENT: Calls the console, which everything else calls back too... kinda.
 /* START */
-if (fs.existsSync(__dirname+'/config/config.json')) {
-	ee.emit('botConsole');
-}
+ee.emit('botConsole');
 /* END */
 // END SUB: Initial Prompt and Console
 
