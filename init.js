@@ -141,7 +141,7 @@ function config(argument) {
 			});
 		});
 	} else if(argument == 'WIPE') {
-		fs.unlinkSync(__dirname'/config/config.json', 'utf8', function (err,data) {
+		fs.unlinkSync(__dirname+'/config/config.json', 'utf8', function (err,data) {
 			if (err) {
 				console.log(timeStampLog()+err);
 			}
