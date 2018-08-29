@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <% include ../partials/header.ejs %>
+</head>
+<body>
+<% include ../partials/nav.ejs %>
+<div class="jumbotron text-center">
+<div class="container">
+<div class="logo">
+<a href="<%= bot_info_website %>" class="lang-logo">
+<img src="<%= bot_logo_long %>">
+</a>
+</div>
+<h1>Statistics and Status Page</h1>
+<p>A Very Capable Bot</p>
+</div>
+</div>
+<div class="container" style="text-align:center;">
+<h3><span class="glyphicon glyphicon-info-sign"></span><%= bot_nickname %> is Operational</h3>
+<br /><br />
+<hr>
+<div class="row">
+<div class="col-lg-12">
+<a href="<%= discord_invite_link %>">
+<img style="max-width:300px;" src="https://cdn.arstechnica.net/wp-content/uploads/2017/08/Discord-LogoWordmark-Color-800x272.png">
+<br />
+Come Join our Discord and Check it out!</a>
+</div>
+</div> 
+<br /><br />
+<hr>
+<div class="well text-center" role="well">
+<a href="<%= bot_info_website %>"><%= bot_info_copyright %></a> | All Rights Reserved
+</div>
+</div>
+</body>
+</html>
