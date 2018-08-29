@@ -1,7 +1,7 @@
 {
-  "name": "Nodefried",
-  "version": "1.0.0",
-  "description": "An all purpose bot.",
+  "name": "nodefried",
+  "version": "0.0.1",
+  "description": "I think therefore I am. Prompt style controller for bots.",
   "entry point:": "init.js",
   "scripts": {
     "test": "echo \"All systems go!\""

@@ -1,6 +1,5 @@
 ## Description
 An all purpose Node.js bot with built with console + prompt + misc other things.
-
 ## Features
 - [x] Interactive Console
 - [x] Pretty Colors
@@ -15,17 +14,18 @@ An all purpose Node.js bot with built with console + prompt + misc other things.
 - [x] Auto-updating
 - [ ] Invite-able (promiscuous)
 - [x] Auto-generates Documentation (Kinda)
-
 ## Operation
 ### Compatibility
 Windows, osX, Linux
 ### Requirements
 Python 2.7, Node.js 8+, NPM
 ### Installation
+#### Source
 1) `git clone https://github.com/nodefried/nodefried.git`
 2) `cd nodefried; npm install -g`
 3) `node init.js` or just `nodefried` (all OS's)
-
+#### NPM
+1) `npm install nodefried -g`
 ## Documentation
 The documentation is [auto-generated](../master/docs/DOCS.md).
 
