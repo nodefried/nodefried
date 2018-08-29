@@ -254,7 +254,7 @@ function prompt(question, callback) {
 // START SUB: Console Prompt
 /* START */
 function botConsolePrompt() {
-	return conf.bot_nickname.toLowerCase().yellow+'@localhost'.yellow+' ##_\ '.trap.bold.cyan;
+	return conf.bot_nickname.toLowerCase().yellow+'@localhost'.yellow+' >>\ '.trap.bold.cyan;
 }
 /* END */
 // END SUB: Console Prompt
@@ -424,12 +424,12 @@ function generateDocumentation(type) {
 				var result = data
 					.replace(/# Welcome to my Documentation/g,
 						'<h1>Welcome to my Documentation</h1>')
-					.replace(/## /g,
+					.replace(/### /g,
+						'<br /> ')
+					.replace(/##/g,
 						'<hr><br /> ')
-					.replace(/\/\/ END SECTION: (.+)/g,
-						'')
-					.replace(/\/\/ START SUB: /g,
-						'')
+					.replace(/# /g,
+						'<hr><br /> ')
 					.replace(/\/\/ END SUB: (.+)/g,
 						'')
 					.replace(/\/\/ COMMENT: /g,
