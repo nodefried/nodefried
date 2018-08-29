@@ -280,11 +280,11 @@ function botDiscord(type,operation) {
 			});
 		});
 		client.login(token);
-		console.log(timeStampLog()+"Discord "+type+" is ready for you!");
-		botConsole();		
+		console.log(timeStampLog()+"Discord "+type.toLowerCase()+" started successfully!".underline.green);
+		botConsole();	
 	} else if(operation == "STOP") {
 		client.destroy();
-		console.log(timeStampLog()+"Discord "+type+" has terminated!");
+		console.log(timeStampLog()+"Discord "+type.toLowerCase()+" stopped successfully!".underline.red);
 		botConsole();		
 	}
 }
@@ -368,7 +368,7 @@ function webServer(action) {
 		web.get('/api/'+conf.bot_api_key+'/status', (req,res) => {
 			res.send('Web server IS online...');
 		});
-		console.log(timeStampLog()+'Web server started successfully!'.green);
+		console.log(timeStampLog()+'Web server started successfully!'.underline.green);
 		botConsole();		
 	} else if(action == "STOP") {
 		var webBackendClose = 
@@ -379,7 +379,7 @@ function webServer(action) {
 			url: webBackendClose
 			//timeout: 500
 		}, function (error,response,body) {
-			console.log(timeStampLog()+'Web server stopped successfully!'.red);
+			console.log(timeStampLog()+'Web server stopped successfully!'.underline.red);
 			botConsole();		
 		})
 	} else if(action == "STATUS") {
