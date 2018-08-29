@@ -410,26 +410,26 @@ function generateDocumentation() {
 			if (err) return console.log(timeStampLog()+err);
 		});
 	});
-	fs.readFile('init.js', 'utf8', function (err,data) {
+	fs.readFile('DOCS.md', 'utf8', function (err,data) {
 		if (err) {
 			return console.log(timeStampLog()+err);
 		}
 		var result = data
-			.replace(/#!\/usr\/bin\/env node/g,
+			.replace(/# /g,
 				'<h1>Welcome to the '+conf.bot_nickname+' Documentation</h1>')
-			.replace(/\/\/ START SECTION: /g,
-				'<div style="background-color:#ffffcc;"> ')
+			.replace(/## /g,
+				'<hr><br /> ')
 			.replace(/\/\/ END SECTION: (.+)/g,
-				'</div>')
+				'')
 			.replace(/\/\/ START SUB: /g,
-				'<h3> ')
+				'')
 			.replace(/\/\/ END SUB: (.+)/g,
 				'')
 			.replace(/\/\/ COMMENT: /g,
 				'')
-			.replace(/\/\* START \*\//g,
+			.replace(/```js/g,
 				'<pre>')
-			.replace(/\/\* END \*\//g,
+			.replace(/```/g,
 				'</pre>');
 		fs.writeFile('DOCS.html', result, 'utf8', function (err) {
 			if (err) return console.log(timeStampLog()+err);
