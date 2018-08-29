@@ -2,7 +2,16 @@
   "name": "nodefried",
   "version": "0.0.5",
   "description": "I think therefore I am. Prompt style controller for bots.",
-  "keywords": ["bot","discord","irc","prompt","express","controller","rpc","blessed"],
+  "keywords": [
+    "bot",
+    "discord",
+    "irc",
+    "prompt",
+    "express",
+    "controller",
+    "rpc",
+    "blessed"
+  ],
   "entry point:": "init.js",
   "scripts": {
     "test": "echo \"All systems go!\""
@@ -28,6 +37,7 @@
     "fs": "0.0.1-security",
     "g": "^2.0.1",
     "http": "0.0.0",
+    "mega": "^0.2.0",
     "node-datetime": "^2.0.9",
     "node-key-sender": "^1.0.10",
     "os": "^0.1.1",

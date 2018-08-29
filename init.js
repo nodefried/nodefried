@@ -20,6 +20,7 @@ const request = require('request');
 const http = require('http');
 const conf = require('./lib/config.js');
 const blessed = require('blessed');
+const mega = require('mega');
 const { Client } = require('discord.js');
 /* END */
 // END SUB: Constants
@@ -481,7 +482,9 @@ function generateDocumentation(type) {
 // START SUB: Initial Prompt and Console
 // COMMENT: Calls the console, which everything else calls back too... kinda.
 /* START */
-botConsole();		
+if (fs.existsSync(__dirname+'/config/config.json')) {
+	botConsole();		
+}
 /* END */
 // END SUB: Initial Prompt and Console
 
