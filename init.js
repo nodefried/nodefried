@@ -362,6 +362,7 @@ function webServer(action) {
 			'theme': 'default'
 		}));
 		web.get('/api/'+conf.bot_api_key+'/close', (req,res) => {
+			res.send('Stopping the web server...');
 			server.close();
 		});
 		web.get('/api/'+conf.bot_api_key+'/status', (req,res) => {
@@ -375,8 +376,8 @@ function webServer(action) {
 		var webBackendStatus = 
 			'http:\/\/localhost:'+conf.bot_port_web+'/api/'+conf.bot_api_key+'/status';
 		request({
-			url: webBackendClose,
-			timeout: 5000
+			url: webBackendClose
+			//timeout: 500
 		}, function (error,response,body) {
 			console.log(timeStampLog()+'Web server stopped successfully!'.red);
 			botConsole();		
