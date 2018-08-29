@@ -114,14 +114,14 @@ function git(argument) {
 function config(argument) {
 	var sys = require('util');
 	var exec = require('child_process').exec;
-	var config = process.cwd()+'/config/config.json';
-	var configBackup = process.cwd()+'/config/config.json.backup';
+	var config = __dirname+'/config/config.json';
+	var configBackup = __dirname+'/config/config.json.backup';
 	function puts(error, stdout, stderr) { 
 		console.log(stdout);
 		botConsole();		
 	}
 	if(argument == 'SHOW') {
-		fs.readFile('./config/config.json', 'utf8', function (err,data) {
+		fs.readFile(__dirname+'/config/config.json', 'utf8', function (err,data) {
 			if (err) {
 				console.log(timeStampLog()+err);
 			}
@@ -141,7 +141,7 @@ function config(argument) {
 			});
 		});
 	} else if(argument == 'WIPE') {
-		fs.unlinkSync('./config/config.json', 'utf8', function (err,data) {
+		fs.unlinkSync(__dirname'/config/config.json', 'utf8', function (err,data) {
 			if (err) {
 				console.log(timeStampLog()+err);
 			}
