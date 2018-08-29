@@ -20,6 +20,7 @@ const request = require('request');
 const http = require('http');
 const conf = require('./lib/config.js');
 const blessed = require('blessed');
+var node_dropbox = require('node-dropbox-v2');
 const { Client } = require('discord.js');
 ```
 
@@ -114,14 +115,14 @@ function git(argument) {
 function config(argument) {
 	var sys = require('util');
 	var exec = require('child_process').exec;
-	var config = process.cwd()+'/config/config.json';
-	var configBackup = process.cwd()+'/config/config.json.backup';
+	var config = __dirname+'/config/config.json';
+	var configBackup = __dirname+'/config/config.json.backup';
 	function puts(error, stdout, stderr) { 
 		console.log(stdout);
 		botConsole();		
 	}
 	if(argument == 'SHOW') {
-		fs.readFile('./config/config.json', 'utf8', function (err,data) {
+		fs.readFile(__dirname+'/config/config.json', 'utf8', function (err,data) {
 			if (err) {
 				console.log(timeStampLog()+err);
 			}
@@ -141,7 +142,7 @@ function config(argument) {
 			});
 		});
 	} else if(argument == 'WIPE') {
-		fs.unlinkSync('./config/config.json', 'utf8', function (err,data) {
+		fs.unlinkSync(__dirname+'/config/config.json', 'utf8', function (err,data) {
 			if (err) {
 				console.log(timeStampLog()+err);
 			}
@@ -280,11 +281,13 @@ function botDiscord(type,operation) {
 			});
 		});
 		client.login(token);
-		console.log(timeStampLog()+"Discord "+type+" is ready for you!");
-		botConsole();		
+		var msg = "Discord "+type.toLowerCase()+" started successfully!";
+		console.log(timeStampLog()+msg.green);
+		botConsole();	
 	} else if(operation == "STOP") {
+		var msg = "Discord "+type.toLowerCase()+" stopped successfully!";
 		client.destroy();
-		console.log(timeStampLog()+"Discord "+type+" has terminated!");
+		console.log(timeStampLog()+msg.red);
 		botConsole();		
 	}
 }
@@ -304,6 +307,8 @@ function botConsole() {
 			webServer(arguments[2]);
 		} else if(arguments[0] == "DISCORD") {
 			botDiscord(arguments[2],arguments[4]);
+		} else if(arguments[0] == "DROPBOX") {
+			dropboxAPI(arguments[2]);
 		} else if(arguments[0] == "CONFIG") {
 			config(arguments[2]);
 		} else if(arguments[0] == "PING") {
@@ -347,10 +352,22 @@ function webServer(action) {
 	const web = express();
 	if (action == "START") {
 		const server = web.listen(conf.bot_port_web);
-		web.get('/', (req,res) => {
-			res.send('Web server started successfully...');
-		});
+		web.use(express.static(path.join(__dirname, 'assets/web/public')));
+		web.set('views', path.join(__dirname, 'assets/web/views'));
+		web.set('view engine', 'ejs');
+		web.get('/', (req, res) => res.render('pages/index', { 
+			'web_title': conf.web_title,
+			'web_favicon': conf.web_favicon,
+			'bot_nickname': conf.bot_nickname,
+			'bot_logo_long': conf.bot_logo_long,
+			'bot_logo_square': conf.bot_logo_square,
+			'bot_info_website': conf.bot_info_website,
+			'bot_info_copyright': conf.bot_info_copyright,
+			'discord_invite_link': conf.discord_invite_link,
+			'theme': 'default'
+		}));
 		web.get('/api/'+conf.bot_api_key+'/close', (req,res) => {
+			res.send('Stopping the web server...');
 			server.close();
 		});
 		web.get('/api/'+conf.bot_api_key+'/status', (req,res) => {
@@ -364,8 +381,8 @@ function webServer(action) {
 		var webBackendStatus = 
 			'http:\/\/localhost:'+conf.bot_port_web+'/api/'+conf.bot_api_key+'/status';
 		request({
-			url: webBackendClose,
-			timeout: 5000
+			url: webBackendClose
+			//timeout: 500
 		}, function (error,response,body) {
 			console.log(timeStampLog()+'Web server stopped successfully!'.red);
 			botConsole();		
@@ -378,13 +395,33 @@ function webServer(action) {
                         timeout: 1000
                 }, function (error,response,body) {
 			if (error) { 
-				console.log(timeStampLog()+'Web Server IS NOT online...'.bold.red);
+				console.log(timeStampLog()+'Web Server IS NOT online...'.red);
 			} else {
-				console.log(timeStampLog()+'Web Server IS online...'.bold.green);
+				console.log(timeStampLog()+'Web Server IS online...'.green);
 			}
 			botConsole();		
                 })
         }
+}
+```
+
+
+### Dropbox API
+```js
+function dropboxAPI(operation) {
+	if(operation == "ACCOUNT") {
+		console.log(timeStampLog()+'Querying DropBox account information, please wait...');
+		api = node_dropbox.api(conf.dropbox_token);
+		api.account(function(err, res, body) {
+			if(!err) {
+				console.log(body);
+				botConsole();
+			} else {
+				console.log(timeStampLog()+err);
+				botConsole();
+			}
+		});
+	}
 }
 ```
 
@@ -415,7 +452,7 @@ function generateDocumentation(type) {
 					'```js')
 				.replace(/\/\* END \*\//g,
 					'```');
-			fs.writeFile(__dirname+'/DOCS.md', result, 'utf8', function (err) {
+			fs.writeFile(__dirname+'/docs/DOCS.md', result, 'utf8', function (err) {
 				if (err) { 
 					return console.log(timeStampLog()+err); 
 				}
@@ -424,8 +461,8 @@ function generateDocumentation(type) {
 		console.log(timeStampLog()+'Documentation (markup) generation done!'.bold.green);
 	} else if(type == "HTML") {
 	console.log(timeStampLog()+'Documentation generation beginning, please wait...'.yellow);
-		if (fs.existsSync(__dirname+'/DOCS.md')) {
-			fs.readFile(__dirname+'/DOCS.md', 'utf8', function (err,data) {
+		if (fs.existsSync(__dirname+'/docs/DOCS.md')) {
+			fs.readFile(__dirname+'/docs/DOCS.md', 'utf8', function (err,data) {
 				if (err) {
 					return console.log(timeStampLog()+err);
 				}
@@ -446,7 +483,7 @@ function generateDocumentation(type) {
 						'<pre>')
 					.replace(/```/g,
 						'</pre>');
-				fs.writeFile(__dirname+'/DOCS.html', result, 'utf8', function (err) {
+				fs.writeFile(__dirname+'/docs/DOCS.html', result, 'utf8', function (err) {
 					if (err) return console.log(timeStampLog()+err);
 				});
 			});	
@@ -467,7 +504,9 @@ function generateDocumentation(type) {
 ### Initial Prompt and Console
 Calls the console, which everything else calls back too... kinda.
 ```js
-botConsole();		
+if (fs.existsSync(__dirname+'/config/config.json')) {
+	botConsole();		
+}
 ```
 
 

@@ -4,6 +4,7 @@
 <br /> Constants
 <pre>
 const sys = require('util');
+//const keyboard = require('node-key-sender');
 const exec = require('child_process').exec;
 const cluster = require('cluster');
 const os = require('os');
@@ -19,15 +20,17 @@ const request = require('request');
 const http = require('http');
 const conf = require('./lib/config.js');
 const blessed = require('blessed');
+var node_dropbox = require('node-dropbox-v2');
 const { Client } = require('discord.js');
 </pre>
 
 
 <br /> Events and Signals
 <pre>
-var eventEmitter = require('events').EventEmitter;
-var ee = new eventEmitter;
-ee.on('botConsole', botConsole);
+//var eventEmitter = require('events').EventEmitter;
+//var ee = new eventEmitter;
+//ee.on('botConsole', botConsole);
+//ee.on('botConsolePrompt', botConsolePrompt);
 //Doesn't Work on Win32 (No Signals)
 process.on("SIGINT", function() { 
 	console.log('' ); 
@@ -67,7 +70,7 @@ function ping(host) {
 	var exec = require('child_process').exec;
 	function puts(error, stdout, stderr) { 
 		console.log(stdout);
-		ee.emit('botConsole');
+		botConsole();		
 	}
 	if (systemOS === "win32") {
 		exec("ping -n 5 "+host, puts);
@@ -85,7 +88,7 @@ function git(argument) {
 	var exec = require('child_process').exec;
 	function puts(error, stdout, stderr) { 
 		console.log(stdout);
-		ee.emit('botConsole');
+		botConsole();		
 	} 
 	if(argument == 'HISTORY') {
 		if (systemOS === "win32") {
@@ -101,7 +104,7 @@ function git(argument) {
 		}
 	} else {
 				console.log(timeStampLog()+'Usage: git history/pull'.bold.green);
-				ee.emit('botConsole');
+				botConsole();		
 	}	
 }
 </pre>
@@ -112,19 +115,19 @@ function git(argument) {
 function config(argument) {
 	var sys = require('util');
 	var exec = require('child_process').exec;
-	var config = process.cwd()+'/config/config.json';
-	var configBackup = process.cwd()+'/config/config.json.backup';
+	var config = __dirname+'/config/config.json';
+	var configBackup = __dirname+'/config/config.json.backup';
 	function puts(error, stdout, stderr) { 
 		console.log(stdout);
-		ee.emit('botConsole');
+		botConsole();		
 	}
 	if(argument == 'SHOW') {
-		fs.readFile('./config/config.json', 'utf8', function (err,data) {
+		fs.readFile(__dirname+'/config/config.json', 'utf8', function (err,data) {
 			if (err) {
 				console.log(timeStampLog()+err);
 			}
 			console.log(data);
-			ee.emit('botConsole');
+			botConsole();		
 		});
 	} else if(argument == 'BACKUP') {
 		fs.readFile(config, 'utf8', function (err,data) {
@@ -135,11 +138,11 @@ function config(argument) {
 				if (err) return console.log(timeStampLog()+err);
 				console.log(timeStampLog()+
 					'Backup saved to config/config.json.backup!'.bold.green);
-				ee.emit('botConsole');
+				botConsole();		
 			});
 		});
 	} else if(argument == 'WIPE') {
-		fs.unlinkSync('./config/config.json', 'utf8', function (err,data) {
+		fs.unlinkSync(__dirname+'/config/config.json', 'utf8', function (err,data) {
 			if (err) {
 				console.log(timeStampLog()+err);
 			}
@@ -148,7 +151,7 @@ function config(argument) {
 		process.exit();
 	} else {
 				console.log(timeStampLog()+'Usage: config show/backup/wipe'.bold.green);
-				ee.emit('botConsole');
+				botConsole();		
 	}
 }
 </pre>
@@ -222,7 +225,7 @@ function doSomething() {
 					setTimeout(function() {
 						loader.stop();
 						screen.destroy();
-						ee.emit('botConsole');
+						botConsole();		
 					}, 3000);
 				});
 			});
@@ -230,7 +233,7 @@ function doSomething() {
 	});
 	screen.key('q', function() {
 		screen.destroy();
-		ee.emit('botConsole');	
+		botConsole();		
 	});
 	screen.render();
 }
@@ -270,14 +273,22 @@ function botDiscord(type,operation) {
 		}
 		client = new Client();
 		client.on('ready', () => {
-			console.log(timeStampLog()+conf.bot_nickname+" Discord "+type+" is ready for you!");
-			ee.emit('botConsole');
+			//console.log(timeStampLog()+"Discord "+type+" is ready for you!");
+			//ee.emit('botConsole');
 		});
-		client.login(token);	
+		client.on('message', msg => {
+			fs.appendFile('logs/discord.log', msg.content+'\n', 'utf8', function(err) {
+			});
+		});
+		client.login(token);
+		var msg = "Discord "+type.toLowerCase()+" started successfully!";
+		console.log(timeStampLog()+msg.green);
+		botConsole();	
 	} else if(operation == "STOP") {
+		var msg = "Discord "+type.toLowerCase()+" stopped successfully!";
 		client.destroy();
-		console.log(timeStampLog()+conf.bot_nickname+" Discord "+type+" has terminated!");
-		ee.emit('botConsole');
+		console.log(timeStampLog()+msg.red);
+		botConsole();		
 	}
 }
 </pre>
@@ -296,6 +307,8 @@ function botConsole() {
 			webServer(arguments[2]);
 		} else if(arguments[0] == "DISCORD") {
 			botDiscord(arguments[2],arguments[4]);
+		} else if(arguments[0] == "DROPBOX") {
+			dropboxAPI(arguments[2]);
 		} else if(arguments[0] == "CONFIG") {
 			config(arguments[2]);
 		} else if(arguments[0] == "PING") {
@@ -312,19 +325,19 @@ function botConsole() {
 			doSomething();
 		} else if (arguments == "" || !arguments) {
 			console.log(timeStampLog()+'Need to enter a command...'.yellow);
-			ee.emit('botConsole');
+			botConsole();		
 		} else {
 			var sys = require('util');
 			var exec = require('child_process').exec;
 			function puts(error, stdout, stderr) { 
 				console.log(stdout);
-				ee.emit('botConsole');
+				botConsole();		
 			}
 			if(conf.bot_shell_whitelist.indexOf(arguments[0].toLowerCase())!=-1) {
 				exec(botCommand, puts);
 			} else {		
 				console.log(timeStampLog()+'This command is blacklisted!');	
-				ee.emit('botConsole');
+				botConsole();		
 			}
 		}
 	});
@@ -339,28 +352,40 @@ function webServer(action) {
 	const web = express();
 	if (action == "START") {
 		const server = web.listen(conf.bot_port_web);
-		web.get('/', (req,res) => {
-			res.send('Web server started successfully...');
-		});
+		web.use(express.static(path.join(__dirname, 'assets/web/public')));
+		web.set('views', path.join(__dirname, 'assets/web/views'));
+		web.set('view engine', 'ejs');
+		web.get('/', (req, res) => res.render('pages/index', { 
+			'web_title': conf.web_title,
+			'web_favicon': conf.web_favicon,
+			'bot_nickname': conf.bot_nickname,
+			'bot_logo_long': conf.bot_logo_long,
+			'bot_logo_square': conf.bot_logo_square,
+			'bot_info_website': conf.bot_info_website,
+			'bot_info_copyright': conf.bot_info_copyright,
+			'discord_invite_link': conf.discord_invite_link,
+			'theme': 'default'
+		}));
 		web.get('/api/'+conf.bot_api_key+'/close', (req,res) => {
+			res.send('Stopping the web server...');
 			server.close();
 		});
 		web.get('/api/'+conf.bot_api_key+'/status', (req,res) => {
 			res.send('Web server IS online...');
 		});
 		console.log(timeStampLog()+'Web server started successfully!'.green);
-		ee.emit('botConsole');
+		botConsole();		
 	} else if(action == "STOP") {
 		var webBackendClose = 
 			'http:\/\/localhost:'+conf.bot_port_web+'/api/'+conf.bot_api_key+'/close';
 		var webBackendStatus = 
 			'http:\/\/localhost:'+conf.bot_port_web+'/api/'+conf.bot_api_key+'/status';
 		request({
-			url: webBackendClose,
-			timeout: 5000
+			url: webBackendClose
+			//timeout: 500
 		}, function (error,response,body) {
 			console.log(timeStampLog()+'Web server stopped successfully!'.red);
-			ee.emit('botConsole');
+			botConsole();		
 		})
 	} else if(action == "STATUS") {
                 var webBackendStatus = 
@@ -370,13 +395,33 @@ function webServer(action) {
                         timeout: 1000
                 }, function (error,response,body) {
 			if (error) { 
-				console.log(timeStampLog()+'Web Server IS NOT online...'.bold.red);
+				console.log(timeStampLog()+'Web Server IS NOT online...'.red);
 			} else {
-				console.log(timeStampLog()+'Web Server IS online...'.bold.green);
+				console.log(timeStampLog()+'Web Server IS online...'.green);
 			}
-			ee.emit('botConsole');
+			botConsole();		
                 })
         }
+}
+</pre>
+
+
+<br /> Dropbox API
+<pre>
+function dropboxAPI(operation) {
+	if(operation == "ACCOUNT") {
+		console.log(timeStampLog()+'Querying DropBox account information, please wait...');
+		api = node_dropbox.api(conf.dropbox_token);
+		api.account(function(err, res, body) {
+			if(!err) {
+				console.log(body);
+				botConsole();
+			} else {
+				console.log(timeStampLog()+err);
+				botConsole();
+			}
+		});
+	}
 }
 </pre>
 
@@ -386,7 +431,7 @@ function webServer(action) {
 function generateDocumentation(type) {
 	if(type == "MARKUP") {
 	console.log(timeStampLog()+'Documentation generation beginning, please wait...'.yellow);
-		fs.readFile('init.js', 'utf8', function (err,data) {
+		fs.readFile(__dirname+'/init.js', 'utf8', function (err,data) {
 			if (err) {
 				return console.log(timeStampLog()+err);
 			}
@@ -407,7 +452,7 @@ function generateDocumentation(type) {
 					'<pre>')
 				.replace(/\/\* END \*\//g,
 					'</pre>');
-			fs.writeFile('DOCS.md', result, 'utf8', function (err) {
+			fs.writeFile(__dirname+'/docs/DOCS.md', result, 'utf8', function (err) {
 				if (err) { 
 					return console.log(timeStampLog()+err); 
 				}
@@ -416,8 +461,8 @@ function generateDocumentation(type) {
 		console.log(timeStampLog()+'Documentation (markup) generation done!'.bold.green);
 	} else if(type == "HTML") {
 	console.log(timeStampLog()+'Documentation generation beginning, please wait...'.yellow);
-		if (fs.existsSync(__dirname+'/DOCS.md')) {
-			fs.readFile('DOCS.md', 'utf8', function (err,data) {
+		if (fs.existsSync(__dirname+'/docs/DOCS.md')) {
+			fs.readFile(__dirname+'/docs/DOCS.md', 'utf8', function (err,data) {
 				if (err) {
 					return console.log(timeStampLog()+err);
 				}
@@ -438,7 +483,7 @@ function generateDocumentation(type) {
 						'<pre>')
 					.replace(/</pre>/g,
 						'</pre>');
-				fs.writeFile('DOCS.html', result, 'utf8', function (err) {
+				fs.writeFile(__dirname+'/docs/DOCS.html', result, 'utf8', function (err) {
 					if (err) return console.log(timeStampLog()+err);
 				});
 			});	
@@ -447,7 +492,7 @@ function generateDocumentation(type) {
 			console.log(timeStampLog()+'Must do'+' '+'docs markup'.inverse+' '+'first, then'+' '+'docs html'.inverse+'!');
 		}
 	}
-	ee.emit('botConsole');
+	botConsole();		
 }
 </pre>
 
@@ -459,7 +504,9 @@ function generateDocumentation(type) {
 <br /> Initial Prompt and Console
 Calls the console, which everything else calls back too... kinda.
 <pre>
-ee.emit('botConsole');
+if (fs.existsSync(__dirname+'/config/config.json')) {
+	botConsole();		
+}
 </pre>
 
 
