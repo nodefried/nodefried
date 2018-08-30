@@ -1,9 +1,18 @@
-let extIP = require('ext-ip')();
+var keypress = require('keypress');
 
-extIP((err, ip) => {
-    if( err ){
-        throw err;
-    }
+// make `process.stdin` begin emitting "keypress" events
+keypress(process.stdin);
 
-    console.log(ip);
+// listen for the "keypress" event
+process.stdin.on('keypress', function (ch, key) {
+  console.log('got "keypress"', key);
+  if (key.name == "up") {
+	return false;
+  }
+  if (key && key.ctrl && key.name == 'c') {
+    process.stdin.pause();
+  }
 });
+
+process.stdin.setRawMode(true);
+process.stdin.resume();

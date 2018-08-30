@@ -32,7 +32,7 @@ const { Client } = require('discord.js');
 //ee.on('botConsole', botConsole);
 //ee.on('botConsolePrompt', botConsolePrompt);
 //Doesn't Work on Win32 (No Signals)
-process.on("SIGINT", function() {
+process.on('SIGINT', function() {
 	console.log('');
 	console.log('Received SIGINT, killing current command...');
 });
@@ -278,7 +278,7 @@ function prompt(question, callback) {
 // START SUB: Console Prompt
 /* START */
 function botConsolePrompt() {
-	if(!conf.wanIP) { var host = "localhost"; } else { var host = conf.wanIP }
+	if(!conf.host_ip) { var host = "localhost"; } else { var host = conf.host_ip }
 	var prompt = conf.bot_nickname.toLowerCase().yellow+'@'.yellow+host.yellow+' >>\ '.trap.bold.cyan;
 	return prompt;
 }
@@ -322,29 +322,29 @@ function botDiscord(type,operation) {
 function botConsole() {
 	if (fs.existsSync(__dirname+'/config/config.json')) {
 	prompt(timeStampLog()+botConsolePrompt(), function(botCommand) {
-		var arguments = botCommand.toUpperCase().split(/(\s+)/);
-		if(arguments[0] == "EXIT") {
+		var arguments = botCommand.split(/(\s+)/);
+		if(arguments[0].toUpperCase() == "EXIT") {
 				console.log(timeStampLog()+'Exiting back to console...');
 				process.exit();
-		} else if(arguments[0] == "WEB") {
-			webServer(arguments[2]);
-		} else if(arguments[0] == "DISCORD") {
-			botDiscord(arguments[2],arguments[4]);
-		} else if(arguments[0] == "DROPBOX") {
-			dropboxAPI(arguments[2]);
-		} else if(arguments[0] == "CONFIG") {
-			config(arguments[2]);
-		} else if(arguments[0] == "PING") {
+		} else if(arguments[0].toUpperCase() == "WEB") {
+			webServer(arguments[2].toUpperCase());
+		} else if(arguments[0].toUpperCase() == "DISCORD") {
+			botDiscord(arguments[2].toUpperCase(),arguments[4]);
+		} else if(arguments[0].toUpperCase() == "DROPBOX") {
+			dropboxAPI(arguments[2].toUpperCase(),arguments);
+		} else if(arguments[0].toUpperCase() == "CONFIG") {
+			config(arguments[2].toUpperCase());
+		} else if(arguments[0].toUpperCase() == "PING") {
 			console.log(timeStampLog()+'Pinging host, please wait...');
-			let host = arguments[2];
+			let host = arguments[2].toUpperCase();
 			ping(host);
-		} else if(arguments[0] == "GIT") {
+		} else if(arguments[0].toUpperCase() == "GIT") {
 			console.log(timeStampLog()+'Working with repository, please wait...');
 			let argument = arguments[2];
 			git(argument);
-		} else if (arguments[0] == "DOCS") {
-			generateDocumentation(arguments[2]);
-		} else if (arguments[0] == "DO") {
+		} else if (arguments[0].toUpperCase() == "DOCS") {
+			generateDocumentation(arguments[2].toUpperCase());
+		} else if (arguments[0].toUpperCase() == "DO") {
 			doSomething();
 		} else if (arguments == "" || !arguments) {
 			console.log(timeStampLog()+'Need to enter a command...'.yellow);
@@ -397,6 +397,8 @@ function webServer(action) {
 			res.send('Web server IS online...');
 		});
 		console.log(timeStampLog()+'Web server started successfully!'.green);
+		console.log(path.join(__dirname, 'assets/web/public'));
+		
 		botConsole();
 	} else if(action == "STOP") {
 		var webBackendClose =
@@ -431,9 +433,10 @@ function webServer(action) {
 
 // START SUB: Dropbox API
 /* START */
-function dropboxAPI(operation) {
+function dropboxAPI(command,argument) {
 	dropbox = node_dropbox.api(conf.dropbox_token);
-	if(operation == "ACCOUNT") {
+
+	if(command == "ACCOUNT") {
 		console.log(timeStampLog()+'Querying DropBox account information, please wait...');
 		dropbox.account(function(err, res, body) {
 			if(!err) {
@@ -445,18 +448,31 @@ function dropboxAPI(operation) {
 			}
 		});
 	}
-	if(operation == "TEST") {
-		console.log(timeStampLog()+'Testing Dropbox write file...');
-		var content = encodeURIComponent("WTF");
-		dropbox.createFile('test.json', content, function(err, res, body) {
-			if(!err) {
-				console.log(body);
-				console.log(timeStampLog()+'Sucessfully wrote /test.json to DropBox!'.green);
-				botConsole();
-			} else {
-				console.log(timeStampLog()+err);
-				botConsole();
+	if(command == "UPLOAD") {
+		console.log(timeStampLog()+'Testing Dropbox upload...');
+		fs.readFile(__dirname+'/'+argument[4], 'utf8', function (err,data) {
+			if (err) {
+					return console.log(err);
 			}
+			dropbox.createFile(argument[4], data, function(err, res, body) {
+				if(!err) {
+					var result = JSON.parse(body);
+					console.log('Name: '+result['name']);
+					console.log('Path Lower: '+result['path_lower']);
+					console.log('Path Display: '+result['path_display']);
+					console.log(result['id']);
+					console.log('Client Modified: '+result['client_modified']);
+					console.log('Server Modified: '+result['server_modified']);
+					console.log('Rev: '+result['rev']);
+					console.log('Size: '+result['size']);
+					console.log('Content Hash: '+result['content_hash']);				
+					console.log(timeStampLog()+'Sucessfully wrote '.green+argument[4].green+' to DropBox!'.green);
+					botConsole();
+				} else {
+					console.log(timeStampLog()+err);
+					botConsole();
+				}
+			});
 		});
 	}
 }
