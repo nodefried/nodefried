@@ -1,3 +1,4 @@
+![](https://cdn.imgpaste.net/2018/08/30/lW4UX.png)
 ## Description
 An all purpose Node.js bot with built with console + prompt + misc other things.
 ## Features
@@ -27,7 +28,8 @@ Python 2.7, Node.js 8+, NPM
 3) `node init.js` or just `nodefried` (all OS's)
 #### NPM
 1) `npm install nodefried -g`
-![](https://nodei.co/npm/request.png?downloads=true&downloadRank=true&stars=true)
+
+![](https://nodei.co/npm/nodefried.png?downloads=true&downloadRank=true&stars=true)
 ## Documentation
 The documentation is [auto-generated](../master/docs/DOCS.md).
 
