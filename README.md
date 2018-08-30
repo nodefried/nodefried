@@ -1,4 +1,4 @@
-![](https://cdn.imgpaste.net/2018/08/30/lW4UX.png)
+![](https://cdn.imgpaste.net/2018/08/30/lWYYb.png)
 ## Description
 An all purpose Node.js bot with built with console + prompt + misc other things.
 ## Features
