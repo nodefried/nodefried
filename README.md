@@ -27,6 +27,7 @@ Python 2.7, Node.js 8+, NPM
 3) `node init.js` or just `nodefried` (all OS's)
 #### NPM
 1) `npm install nodefried -g`
+!(https://nodei.co/npm/request.png?downloads=true&downloadRank=true&stars=true)
 ## Documentation
 The documentation is [auto-generated](../master/docs/DOCS.md).
 
