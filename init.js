@@ -409,10 +409,10 @@ function webServer(action) {
 // START SUB: Dropbox API
 /* START */
 function dropboxAPI(operation) {
+	dropbox = node_dropbox.api(conf.dropbox_token);
 	if(operation == "ACCOUNT") {
 		console.log(timeStampLog()+'Querying DropBox account information, please wait...');
-		api = node_dropbox.api(conf.dropbox_token);
-		api.account(function(err, res, body) {
+		dropbox.account(function(err, res, body) {
 			if(!err) {
 				console.log(body);
 				botConsole();
@@ -422,6 +422,20 @@ function dropboxAPI(operation) {
 			}
 		});
 	}
+	if(operation == "READ") {
+		console.log(timeStampLog()+'Testing Dropbox write file...');
+		var content = encodeURIComponent("WTF");
+		dropbox.createFile('test.json', content, function(err, res, body) {
+			if(!err) {
+				console.log(body);
+				console.log(content);
+				botConsole();
+			} else {
+				console.log(timeStampLog()+err);
+				botConsole();
+			}
+		});
+	}	
 }
 /* END */
 // END SUB: Dropbox API
