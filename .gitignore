@@ -2,4 +2,3 @@ node_modules
 config/config.json
 config/config.json.backup
 config/peers.json
-logs
