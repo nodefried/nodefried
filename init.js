@@ -20,7 +20,7 @@ const request = require('request');
 const http = require('http');
 const conf = require('./lib/config.js');
 const blessed = require('blessed');
-var node_dropbox = require('node-dropbox-v2');
+const node_dropbox = require('node-dropbox-v2');
 const { Client } = require('discord.js');
 /* END */
 // END SUB: Constants
@@ -80,6 +80,27 @@ function ping(host) {
 }
 /* END */
 // END SUB: Ping
+
+// START SUB: Get Public IP
+/* START */
+function getPublicIP() {
+	http.get('http://bot.whatismyipaddress.com', function(res){
+		res.setEncoding('utf8');
+		res.on('data', function(chunk){
+			fs.writeFile(__dirname+'/config/ip', chunk, 'utf8', function (err) {
+				if (err) { };
+			});
+		});
+	});
+	fs.readFile(__dirname+'/config/ip', 'utf8', function (err,data) {
+		if (err) {
+			console.log(timeStampLog()+err);
+		}
+		console.log(data);
+	});	
+}
+/* END */
+// END SUB: Get Public IP
 
 // START SUB: Git Operations
 /* START */
@@ -257,7 +278,8 @@ function prompt(question, callback) {
 // START SUB: Console Prompt
 /* START */
 function botConsolePrompt() {
-	return conf.bot_nickname.toLowerCase().yellow+'@localhost'.yellow+' >>\ '.trap.bold.cyan;
+	var prompt = conf.bot_nickname.toLowerCase().yellow+'@'.yellow+'localhost'.yellow+' >>\ '.trap.bold.cyan;
+	return prompt;
 }
 /* END */
 // END SUB: Console Prompt
