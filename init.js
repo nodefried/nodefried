@@ -505,9 +505,7 @@ function generateDocumentation(type) {
 // START SUB: Initial Prompt and Console
 // COMMENT: Calls the console, which everything else calls back too... kinda.
 /* START */
-if (fs.existsSync(__dirname+'/config/config.json')) {
-	botConsole();		
-}
+botConsole();
 /* END */
 // END SUB: Initial Prompt and Console
 
