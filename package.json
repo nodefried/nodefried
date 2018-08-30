@@ -15,7 +15,9 @@
   "entry point:": "init.js",
   "scripts": {
     "test": "echo \"All systems go!\"",
-    "start": "node init.js"
+    "pretest": "eslint --ignore-path .gitignore .",
+    "start": "node init.js",
+    "link": ""
   },
   "bin": {
     "nodefried": "./init.js"
@@ -52,5 +54,10 @@
     "request": "^2.88.0",
     "term.js": "0.0.7",
     "util": "^0.11.0"
+  },
+  "devDependencies": {
+    "eslint": "^5.3.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.14.0"
   }
 }

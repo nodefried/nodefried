@@ -460,7 +460,7 @@ function dropboxAPI(command,argument) {
 					console.log('Name: '+result['name']);
 					console.log('Path Lower: '+result['path_lower']);
 					console.log('Path Display: '+result['path_display']);
-					console.log(result['id']);
+					console.log('Identifier: '+result['id']);
 					console.log('Client Modified: '+result['client_modified']);
 					console.log('Server Modified: '+result['server_modified']);
 					console.log('Rev: '+result['rev']);
