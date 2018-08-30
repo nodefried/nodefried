@@ -14,7 +14,8 @@
   ],
   "entry point:": "init.js",
   "scripts": {
-    "test": "echo \"All systems go!\""
+    "test": "echo \"All systems go!\"",
+    "start": "node init.js"
   },
   "bin": {
     "nodefried": "./init.js"
