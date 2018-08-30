@@ -278,7 +278,8 @@ function prompt(question, callback) {
 // START SUB: Console Prompt
 /* START */
 function botConsolePrompt() {
-	var prompt = conf.bot_nickname.toLowerCase().yellow+'@'.yellow+'localhost'.yellow+' >>\ '.trap.bold.cyan;
+	if(!conf.wanIP) { var host = "localhost"; } else { var host = conf.wanIP }
+	var prompt = conf.bot_nickname.toLowerCase().yellow+'@'.yellow+host.yellow+' >>\ '.trap.bold.cyan;
 	return prompt;
 }
 /* END */
