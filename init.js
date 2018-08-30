@@ -489,7 +489,8 @@ function generateDocumentation(type) {
 			});	
 			console.log(timeStampLog()+'Documentation (html) generation done!'.bold.green);			
 		} else {
-			console.log(timeStampLog()+'Must do'+' '+'docs markup'.inverse+' '+'first, then'+' '+'docs html'.inverse+'!');
+			console.log(timeStampLog()+
+				'Must do'+' '+'docs markup'.inverse+' '+'first, then'+' '+'docs html'.inverse+'!');
 		}
 	}
 	botConsole();		
