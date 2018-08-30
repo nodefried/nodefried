@@ -32,9 +32,9 @@ const { Client } = require('discord.js');
 //ee.on('botConsole', botConsole);
 //ee.on('botConsolePrompt', botConsolePrompt);
 //Doesn't Work on Win32 (No Signals)
-process.on("SIGINT", function() { 
-	console.log('' ); 
-	console.log('Received SIGINT, killing current command...'); 
+process.on("SIGINT", function() {
+	console.log('');
+	console.log('Received SIGINT, killing current command...');
 });
 /* END */
 // END SUB: Events and Signals
@@ -68,13 +68,13 @@ function timeStamp() {
 function ping(host) {
 	var sys = require('util');
 	var exec = require('child_process').exec;
-	function puts(error, stdout, stderr) { 
+	function puts(error, stdout, stderr) {
 		console.log(stdout);
-		botConsole();		
+		botConsole();
 	}
 	if (systemOS === "win32") {
 		exec("ping -n 5 "+host, puts);
-	} else {		
+	} else {
 		exec("ping -c 5 "+host, puts);
 	}
 }
@@ -86,26 +86,26 @@ function ping(host) {
 function git(argument) {
 	var sys = require('util');
 	var exec = require('child_process').exec;
-	function puts(error, stdout, stderr) { 
+	function puts(error, stdout, stderr) {
 		console.log(stdout);
-		botConsole();		
-	} 
+		botConsole();
+	}
 	if(argument == 'HISTORY') {
 		if (systemOS === "win32") {
 			exec('git log --pretty=format:"%h - %an (%ae): %s" --shortstat  -n 3', puts);
-		} else {		
+		} else {
 			exec('git log --pretty=format:"%h - %an (%ae): %s" --shortstat  -n 3', puts);
 		}
 	} else if(argument == 'PULL') {
 		if (systemOS === "win32") {
 			exec('git stash && git pull', puts);
-		} else {		
+		} else {
 			exec('git stash && git pull', puts);
 		}
 	} else {
 				console.log(timeStampLog()+'Usage: git history/pull'.bold.green);
-				botConsole();		
-	}	
+				botConsole();
+	}
 }
 /* END */
 // END SUB: Git Operations
@@ -117,9 +117,9 @@ function config(argument) {
 	var exec = require('child_process').exec;
 	var config = __dirname+'/config/config.json';
 	var configBackup = __dirname+'/config/config.json.backup';
-	function puts(error, stdout, stderr) { 
+	function puts(error, stdout, stderr) {
 		console.log(stdout);
-		botConsole();		
+		botConsole();
 	}
 	if(argument == 'SHOW') {
 		fs.readFile(__dirname+'/config/config.json', 'utf8', function (err,data) {
@@ -127,7 +127,7 @@ function config(argument) {
 				console.log(timeStampLog()+err);
 			}
 			console.log(data);
-			botConsole();		
+			botConsole();
 		});
 	} else if(argument == 'BACKUP') {
 		fs.readFile(config, 'utf8', function (err,data) {
@@ -138,7 +138,7 @@ function config(argument) {
 				if (err) return console.log(timeStampLog()+err);
 				console.log(timeStampLog()+
 					'Backup saved to config/config.json.backup!'.bold.green);
-				botConsole();		
+				botConsole();
 			});
 		});
 	} else if(argument == 'WIPE') {
@@ -151,7 +151,7 @@ function config(argument) {
 		process.exit();
 	} else {
 				console.log(timeStampLog()+'Usage: config show/backup/wipe'.bold.green);
-				botConsole();		
+				botConsole();
 	}
 }
 /* END */
@@ -225,7 +225,7 @@ function doSomething() {
 					setTimeout(function() {
 						loader.stop();
 						screen.destroy();
-						botConsole();		
+						botConsole();
 					}, 3000);
 				});
 			});
@@ -233,7 +233,7 @@ function doSomething() {
 	});
 	screen.key('q', function() {
 		screen.destroy();
-		botConsole();		
+		botConsole();
 	});
 	screen.render();
 }
@@ -266,10 +266,10 @@ function botConsolePrompt() {
 /* START */
 function botDiscord(type,operation) {
 	if(operation == "START") {
-		if(type == "SELF") { 
-			token = conf.discord_token_self; 
-		} else if(type == "BOT") { 
-			token = conf.discord_token_bot; 
+		if(type == "SELF") {
+			token = conf.discord_token_self;
+		} else if(type == "BOT") {
+			token = conf.discord_token_bot;
 		}
 		client = new Client();
 		client.on('ready', () => {
@@ -283,12 +283,12 @@ function botDiscord(type,operation) {
 		client.login(token);
 		var msg = "Discord "+type.toLowerCase()+" started successfully!";
 		console.log(timeStampLog()+msg.green);
-		botConsole();	
+		botConsole();
 	} else if(operation == "STOP") {
 		var msg = "Discord "+type.toLowerCase()+" stopped successfully!";
 		client.destroy();
 		console.log(timeStampLog()+msg.red);
-		botConsole();		
+		botConsole();
 	}
 }
 /* END */
@@ -325,19 +325,19 @@ function botConsole() {
 			doSomething();
 		} else if (arguments == "" || !arguments) {
 			console.log(timeStampLog()+'Need to enter a command...'.yellow);
-			botConsole();		
+			botConsole();
 		} else {
 			var sys = require('util');
 			var exec = require('child_process').exec;
-			function puts(error, stdout, stderr) { 
+			function puts(error, stdout, stderr) {
 				console.log(stdout);
-				botConsole();		
+				botConsole();
 			}
 			if(conf.bot_shell_whitelist.indexOf(arguments[0].toLowerCase())!=-1) {
 				exec(botCommand, puts);
-			} else {		
-				console.log(timeStampLog()+'This command is blacklisted!');	
-				botConsole();		
+			} else {
+				console.log(timeStampLog()+'This command is blacklisted!');
+				botConsole();
 			}
 		}
 	});
@@ -355,7 +355,7 @@ function webServer(action) {
 		web.use(express.static(path.join(__dirname, 'assets/web/public')));
 		web.set('views', path.join(__dirname, 'assets/web/views'));
 		web.set('view engine', 'ejs');
-		web.get('/', (req, res) => res.render('pages/index', { 
+		web.get('/', (req, res) => res.render('pages/index', {
 			'web_title': conf.web_title,
 			'web_favicon': conf.web_favicon,
 			'bot_nickname': conf.bot_nickname,
@@ -374,32 +374,32 @@ function webServer(action) {
 			res.send('Web server IS online...');
 		});
 		console.log(timeStampLog()+'Web server started successfully!'.green);
-		botConsole();		
+		botConsole();
 	} else if(action == "STOP") {
-		var webBackendClose = 
+		var webBackendClose =
 			'http:\/\/localhost:'+conf.bot_port_web+'/api/'+conf.bot_api_key+'/close';
-		var webBackendStatus = 
+		var webBackendStatus =
 			'http:\/\/localhost:'+conf.bot_port_web+'/api/'+conf.bot_api_key+'/status';
 		request({
 			url: webBackendClose
 			//timeout: 500
 		}, function (error,response,body) {
 			console.log(timeStampLog()+'Web server stopped successfully!'.red);
-			botConsole();		
+			botConsole();
 		})
 	} else if(action == "STATUS") {
-                var webBackendStatus = 
+                var webBackendStatus =
 			'http:\/\/localhost:'+conf.bot_port_web+'/api/'+conf.bot_api_key+'/status';
                 request({
                         url: webBackendStatus,
                         timeout: 1000
                 }, function (error,response,body) {
-			if (error) { 
+			if (error) {
 				console.log(timeStampLog()+'Web Server IS NOT online...'.red);
 			} else {
 				console.log(timeStampLog()+'Web Server IS online...'.green);
 			}
-			botConsole();		
+			botConsole();
                 })
         }
 }
@@ -422,20 +422,20 @@ function dropboxAPI(operation) {
 			}
 		});
 	}
-	if(operation == "READ") {
+	if(operation == "TEST") {
 		console.log(timeStampLog()+'Testing Dropbox write file...');
 		var content = encodeURIComponent("WTF");
 		dropbox.createFile('test.json', content, function(err, res, body) {
 			if(!err) {
 				console.log(body);
-				console.log(content);
+				console.log(timeStampLog()+'Sucessfully wrote /test.json to DropBox!'.green);
 				botConsole();
 			} else {
 				console.log(timeStampLog()+err);
 				botConsole();
 			}
 		});
-	}	
+	}
 }
 /* END */
 // END SUB: Dropbox API
@@ -467,8 +467,8 @@ function generateDocumentation(type) {
 				.replace(/\/\* END \*\//g,
 					'```');
 			fs.writeFile(__dirname+'/docs/DOCS.md', result, 'utf8', function (err) {
-				if (err) { 
-					return console.log(timeStampLog()+err); 
+				if (err) {
+					return console.log(timeStampLog()+err);
 				}
 			});
 		});
@@ -500,14 +500,15 @@ function generateDocumentation(type) {
 				fs.writeFile(__dirname+'/docs/DOCS.html', result, 'utf8', function (err) {
 					if (err) return console.log(timeStampLog()+err);
 				});
-			});	
-			console.log(timeStampLog()+'Documentation (html) generation done!'.bold.green);			
+			});
+			console.log(timeStampLog()+'Documentation (html) generation done!'.bold.green);
 		} else {
-			console.log(timeStampLog()+
-				'Must do'+' '+'docs markup'.inverse+' '+'first, then'+' '+'docs html'.inverse+'!');
+			console.log(timeStampLog()
+				+'Must do'+' '+'docs markup'.inverse+' '
+				+'first, then'+' '+'docs html'.inverse+'!');
 		}
 	}
-	botConsole();		
+	botConsole();
 }
 /* END */
 // END SUB: Main Generator
