@@ -26,8 +26,24 @@ const dropbox = node_dropbox.api(conf.dropbox_token);
 const MongoClient = require('mongodb').MongoClient;
 const mongoURI = conf.mongodb_uri;
 const assert = require('assert');
+const util = require('util');
+const log_file_debug = fs.createWriteStream(__dirname + '/logs/debug.log', {flags : 'w'});
+const log_file_irc = fs.createWriteStream(__dirname + '/logs/irc.log', {flags : 'w'});
+const log_file_discord = fs.createWriteStream(__dirname + '/logs/discord.log', {flags : 'w'});
+const log_file_services = fs.createWriteStream(__dirname + '/logs/services.log', {flags : 'w'});
+const log_file_peers = fs.createWriteStream(__dirname + '/logs/peers.log', {flags : 'w'});
+const log_stdout = process.stdout;
 /* END */
 // END SUB: Constants
+
+// START SUB: File Logger
+/* START */
+console.fileLog = function(d,file) { 
+  file.write(timeStampLogPlain()+util.format(d) + '\n');
+  //log_stdout.write(util.format(d) + '\n');
+};
+/* END */
+// END SUB: File Logger
 
 // START SUB: Events and Signals
 /* START */
@@ -47,7 +63,7 @@ process.on('SIGINT', () => {
 
 // START SECTION: FUNCTIONS
 
-// START SUB: Timestamp Log
+// START SUB: Timestamp Log Pretty
 /* START */
 function timeStampLog() {
   const dateTime = require('node-datetime');
@@ -55,7 +71,17 @@ function timeStampLog() {
   return `${dt.format('Y-m-d H:M:S').bold.green}| `;
 }
 /* END */
-// END SUB: Timestamp Log
+// END SUB: Timestamp Log Pretty
+
+// START SUB: Timestamp Log Plain
+/* START */
+function timeStampLogPlain() {
+  const dateTime = require('node-datetime');
+  const dt = dateTime.create();
+  return `${dt.format('Y-m-d H:M:S')}| `;
+}
+/* END */
+// END SUB: Timestamp Log Plain
 
 // START SUB: Timestamp Normal
 /* START */
@@ -679,7 +705,7 @@ function generateDocumentation(type) {
 
 function peersUpdateCron(callback) {
   setInterval(function() {
-    console.log('peers update cron finished')
+    console.fileLog('Peers Synchronized Sucessfully!', log_file_peers)
     peersUpdate();
     callback(null, 'finished!');
   }, 20000);
@@ -687,14 +713,14 @@ function peersUpdateCron(callback) {
 
 function testCron(callback) {
   setInterval(function() {
-    console.log('status update cron finished')
+    console.fileLog('Peer Status Updated Sucessfully!', log_file_peers)
     //peersUpdate();
     callback(null, 'finished!');
   }, 10000);
 }
 
 function cron() {
-  console.log('started');
+  //console.log('started');
   peersUpdateCron(function(err, result) {
     return result;
   });
