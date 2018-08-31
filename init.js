@@ -159,6 +159,11 @@ function update() {
         const exec = require('child_process').exec;
         function puts(error, stdout, stderr) {
           console.log(stdout);
+          if(err) {
+            console.log('Update was not successful!'.red);
+          } else {
+            console.log('Update was successful!'.green)
+          }
           botConsole();
         }  
         exec('git stash; git pull; sudo npm install -g nodefried', puts);
@@ -377,7 +382,7 @@ function botConsole() {
         const argument = args[2];
         git(argument.toUpperCase());
       } else if (args[0].toUpperCase() === 'UPDATE') {
-        console.log(`${timeStampLog()}Updating '`+conf.bot_nickname+`, please wait...`);
+        console.log(`${timeStampLog()}Updating `+conf.bot_nickname+`, please wait...`);
         const argument = args[2];
         update();
       } else if (args[0].toUpperCase() === 'DOCS') {
