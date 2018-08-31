@@ -422,32 +422,41 @@ function botConsole() {
 function webServer(action) {
   const web = express();
   if (action === 'START') {
-    const server = web.listen(conf.bot_port_web);
-    web.use(express.static(path.join(__dirname, 'assets/web/public')));
-    web.set('views', path.join(__dirname, 'assets/web/views'));
-    web.set('view engine', 'ejs');
-    web.get('/', (req, res) => res.render('pages/index', {
-      web_title: conf.web_title,
-      web_favicon: conf.web_favicon,
-      bot_nickname: conf.bot_nickname,
-      bot_logo_long: conf.bot_logo_long,
-      bot_logo_square: conf.bot_logo_square,
-      bot_info_website: conf.bot_info_website,
-      bot_info_copyright: conf.bot_info_copyright,
-      discord_invite_link: conf.discord_invite_link,
-      theme: 'default',
-    }));
-    web.get(`/api/${conf.bot_api_key}/close`, (req, res) => {
-      res.send('Stopping the web server...');
-      server.close();
+    var webBackendStatus = `http:\/\/localhost:${conf.bot_port_web}/api/${conf.bot_api_key}/status`;
+    request({
+      url: webBackendStatus,
+      timeout: 1000,
+    }, (error, response, body) => {
+      if (!error) {
+        console.log(timeStampLog() + 'Web Server already started...'.yellow);
+      } else {
+        const server = web.listen(conf.bot_port_web);
+        web.use(express.static(path.join(__dirname, 'assets/web/public')));
+        web.set('views', path.join(__dirname, 'assets/web/views'));
+        web.set('view engine', 'ejs');
+        web.get('/', (req, res) => res.render('pages/index', {
+          web_title: conf.web_title,
+          web_favicon: conf.web_favicon,
+          bot_nickname: conf.bot_nickname,
+          bot_logo_long: conf.bot_logo_long,
+          bot_logo_square: conf.bot_logo_square,
+          bot_info_website: conf.bot_info_website,
+          bot_info_copyright: conf.bot_info_copyright,
+          discord_invite_link: conf.discord_invite_link,
+          theme: 'default',
+        }));
+        web.get(`/api/${conf.bot_api_key}/close`, (req, res) => {
+          res.send('Stopping the web server...');
+          server.close();
+        });
+        web.get(`/api/${conf.bot_api_key}/status`, (req, res) => {
+          res.send('Web server IS online...');
+        });
+        console.log(timeStampLog() + 'Web server started successfully!'.green);
+        console.log(path.join(__dirname, 'assets/web/public'));   
+        botConsole();
+      }
     });
-    web.get(`/api/${conf.bot_api_key}/status`, (req, res) => {
-      res.send('Web server IS online...');
-    });
-    console.log(timeStampLog() + 'Web server started successfully!'.green);
-    console.log(path.join(__dirname, 'assets/web/public'));
-
-    botConsole();
   } else if (action === 'STOP') {
     const webBackendClose = `http:\/\/localhost:${conf.bot_port_web}/api/${conf.bot_api_key}/close`;
     var webBackendStatus = `http:\/\/localhost:${conf.bot_port_web}/api/${conf.bot_api_key}/status`;
