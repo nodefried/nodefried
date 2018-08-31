@@ -16,7 +16,7 @@ const colors = require('colors');
 const fs = require('fs');
 const path = require('path');
 const express = require('express');
-const request = require('request');
+const request = require('request').defaults({ encoding: null });
 const http = require('http');
 const blessed = require('blessed');
 const node_dropbox = require('node-dropbox-v2');
@@ -495,9 +495,11 @@ function dropboxAPI(command, argument) {
     console.log(`${timeStampLog()}Testing Dropbox download...`);
     dropbox.getFile(argument[4], (err, res, body) => {
       if (!err) {
-        console.log(body);
-        console.log(timeStampLog() + 'Sucessfully wrote '.green + argument[4].green + ' to DropBox!'.green);
-        botConsole();
+        fs.writeFile(argument[6], body, 'utf8', (err) => {
+          if (err) return console.log(timeStampLog() + err);
+          console.log(timeStampLog() + 'Sucessfully wrote '.green + argument[4].green + ' to DropBox!'.green);
+          botConsole();
+        });
       } else if(err) {
         console.log(timeStampLog() + err);
         botConsole();
