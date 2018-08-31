@@ -714,7 +714,7 @@ function testCron(callback) {
     //peersUpdate();
     callback(null, 'finished!');
   }, 10000);
-)
+}
 function cron() {
   //console.log('started');
   peersUpdateCron(function(err, result) {
