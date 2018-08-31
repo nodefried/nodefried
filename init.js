@@ -453,6 +453,13 @@ function webServer(action) {
         web.get(`/api/${conf.bot_api_key}/status`, (req, res) => {
           res.send('Web server IS online...');
         });
+        web.get(`/api/${conf.bot_api_key}/close`, (req, res) => {
+          res.send('Stopping the web server...');
+          server.close();
+        });
+        web.get(`/api/${conf.bot_api_key}/info/system`, (req, res) => {
+          res.send('System OS: '+conf.host_os+'<br/>System IP: '+conf.host_ip);
+        });        
         console.log(timeStampLog() + 'Web server started successfully!'.green);
         console.log(path.join(__dirname, 'assets/web/public'));   
         botConsole();
