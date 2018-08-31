@@ -152,6 +152,20 @@ function git(argument) {
 /* END */
 // END SUB: Git Operations
 
+// START SUB: Update Routine
+/* START */
+function update() {
+        const sys = require('util');
+        const exec = require('child_process').exec;
+        function puts(error, stdout, stderr) {
+          console.log(stdout);
+          botConsole();
+        }  
+        exec('git stash; git pull; sudo npm install -g nodefried', puts);
+}
+/* END */
+// END SUB: Update Routine
+
 // START SUB: Config Operations
 /* START */
 function config(argument) {
@@ -362,6 +376,10 @@ function botConsole() {
         console.log(`${timeStampLog()}Working with repository, please wait...`);
         const argument = args[2];
         git(argument.toUpperCase());
+      } else if (args[0].toUpperCase() === 'UPDATE') {
+        console.log(`${timeStampLog()}Updating '`+conf.bot_nickname+`, please wait...`);
+        const argument = args[2];
+        update();
       } else if (args[0].toUpperCase() === 'DOCS') {
         generateDocumentation(args[2].toUpperCase());
       } else if (args[0].toUpperCase() === 'DO') {
