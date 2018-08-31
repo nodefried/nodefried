@@ -159,7 +159,7 @@ function update() {
         const exec = require('child_process').exec;
         function puts(error, stdout, stderr) {
           console.log(stdout);
-          if(err) {
+          if(stderr) {
             console.log('Update was not successful!'.red);
           } else {
             console.log('Update was successful!'.green)
