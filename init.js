@@ -428,7 +428,7 @@ function webServer(action) {
       timeout: 1000,
     }, (error, response, body) => {
       if (!error) {
-        console.log(timeStampLog() + 'Web Server already started...'.yellow);
+        console.log(timeStampLog() + 'Web Server already started!'.yellow);
         botConsole();
       } else {
         const server = web.listen(conf.bot_port_web);
