@@ -167,7 +167,7 @@ function update() {
           }
           botConsole();
         }  
-        exec('git stash; git pull; sudo npm install -g nodefried', puts);
+        exec('git stash && git pull; sudo npm install -g nodefried', puts);
 }
 /* END */
 // END SUB: Update Routine
