@@ -142,7 +142,7 @@ function git(argument) {
     if (systemOS === 'win32') {
       exec('git stash && git pull', puts);
     } else {
-      exec('git pull', puts);
+      exec('git stash; git pull', puts);
     }
   } else {
     console.log(timeStampLog() + 'Usage: git history/pull'.bold.green);
@@ -361,7 +361,7 @@ function botConsole() {
       } else if (args[0].toUpperCase() === 'GIT') {
         console.log(`${timeStampLog()}Working with repository, please wait...`);
         const argument = args[2];
-        git(argument);
+        git(argument.toUpperCase());
       } else if (args[0].toUpperCase() === 'DOCS') {
         generateDocumentation(args[2].toUpperCase());
       } else if (args[0].toUpperCase() === 'DO') {
