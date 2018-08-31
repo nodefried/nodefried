@@ -168,7 +168,7 @@ function update() {
           botConsole();
         }
         if (systemOS === 'win32') {  
-          exec('git stash & git pull & npm install -g nodefried', puts);
+          exec('git stash & git pull & npm install nodefried', puts);
         } else {
           exec('git stash ; git pull ; sudo npm install -g nodefried', puts);
         }
