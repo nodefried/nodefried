@@ -131,13 +131,13 @@ function git(argument) {
     console.log(stdout);
     botConsole();
   }
-  if (argument == 'HISTORY') {
+  if (argument === 'HISTORY') {
     if (systemOS === 'win32') {
       exec('git log --pretty=format:"%h - %an (%ae): %s" --shortstat  -n 3', puts);
     } else {
       exec('git log --pretty=format:"%h - %an (%ae): %s" --shortstat  -n 3', puts);
     }
-  } else if (argument == 'PULL') {
+  } else if (argument === 'PULL') {
     if (systemOS === 'win32') {
       exec('git stash && git pull', puts);
     } else {
@@ -162,7 +162,7 @@ function config(argument) {
     console.log(stdout);
     botConsole();
   }
-  if (argument == 'SHOW') {
+  if (argument === 'SHOW') {
     fs.readFile(`${__dirname}/config/config.json`, 'utf8', (err, data) => {
       if (err) {
         console.log(timeStampLog() + err);
@@ -170,7 +170,7 @@ function config(argument) {
       console.log(data);
       botConsole();
     });
-  } else if (argument == 'BACKUP') {
+  } else if (argument === 'BACKUP') {
     fs.readFile(config, 'utf8', (err, data) => {
       if (err) {
         return console.log(timeStampLog() + err);
@@ -182,7 +182,7 @@ function config(argument) {
         botConsole();
       });
     });
-  } else if (argument == 'WIPE') {
+  } else if (argument === 'WIPE') {
     fs.unlinkSync(`${__dirname}/config/config.json`, 'utf8', (err, data) => {
       if (err) {
         console.log(timeStampLog() + err);
@@ -308,10 +308,10 @@ function botConsolePrompt() {
 // START SUB: Discord Bot Controller
 /* START */
 function botDiscord(type, operation) {
-  if (operation == 'START') {
-    if (type == 'SELF') {
+  if (operation === 'START') {
+    if (type === 'SELF') {
       token = conf.discord_token_self;
-    } else if (type == 'BOT') {
+    } else if (type === 'BOT') {
       token = conf.discord_token_bot;
     }
     client = new Client();
@@ -327,7 +327,7 @@ function botDiscord(type, operation) {
     var msg = `Discord ${type.toLowerCase()} started successfully!`;
     console.log(timeStampLog() + msg.green);
     botConsole();
-  } else if (operation == 'STOP') {
+  } else if (operation === 'STOP') {
     var msg = `Discord ${type.toLowerCase()} stopped successfully!`;
     client.destroy();
     console.log(timeStampLog() + msg.red);
@@ -343,29 +343,29 @@ function botConsole() {
   if (fs.existsSync(`${__dirname}/config/config.json`)) {
     prompt(timeStampLog() + botConsolePrompt(), (botCommand) => {
       const args = botCommand.split(/(\s+)/);
-      if (args[0].toUpperCase() == 'EXIT') {
+      if (args[0].toUpperCase() === 'EXIT') {
         console.log(`${timeStampLog()}Exiting back to console...`);
         process.exit();
-      } else if (args[0].toUpperCase() == 'WEB') {
+      } else if (args[0].toUpperCase() === 'WEB') {
         webServer(args[2].toUpperCase());
-      } else if (args[0].toUpperCase() == 'DISCORD') {
+      } else if (args[0].toUpperCase() === 'DISCORD') {
         botDiscord(args[2].toUpperCase(), args[4]);
-      } else if (args[0].toUpperCase() == 'DROPBOX') {
+      } else if (args[0].toUpperCase() === 'DROPBOX') {
         dropboxAPI(args[2].toUpperCase(), args);
-      } else if (args[0].toUpperCase() == 'CONFIG') {
+      } else if (args[0].toUpperCase() === 'CONFIG') {
         config(args[2].toUpperCase());
-      } else if (args[0].toUpperCase() == 'PING') {
+      } else if (args[0].toUpperCase() === 'PING') {
         const host = args[2].toUpperCase();
         ping(host);
-      } else if (args[0].toUpperCase() == 'GIT') {
+      } else if (args[0].toUpperCase() === 'GIT') {
         console.log(`${timeStampLog()}Working with repository, please wait...`);
         const argument = args[2];
         git(argument);
-      } else if (args[0].toUpperCase() == 'DOCS') {
+      } else if (args[0].toUpperCase() === 'DOCS') {
         generateDocumentation(args[2].toUpperCase());
-      } else if (args[0].toUpperCase() == 'DO') {
+      } else if (args[0].toUpperCase() === 'DO') {
         doSomething();
-      } else if (args == '' || !args) {
+      } else if (args === '' || !args) {
         console.log(timeStampLog() + 'Need to enter a command...'.yellow);
         botConsole();
       } else {
@@ -392,7 +392,7 @@ function botConsole() {
 /* START */
 function webServer(action) {
   const web = express();
-  if (action == 'START') {
+  if (action === 'START') {
     const server = web.listen(conf.bot_port_web);
     web.use(express.static(path.join(__dirname, 'assets/web/public')));
     web.set('views', path.join(__dirname, 'assets/web/views'));
@@ -419,7 +419,7 @@ function webServer(action) {
     console.log(path.join(__dirname, 'assets/web/public'));
 
     botConsole();
-  } else if (action == 'STOP') {
+  } else if (action === 'STOP') {
     const webBackendClose = `http:\/\/localhost:${conf.bot_port_web}/api/${conf.bot_api_key}/close`;
     var webBackendStatus = `http:\/\/localhost:${conf.bot_port_web}/api/${conf.bot_api_key}/status`;
     request({
@@ -429,7 +429,7 @@ function webServer(action) {
       console.log(timeStampLog() + 'Web server stopped successfully!'.red);
       botConsole();
     });
-  } else if (action == 'STATUS') {
+  } else if (action === 'STATUS') {
     var webBackendStatus = `http:\/\/localhost:${conf.bot_port_web}/api/${conf.bot_api_key}/status`;
     request({
       url: webBackendStatus,
@@ -452,7 +452,7 @@ function webServer(action) {
 function dropboxAPI(command, argument) {
   dropbox = node_dropbox.api(conf.dropbox_token);
 
-  if (command == 'ACCOUNT') {
+  if (command === 'ACCOUNT') {
     console.log(`${timeStampLog()}Querying DropBox account information, please wait...`);
     dropbox.account((err, res, body) => {
       if (!err) {
@@ -464,7 +464,7 @@ function dropboxAPI(command, argument) {
       }
     });
   }
-  if (command == 'UPLOAD') {
+  if (command === 'UPLOAD') {
     console.log(`${timeStampLog()}Testing Dropbox upload...`);
     fs.readFile(`${__dirname}/${argument[4]}`, 'utf8', (err, data) => {
       if (err) {
@@ -498,7 +498,7 @@ function dropboxAPI(command, argument) {
 // START SUB: Documentation Generator
 /* START */
 function generateDocumentation(type) {
-  if (type == 'MARKUP') {
+  if (type === 'MARKUP') {
     console.log(timeStampLog() + 'Documentation generation beginning, please wait...'.yellow);
     fs.readFile(`${__dirname}/init.js`, 'utf8', (err, data) => {
       if (err) {
@@ -528,7 +528,7 @@ function generateDocumentation(type) {
       });
     });
     console.log(timeStampLog() + 'Documentation (markup) generation done!'.bold.green);
-  } else if (type == 'HTML') {
+  } else if (type === 'HTML') {
     console.log(timeStampLog() + 'Documentation generation beginning, please wait...'.yellow);
     if (fs.existsSync(`${__dirname}/docs/DOCS.md`)) {
       fs.readFile(`${__dirname}/docs/DOCS.md`, 'utf8', (err, data) => {
