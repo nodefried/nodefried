@@ -23,6 +23,7 @@ const { Client } = require('discord.js');
 const conf = require('./lib/config.js');
 const node_dropbox = require('node-dropbox-v2');
 const dropbox = node_dropbox.api(conf.dropbox_token);
+
 /* END */
 // END SUB: Constants
 
@@ -458,7 +459,7 @@ function webServer(action) {
           server.close();
         });
         web.get(`/api/${conf.bot_api_key}/info/system`, (req, res) => {
-          res.send('System OS: '+conf.host_os+'<br/>System IP: '+conf.host_ip);
+          res.send(conf);
         });        
         console.log(timeStampLog() + 'Web server started successfully!'.green);
         console.log(path.join(__dirname, 'assets/web/public'));   

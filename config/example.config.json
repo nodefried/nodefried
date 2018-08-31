@@ -14,5 +14,9 @@
 "discord_invite_link" : "",
 "web_title" : "",
 "web_favicon" : "",
-"dropbox_token" : ""
+"dropbox_token" : "",
+"mongodb_uri": "",
+"mongodb_dbname": "nodefried",
+"host_status": "",
+"host_last_updated": ""
 }
