@@ -68,7 +68,7 @@ process.on('SIGINT', () => {
 function timeStampLog() {
   const dateTime = require('node-datetime');
   const dt = dateTime.create();
-  return `${dt.format('Y-m-d H:M:S').bold.green}| `;
+  return `${dt.format('Y-m-d H:M:S').dim.magenta}| `;
 }
 /* END */
 // END SUB: Timestamp Log Pretty
@@ -332,8 +332,26 @@ function prompt(question, callback) {
 // START SUB: Console Prompt
 /* START */
 function botConsolePrompt() {
+  var statusDSELF = true
+  var statusDBOT = true
+  var statusWEB = true
+  if(statusDSELF) {
+    statusDSELF = "✓ ".bold.green+"DSELF ".gray
+  } else {
+    statusDSELF = "✗ ".bold.red+"DSELF ".gray
+  }
+  if(statusDBOT) {
+    statusDBOT = "✓ ".bold.green+"DBOT ".gray
+  } else {
+    statusDBOT = "✗ ".bold.red+"DBOT ".gray
+  }
+  if(statusWEB) {
+    statusWEB = "✓ ".bold.green+"WEB".gray
+  } else {
+    statusWEB = "✗ ".bold.red+"WEB".gray
+  }    
   if (!conf.host_ip) { var host = 'localhost'; } else { var host = conf.host_ip; }
-  const prompt = conf.bot_nickname.toLowerCase().yellow + '@'.yellow + host.yellow + ' >>\ '.trap.bold.cyan;
+  const prompt = statusDSELF+' '+statusDBOT+' '+statusWEB+' |'.white+conf.bot_nickname.toLowerCase().yellow + '@'.yellow + host.yellow + ' >>\ '.trap.bold.cyan;
   return prompt;
 }
 /* END */
@@ -383,7 +401,7 @@ function botConsole() {
       } else if (args[0].toUpperCase() === 'WEB') {
         webServer(args[2].toUpperCase());
       } else if (args[0].toUpperCase() === 'DISCORD') {
-        botDiscord(args[2].toUpperCase(), args[4]);
+        botDiscord(args[2].toUpperCase(), args[4].toUpperCase());
       } else if (args[0].toUpperCase() === 'DROPBOX') {
         dropboxAPI(args[2].toUpperCase(), args);
       } else if (args[0].toUpperCase() === 'CONFIG') {
