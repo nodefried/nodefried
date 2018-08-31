@@ -41,7 +41,7 @@
         "http": "0.0.0",
         "keypress": "^0.2.1",
         "node-datetime": "^2.1.0",
-        "node-dropbox-v2": "^0.0.1",
+        "node-dropbox-v2": "^0.1.6",
         "node-key-sender": "^1.0.10",
         "os": "^0.1.1",
         "path": "^0.12.7",
