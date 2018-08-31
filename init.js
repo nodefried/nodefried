@@ -429,6 +429,7 @@ function webServer(action) {
     }, (error, response, body) => {
       if (!error) {
         console.log(timeStampLog() + 'Web Server already started...'.yellow);
+        botConsole();
       } else {
         const server = web.listen(conf.bot_port_web);
         web.use(express.static(path.join(__dirname, 'assets/web/public')));
