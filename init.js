@@ -464,7 +464,7 @@ function dropboxAPI(command, argument) {
       }
     });
   }
-  if (command === 'UPLOAD') {
+  if (command === 'PUT') {
     console.log(`${timeStampLog()}Testing Dropbox upload...`);
     fs.readFile(`${__dirname}/${argument[4]}`, 'utf8', (err, data) => {
       if (err) {
@@ -484,12 +484,25 @@ function dropboxAPI(command, argument) {
           console.log(`Content Hash: ${result.content_hash}`);
           console.log(timeStampLog() + 'Sucessfully wrote '.green + argument[4].green + ' to DropBox!'.green);
           botConsole();
-        } else {
+        } else if(err) {
           console.log(timeStampLog() + err);
           botConsole();
         }
       });
-    });
+    })
+  }
+  if (command === 'GET') {
+    console.log(`${timeStampLog()}Testing Dropbox download...`);
+    dropbox.getFile(argument[4], (err, res, body) => {
+      if (!err) {
+        console.log(body);
+        console.log(timeStampLog() + 'Sucessfully wrote '.green + argument[4].green + ' to DropBox!'.green);
+        botConsole();
+      } else if(err) {
+        console.log(timeStampLog() + err);
+        botConsole();
+      }
+    });  
   }
 }
 /* END */
