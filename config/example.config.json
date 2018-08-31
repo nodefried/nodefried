@@ -1,0 +1,18 @@
+{
+"bot_nickname" : "Nodefried",
+"bot_port_web" : "9876",
+"bot_port_com" : "9875",
+"bot_api_key" : "0101",
+"bot_logo_long" : "",
+"bot_logo_square" : "",
+"bot_info_website" : "",
+"bot_info_copyright" : "",
+"bot_shell_whitelist" : "ls, dir, cat, nslookup, dig, tracert, cp, copy, mv, dir, del, clear, ipconfig, ip, ifconfig, openvpn",
+"bot_motd_disable": "",
+"discord_token_bot" : "",
+"discord_token_self" : "",
+"discord_invite_link" : "",
+"web_title" : "",
+"web_favicon" : "",
+"dropbox_token" : ""
+}
