@@ -47,7 +47,6 @@ console.fileLog = function(d,file) {
 
 // START SUB: Events and Signals
 /* START */
-
 // var eventEmitter = require('events').EventEmitter;
 // var ee = new eventEmitter;
 // ee.on('botConsole', botConsole);
@@ -336,23 +335,35 @@ function botConsolePrompt() {
   var statusDSELF = true
   var statusDBOT = true
   var statusWEB = true
+  var statusDBOX = true
+  var statusDB = true
   if(statusDSELF) {
-    statusDSELF = "✓ ".bold.green+"DSELF ".gray
+    statusDSELF = "✓ ".bold.green+"DSELF".gray
   } else {
-    statusDSELF = "✗ ".bold.red+"DSELF ".gray
+    statusDSELF = "✗ ".bold.red+"DSELF".gray
   }
   if(statusDBOT) {
-    statusDBOT = "✓ ".bold.green+"DBOT ".gray
+    statusDBOT = "✓ ".bold.green+"DBOT".gray
   } else {
-    statusDBOT = "✗ ".bold.red+"DBOT ".gray
+    statusDBOT = "✗ ".bold.red+"DBOT".gray
   }
   if(statusWEB) {
     statusWEB = "✓ ".bold.green+"WEB".gray
   } else {
     statusWEB = "✗ ".bold.red+"WEB".gray
-  }    
+  } 
+  if(statusDBOX) {
+    statusDBOX = "✓ ".bold.green+"DBOX".gray
+  } else {
+    statusDBOX = "✗ ".bold.red+"DBOX".gray
+  }      
+  if(statusDB) {
+    statusDB = "✓ ".bold.green+"DB".gray
+  } else {
+    statusDB = "✗ ".bold.red+"DB".gray
+  }        
   if (!conf.host_ip) { var host = 'localhost'; } else { var host = conf.host_ip; }
-  const prompt = statusDSELF+' '+statusDBOT+' '+statusWEB+' |'.white+conf.bot_nickname.toLowerCase().yellow + '@'.yellow + host.yellow + ' >>\ '.trap.bold.cyan;
+  const prompt = statusDSELF+' '+statusDBOT+' '+statusWEB+' '+statusDBOX+' '+statusDB+' |'.white+conf.bot_nickname.toLowerCase().yellow + '@'.yellow + host.yellow + ' >>\ '.trap.bold.cyan;
   return prompt;
 }
 /* END */

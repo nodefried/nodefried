@@ -2,7 +2,7 @@
 ## Description
 An all purpose Node.js bot with built with console + prompt + misc other things.
 
-![Now with Status Indicators!](https://s19.postimg.cc/d1b1b7bir/screenshot_2018_08_31_at_17_01_51.png)
+![Now with Status Indicators!](https://s19.postimg.cc/ncne3rg1v/screenshot_2018_08_31_at_17_18_03.png)
 ## Features
 - [x] Interactive Console
 - [x] Pretty Colors
