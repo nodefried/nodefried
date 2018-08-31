@@ -19,9 +19,10 @@ const express = require('express');
 const request = require('request').defaults({ encoding: null });
 const http = require('http');
 const blessed = require('blessed');
-const node_dropbox = require('node-dropbox-v2');
 const { Client } = require('discord.js');
 const conf = require('./lib/config.js');
+const node_dropbox = require('node-dropbox-v2');
+const dropbox = node_dropbox.api(conf.dropbox_token);
 /* END */
 // END SUB: Constants
 
@@ -450,8 +451,6 @@ function webServer(action) {
 // START SUB: Dropbox API
 /* START */
 function dropboxAPI(command, argument) {
-  dropbox = node_dropbox.api(conf.dropbox_token);
-
   if (command === 'ACCOUNT') {
     console.log(`${timeStampLog()}Querying DropBox account information, please wait...`);
     dropbox.account((err, res, body) => {
@@ -509,6 +508,48 @@ function dropboxAPI(command, argument) {
 }
 /* END */
 // END SUB: Dropbox API
+
+// START SUB: Peers List Wipe
+/* START */
+function peersWipe() {
+  fs.writeFile('config/peers.json', '{}', {ecoding: 'utf8'}, (err) => {
+    if (err) return console.log(timeStampLog() + err);
+  });
+}
+/* END */
+// END SUB: Peers List Wipe
+
+// START SUB: Peers List Get
+/* START */
+function peersGet() {
+  dropbox.getFile('controller/peers.json', (err, res, body) => {
+    if (!err) {
+      fs.writeFile('config/peers.json', body, {ecoding: 'utf8'}, (err) => {
+        if (err) return console.log(timeStampLog() + err);
+      });
+    } else if(err) {
+    }
+  });  
+}
+/* END */
+// END SUB: Peer List Get
+
+// START SUB: Peers List Get
+/* START */
+function peersUpdate() {
+  fs.readFile('config/peers.json', 'utf8', (err, data) => {
+    if (err) {
+      return console.log(err);
+    }  
+    dropbox.createFile('controller/peers.json', data, (err, res, body) => {
+      if (!err) {
+      } else if(err) {
+      }
+    });  
+  });
+}
+/* END */
+// END SUB: Peer List Get
 
 // START SUB: Documentation Generator
 /* START */
@@ -591,6 +632,7 @@ function generateDocumentation(type) {
 // COMMENT: Calls the console, which everything else calls back too... kinda.
 /* START */
 botConsole();
+//peersUpdate();
 /* END */
 // END SUB: Initial Prompt and Console
 

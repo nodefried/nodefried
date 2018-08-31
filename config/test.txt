@@ -1,5 +1,0 @@
-this is a 
-sample
-text file with
-return endings and spaces.
-
