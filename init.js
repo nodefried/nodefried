@@ -166,8 +166,12 @@ function update() {
             console.log('Update was successful!'.green)
           }
           botConsole();
-        }  
-        exec('git stash && git pull && sudo npm install -g nodefried', puts);
+        }
+        if (systemOS === 'win32') {  
+          exec('git stash & git pull & sudo npm install -g nodefried', puts);
+        } else {
+          exec('git stash ; git pull ; sudo npm install -g nodefried', puts);
+        }
 }
 /* END */
 // END SUB: Update Routine
