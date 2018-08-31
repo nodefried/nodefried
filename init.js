@@ -23,7 +23,9 @@ const { Client } = require('discord.js');
 const conf = require('./lib/config.js');
 const node_dropbox = require('node-dropbox-v2');
 const dropbox = node_dropbox.api(conf.dropbox_token);
-
+const MongoClient = require('mongodb').MongoClient;
+const mongoURI = conf.mongodb_uri;
+const assert = require('assert');
 /* END */
 // END SUB: Constants
 
@@ -103,27 +105,6 @@ function ping(host) {
 /* END */
 // END SUB: Ping
 
-// START SUB: Get Public IP
-/* START */
-function getPublicIP() {
-  http.get('http://bot.whatismyipaddress.com', (res) => {
-    res.setEncoding('utf8');
-    res.on('data', (chunk) => {
-      fs.writeFile(`${__dirname}/config/ip`, chunk, 'utf8', (err) => {
-        if (err) { }
-      });
-    });
-  });
-  fs.readFile(`${__dirname}/config/ip`, 'utf8', (err, data) => {
-    if (err) {
-      console.log(timeStampLog() + err);
-    }
-    console.log(data);
-  });
-}
-/* END */
-// END SUB: Get Public IP
-
 // START SUB: Git Operations
 /* START */
 function git(argument) {
@@ -152,6 +133,7 @@ function git(argument) {
 }
 /* END */
 // END SUB: Git Operations
+
 
 // START SUB: Update Routine
 /* START */
@@ -583,17 +565,34 @@ function peersGet() {
 // START SUB: Peers List Get
 /* START */
 function peersUpdate() {
-  fs.readFile('config/peers.json', 'utf8', (err, data) => {
-    if (err) {
-      return console.log(err);
-    }  
-    dropbox.createFile('controller/peers.json', data, (err, res, body) => {
-      if (!err) {
-      } else if(err) {
-      }
-    });  
+  http.get('http://bot.whatismyipaddress.com', (res) => {
+    res.setEncoding('utf8');
+    res.on('data', (chunk) => {
+      MongoClient.connect(conf.mongodb_uri, { useNewUrlParser: true }, function(err, db) {
+        if (err) throw err;
+        var dbo = db.db(conf.mongodb_dbname);  
+        var fileNameConfig = __dirname+'/config/config.json';
+        var fileConfig = require(fileNameConfig);    
+        var lookup = { host_ip: chunk };
+        var peerUpdateInfo = { $set: fileConfig };
+        dbo.collection("peers").updateOne(lookup, peerUpdateInfo, {upsert: true, safe: false}, function(err, res) {
+          if (err) throw err;
+        });                
+      }); 
+    });
   });
 }
+  // old dropbox method
+  // fs.readFile('config/peers.json', 'utf8', (err, data) => {
+  //   if (err) {
+  //     return console.log(err);
+  //   }  
+  //   dropbox.createFile('controller/peers.json', data, (err, res, body) => {
+  //     if (!err) {
+  //     } else if(err) {
+  //     }
+  //   });  
+  // });
 /* END */
 // END SUB: Peer List Get
 
@@ -677,8 +676,36 @@ function generateDocumentation(type) {
 // START SUB: Initial Prompt and Console
 // COMMENT: Calls the console, which everything else calls back too... kinda.
 /* START */
+
+function peersUpdateCron(callback) {
+  setInterval(function() {
+    console.log('peers update cron finished')
+    peersUpdate();
+    callback(null, 'finished!');
+  }, 20000);
+}
+
+function testCron(callback) {
+  setInterval(function() {
+    console.log('status update cron finished')
+    //peersUpdate();
+    callback(null, 'finished!');
+  }, 10000);
+}
+
+function cron() {
+  console.log('started');
+  peersUpdateCron(function(err, result) {
+    return result;
+  });
+  testCron(function(err, result) {
+    return result;
+  });  
+}
+
+cron();
 botConsole();
-//peersUpdate();
+
 /* END */
 // END SUB: Initial Prompt and Console
 
