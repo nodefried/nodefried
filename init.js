@@ -160,6 +160,7 @@ function update() {
         function puts(error, stdout, stderr) {
           console.log(stdout);
           if(stderr) {
+            console.log('ERROR:'+stderr);
             console.log('Update was not successful!'.red);
           } else {
             console.log('Update was successful!'.green)
