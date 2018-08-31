@@ -699,10 +699,8 @@ function generateDocumentation(type) {
 
 // START SECTION: RUNTIME
 
-// START SUB: Initial Prompt and Console
-// COMMENT: Calls the console, which everything else calls back too... kinda.
+//START SUB: Cron Jobs
 /* START */
-
 function peersUpdateCron(callback) {
   setInterval(function() {
     console.fileLog('Peers Synchronized Sucessfully!', log_file_peers)
@@ -710,15 +708,13 @@ function peersUpdateCron(callback) {
     callback(null, 'finished!');
   }, 20000);
 }
-
 function testCron(callback) {
   setInterval(function() {
     console.fileLog('Peer Status Updated Sucessfully!', log_file_peers)
     //peersUpdate();
     callback(null, 'finished!');
   }, 10000);
-}
-
+)
 function cron() {
   //console.log('started');
   peersUpdateCron(function(err, result) {
@@ -728,10 +724,14 @@ function cron() {
     return result;
   });  
 }
-
 cron();
-botConsole();
+/* END */
+//END SUB: Cron Jobs
 
+// START SUB: Initial Prompt and Console
+// COMMENT: Calls the console, which everything else calls back too... kinda.
+/* START */
+botConsole();
 /* END */
 // END SUB: Initial Prompt and Console
 
