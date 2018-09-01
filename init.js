@@ -488,8 +488,8 @@ function webServer(action) {
         var httpServer = http.createServer(web);
         var httpsServer = https.createServer(credentials, web);
         
-        httpServer.listen(8080);
-        httpsServer.listen(8443);
+        httpServer.listen(80);
+        httpsServer.listen(443);
 
         web.use(express.static(path.join(__dirname, 'assets/web/public')));
         web.set('views', path.join(__dirname, 'assets/web/views'));
@@ -503,7 +503,7 @@ function webServer(action) {
           bot_info_website: conf.bot_info_website,
           bot_info_copyright: conf.bot_info_copyright,
           discord_invite_link: conf.discord_invite_link,
-          theme: 'default',
+          theme: 'cyborg',
         }));
         web.get(`/api/${conf.bot_api_key}/close`, (req, res) => {
           res.send('Stopping the web server...');
