@@ -468,7 +468,6 @@ function botConsole() {
 // START SUB: Web Server
 /* START */
 function webServer(action) {
-  const web = express();
   if (action === 'START') {
     var webBackendStatus = `http:\/\/localhost:${conf.bot_port_web}/api/${conf.bot_api_key}/status`;
     request({
@@ -480,19 +479,21 @@ function webServer(action) {
         botConsole();
       } else {
 
-        var options = {
-          key: fs.readFileSync(__dirname+'/assets/ssl/privatekey.pem'),
-          cert: fs.readFileSync(__dirname+'/assets/ssl/certificate.pem'),
-        };
-        //var webHTTPS = web.createServer(options, web).listen(conf.bot_port_web_ssl);
-        var webServerHTTP = web.listen(conf.bot_port_web);
-        var webServerHTTPS = https.createServer(options, web).listen(conf.bot_port_web_ssl);
-       
+        var privateKey  = fs.readFileSync(__dirname+'/assets/ssl/privatekey.pem', 'utf8');
+        var certificate = fs.readFileSync(__dirname+'/assets/ssl/certificate.pem', 'utf8');
+        
+        var credentials = {key: privateKey, cert: certificate};
+        var web = express();
+              
+        var httpServer = http.createServer(web);
+        var httpsServer = https.createServer(credentials, web);
+        
+        httpServer.listen(8080);
+        httpsServer.listen(8443);
+
         web.use(express.static(path.join(__dirname, 'assets/web/public')));
         web.set('views', path.join(__dirname, 'assets/web/views'));
         web.set('view engine', 'ejs');
-        web.set('key',fs.readFileSync(__dirname+'/assets/ssl/privatekey.pem'));
-        web.set('cert',fs.readFileSync(__dirname+'/assets/ssl/certificate.pem'));
         web.get('/', (req, res) => res.render('pages/index', {
           web_title: conf.web_title,
           web_favicon: conf.web_favicon,
@@ -517,11 +518,10 @@ function webServer(action) {
         });
         web.get(`/api/${conf.bot_api_key}/info/system`, (req, res) => {
           res.send(conf);
-        });        
+        });      
         console.log(timeStampLog() + 'Web server started successfully!'.green);
         console.log(path.join(__dirname, 'assets/web/public'));   
         botConsole();
-
       }
     });
   } else if (action === 'STOP') {
