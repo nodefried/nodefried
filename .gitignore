@@ -3,5 +3,9 @@ config/config.json
 config/config.json.backup
 config/peers.json
 config/host.json
+assets/ssl/*.pem
+assets/ssl/*
 assets/ssl
-logs/*.log
+logs
+logs/*
+logs/

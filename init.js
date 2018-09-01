@@ -37,7 +37,6 @@ const log_file_services = fs.createWriteStream(`${__dirname}/logs/services.log`,
 const log_file_peers = fs.createWriteStream(`${__dirname}/logs/peers.log`, { flags: 'w' });
 const log_file_cloudflare = fs.createWriteStream(`${__dirname}/logs/cloudflare.log`, { flags: 'w' });
 const log_stdout = process.stdout;
-
 /* END */
 // END SUB: Constants
 
