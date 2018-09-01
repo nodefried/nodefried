@@ -19,42 +19,6 @@
 </div>
 <div class="container" style="text-align:center;">
 <h3><span class="glyphicon glyphicon-info-sign"></span><%= bot_nickname %> is Operational</h3>
-<%=
-getStatus = function(value) {
-  var statusDSELF = true;
-  var statusDBOT = true;
-  var statusWEB = true;
-  var statusDBOX = true;
-  var statusDB = true;
-  if(statusDSELF) {
-    statusDSELF = "✓ ".bold.green+"DSELF".gray;
-  } else {
-    statusDSELF = "✗ ".bold.red+"DSELF".gray;
-  }
-  if(statusDBOT) {
-    statusDBOT = "✓ ".bold.green+"DBOT".gray;
-  } else {
-    statusDBOT = "✗ ".bold.red+"DBOT".gray;
-  }
-  if(statusWEB) {
-    statusWEB = "✓ ".bold.green+"WEB".gray;
-  } else {
-    statusWEB = "✗ ".bold.red+"WEB".gray;
-  } 
-  if(conf.dropbox_token) {
-    statusDBOX = "✓ ".bold.green+"DBOX".gray;
-  } else {
-    statusDBOX = "✗ ".bold.red+"DBOX".gray;
-  }      
-  if(statusDB) {
-    statusDB = "✓ ".bold.green+"DB".gray;
-  } else {
-    statusDB = "✗ ".bold.red+"DB".gray;
-  }    
-  return statusDSELF+' '+statusDBOT+' '+statusWEB+' '+statusDBOX+' '+statusDB;
-}
-getStatus('true', {async: true});
-%>
 <br /><br />
 <hr>
 <div class="row">
