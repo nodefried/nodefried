@@ -685,40 +685,59 @@ function generateDocumentation() {
           '```js')
         .replace(/\/\* END \*\//g,
           '```');
-		fs.writeFile(`${__dirname}/docs/DOCS.md`, result, 'utf8', (err) => {
-			if (err) {
-			  return console.log(timeStampLog() + err);
-			} else {
-				if (fs.existsSync(`${__dirname}/docs/DOCS.md`)) {
-					fs.readFile(`${__dirname}/docs/DOCS.md`, 'utf8', (err, data) => {
+	fs.writeFile(`${__dirname}/docs/DOCS.md`, result, 'utf8', (err) => {
+		if (err) {
+		  return console.log(timeStampLog() + err);
+		} else {
+			if (fs.existsSync(`${__dirname}/docs/DOCS.md`)) {
+				fs.readFile(`${__dirname}/docs/DOCS.md`, 'utf8', (err, data) => {
+					if (err) {
+					  return console.log(timeStampLog() + err);
+					} else {
+					  var showdown  = require('showdown'),
+						  converter = new showdown.Converter(),
+						  text      = '# hello, markdown!',
+						  html      = converter.makeHtml(data);
+					  fs.writeFile(`${__dirname}/docs/DOCS.html`, html, 'utf8', (err) => {
 						if (err) {
-						  return console.log(timeStampLog() + err);
+							return console.log(timeStampLog() + err);
 						} else {
-						  var showdown  = require('showdown'),
-							  converter = new showdown.Converter(),
-							  text      = '# hello, markdown!',
-							  html      = converter.makeHtml(data);
-						  fs.writeFile(`${__dirname}/docs/DOCS.html`, html, 'utf8', (err) => {
-							if (err) {
-								return console.log(timeStampLog() + err);
-							} else {
-								var docStyle = `
-								<style>
-									body { background-color:#ffffff;color:#000;padding:5px; }
-									pre { border:1px solid gray; background-color:#f8f8ff;box-shadow:inset 0px 0px 0px 2px #D3D3D3;padding:2px;color:black;font-family: 'Lucida Console';font-size:.8em; } 
-								</style>`;
-								fs.appendFile(`${__dirname}/docs/DOCS.html`, docStyle, function (err) {
-									if (err) throw err;
-								});			
-							}
-						  });
+							var docStyle = `
+							<style>
+								body { 
+									background-color:#ffffff;color:#000;padding:5px; 
+								}
+								pre { 
+									border:1px solid gray; 
+									background-color:#f8f8ff;
+									box-shadow:inset 0px 0px 0px 2px #D3D3D3;
+									padding:2px;color:black;font-family: 'Lucida Console';
+									font-size:.8em; 
+								} 
+							</style>`;
+							var docStyle2 = `
+								<link type="text/css" rel="stylesheet" href="https://raw.githubusercontent.com/sindresorhus/github-markdown-css/gh-pages/github-markdown.css">
+							`;
+							const data = fs.readFileSync(`${__dirname}/docs/DOCS.html`)
+							const fd = fs.openSync(`${__dirname}/docs/DOCS.html`, 'w+')
+							const insert = new Buffer(docStyle2)
+							fs.writeSync(fd, insert, 0, insert.length, 0)
+							fs.writeSync(fd, data, 0, data.length, insert.length)
+							fs.close(fd, (err) => {
+							  if (err) throw err;
+							});
+							//fs.prependFile(`${__dirname}/docs/DOCS.html`, docStyle2, function (err) {
+							//	if (err) throw err;
+							//});			
 						}
-					});
-				}
+					  });
+					}
+				});
 			}
-		});
-		console.log(timeStampLog() + 'Documentation generation done!'.bold.green);
-		botConsole();
+		}
+	});
+	console.log(timeStampLog() + 'Documentation generation done!'.bold.green);
+	botConsole();
 	});
 }
 /* END */
