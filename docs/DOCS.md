@@ -68,7 +68,7 @@ process.on('SIGINT', () => {
 function timeStampLog() {
   const dateTime = require('node-datetime');
   const dt = dateTime.create();
-  return `᚛- `.bold.magenta+getStatusLine()+` -᚜`.bold.magenta+`\n`+`${dt.format('Y-m-d H:M:S').dim.magenta} |`;
+  return `${dt.format('Y-m-d H:M:S').dim.magenta} | `+getStatusLine()+` | `;
 }
 ```
 
@@ -338,29 +338,29 @@ function getStatusLine() {
   var statusDBOX = true
   var statusDB = true
   if(statusDSELF) {
-    statusDSELF = "✓ ".bold.green+"DSELF".gray
+    statusDSELF = "b ".bold.green+"DSELF".gray
   } else {
-    statusDSELF = "✗ ".bold.red+"DSELF".gray
+    statusDSELF = "b ".bold.red+"DSELF".gray
   }
   if(statusDBOT) {
-    statusDBOT = "✓ ".bold.green+"DBOT".gray
+    statusDBOT = "b ".bold.green+"DBOT".gray
   } else {
-    statusDBOT = "✗ ".bold.red+"DBOT".gray
+    statusDBOT = "b ".bold.red+"DBOT".gray
   }
   if(statusWEB) {
-    statusWEB = "✓ ".bold.green+"WEB".gray
+    statusWEB = "b ".bold.green+"WEB".gray
   } else {
-    statusWEB = "✗ ".bold.red+"WEB".gray
+    statusWEB = "b ".bold.red+"WEB".gray
   } 
   if(conf.dropbox_token) {
-    statusDBOX = "✓ ".bold.green+"DBOX".gray
+    statusDBOX = "b ".bold.green+"DBOX".gray
   } else {
-    statusDBOX = "✗ ".bold.red+"DBOX".gray
+    statusDBOX = "b ".bold.red+"DBOX".gray
   }      
   if(statusDB) {
-    statusDB = "✓ ".bold.green+"DB".gray
+    statusDB = "b ".bold.green+"DB".gray
   } else {
-    statusDB = "✗ ".bold.red+"DB".gray
+    statusDB = "b ".bold.red+"DB".gray
   }    
   return statusDSELF+' '+statusDBOT+' '+statusWEB+' '+statusDBOX+' '+statusDB;
 }
@@ -441,23 +441,23 @@ function botConsole() {
         generateDocumentation();
       } else if (args[0].toUpperCase() === 'DO') {
         doSomething();
-      } else if (args === '' || !args) {
+      } else if (args[0] === '' || !args[0]) {
         console.log(timeStampLog() + 'Need to enter a command...'.yellow);
         botConsole();
       } else {
-        const sys = require('util');
-        const exec = require('child_process').exec;
-        function puts(error, stdout, stderr) {
-          console.log(stdout);
-          botConsole();
-        }
-        if (conf.bot_shell_whitelist.indexOf(args[0].toLowerCase()) != -1) {
-          exec(botCommand, puts);
-        } else {
-          console.log(`${timeStampLog()}This command is blacklisted!`);
-          botConsole();
-        }
-      }
+       const sys = require('util');
+       const exec = require('child_process').exec;
+       function puts(error, stdout, stderr) {
+         console.log(stdout);
+         botConsole();
+       }
+       if (conf.bot_shell_whitelist.indexOf(args[0].toLowerCase()) != -1) {
+         exec(botCommand, puts);
+       } else {
+         console.log(`${timeStampLog()}This command is blacklisted!`);
+         botConsole();
+       }
+	    }
     });
   }
 }
@@ -639,10 +639,14 @@ function peersUpdate() {
         var fileConfig = require(fileNameConfig);    
         var lookup = { host_ip: chunk };
         var peerUpdateInfo = { $set: fileConfig };
+		var timeStamp = + new Date();
         dbo.collection("peers").updateOne(lookup, peerUpdateInfo, {upsert: true, safe: false}, function(err, res) {
           if (err) throw err;
         });                
-      }); 
+        dbo.collection("peers").updateOne(lookup, { $set: { host_last_updated: timeStamp } }, {upsert: true, safe: false}, function(err, res) {
+          if (err) throw err;
+        }); 
+	  }); 
     });
   });
 }
@@ -664,7 +668,7 @@ function peersUpdate() {
 ```js
 function generateDocumentation() {
     console.log(timeStampLog() + 'Documentation generation beginning, please wait...'.yellow);
-    fs.readFile(`${__dirname}/init.js`, 'utf8', (err, data) => {
+    fs.readFile(`${__dirname}/init.js`, 'ascii', (err, data) => {
       if (err) {
         return console.log(timeStampLog() + err);
       }
@@ -685,12 +689,12 @@ function generateDocumentation() {
           '```js')
         .replace(/\/\* END \*\//g,
           '```');
-	fs.writeFile(`${__dirname}/docs/DOCS.md`, result, 'utf8', (err) => {
+	fs.writeFile(`${__dirname}/docs/DOCS.md`, result, 'ascii', (err) => {
 		if (err) {
 		  return console.log(timeStampLog() + err);
 		} else {
 			if (fs.existsSync(`${__dirname}/docs/DOCS.md`)) {
-				fs.readFile(`${__dirname}/docs/DOCS.md`, 'utf8', (err, data) => {
+				fs.readFile(`${__dirname}/docs/DOCS.md`, 'ascii', (err, data) => {
 					if (err) {
 					  return console.log(timeStampLog() + err);
 					} else {
@@ -698,7 +702,7 @@ function generateDocumentation() {
 						  converter = new showdown.Converter(),
 						  text      = '# hello, markdown!',
 						  html      = converter.makeHtml(data);
-					  fs.writeFile(`${__dirname}/docs/DOCS.html`, html, 'utf8', (err) => {
+					  fs.writeFile(`${__dirname}/docs/DOCS.html`, html, 'ascii', (err) => {
 						if (err) {
 							return console.log(timeStampLog() + err);
 						} else {
@@ -715,14 +719,15 @@ function generateDocumentation() {
 									font-size:.8em; 
 								} 
 							</style>`;
-							var docStyle2 = `
-								<link type="text/css" rel="stylesheet" href="https://raw.githubusercontent.com/sindresorhus/github-markdown-css/gh-pages/github-markdown.css">
+              var docStyle2 = `
+                <meta charset="utf-8"/>
+								<link type="text/css" rel="stylesheet" href="https://raw.githubusercontent.com/nodefried/nodefried/master/assets/web/public/stylesheets/github-markdown.css">
 							`;
 							const data = fs.readFileSync(`${__dirname}/docs/DOCS.html`)
 							const fd = fs.openSync(`${__dirname}/docs/DOCS.html`, 'w+')
 							const insert = new Buffer(docStyle2)
-							fs.writeSync(fd, insert, 0, insert.length, 0)
-							fs.writeSync(fd, data, 0, data.length, insert.length)
+							fs.writeSync(fd, insert, 0, 'ascii', insert.length, 0)
+							fs.writeSync(fd, data, 0, 'ascii', data.length, insert.length)
 							fs.close(fd, (err) => {
 							  if (err) throw err;
 							});
