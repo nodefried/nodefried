@@ -21,17 +21,15 @@ const http = require('http');
 const https = require('https');
 const blessed = require('blessed');
 const { Client } = require('discord.js');
+const conf = require('./lib/config.js');
 const node_dropbox = require('node-dropbox-v2');
-
 const dropbox = node_dropbox.api(conf.dropbox_token);
-const MongoClient = require('mongodb').MongoClient;
 
+const MongoClient = require('mongodb').MongoClient;
 const mongoURI = conf.mongodb_uri;
 const assert = require('assert');
 const util = require('util');
 const cloudflareddns = require('cloudflare-dynamic-dns2');
-const conf = require('./lib/config.js');
-
 const log_file_debug = fs.createWriteStream(`${__dirname}/logs/debug.log`, { flags: 'w' });
 const log_file_irc = fs.createWriteStream(`${__dirname}/logs/irc.log`, { flags: 'w' });
 const log_file_discord = fs.createWriteStream(`${__dirname}/logs/discord.log`, { flags: 'w' });
@@ -39,6 +37,7 @@ const log_file_services = fs.createWriteStream(`${__dirname}/logs/services.log`,
 const log_file_peers = fs.createWriteStream(`${__dirname}/logs/peers.log`, { flags: 'w' });
 const log_file_cloudflare = fs.createWriteStream(`${__dirname}/logs/cloudflare.log`, { flags: 'w' });
 const log_stdout = process.stdout;
+
 /* END */
 // END SUB: Constants
 
