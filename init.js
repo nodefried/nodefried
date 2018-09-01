@@ -68,7 +68,7 @@ process.on('SIGINT', () => {
 function timeStampLog() {
   const dateTime = require('node-datetime');
   const dt = dateTime.create();
-  return `${dt.format('Y-m-d H:M:S').dim.magenta}| `;
+  return `᚛- `.bold.magenta+getStatusLine()+` -᚜`.bold.magenta+`\n`+`${dt.format('Y-m-d H:M:S').dim.magenta} |`;
 }
 /* END */
 // END SUB: Timestamp Log Pretty
@@ -329,9 +329,9 @@ function prompt(question, callback) {
 /* END */
 // END SUB: Prompt
 
-// START SUB: Console Prompt
+// START SUB: Service Status Line
 /* START */
-function botConsolePrompt() {
+function getStatusLine() {
   var statusDSELF = true
   var statusDBOT = true
   var statusWEB = true
@@ -352,7 +352,7 @@ function botConsolePrompt() {
   } else {
     statusWEB = "✗ ".bold.red+"WEB".gray
   } 
-  if(statusDBOX) {
+  if(conf.dropbox_token) {
     statusDBOX = "✓ ".bold.green+"DBOX".gray
   } else {
     statusDBOX = "✗ ".bold.red+"DBOX".gray
@@ -361,9 +361,17 @@ function botConsolePrompt() {
     statusDB = "✓ ".bold.green+"DB".gray
   } else {
     statusDB = "✗ ".bold.red+"DB".gray
-  }        
+  }    
+  return statusDSELF+' '+statusDBOT+' '+statusWEB+' '+statusDBOX+' '+statusDB;
+}
+/* END */
+// END SUB: Service Status Line
+
+// START SUB: Console Prompt
+/* START */
+function botConsolePrompt() {
   if (!conf.host_ip) { var host = 'localhost'; } else { var host = conf.host_ip; }
-  const prompt = statusDSELF+' '+statusDBOT+' '+statusWEB+' '+statusDBOX+' '+statusDB+' |'.white+conf.bot_nickname.toLowerCase().yellow + '@'.yellow + host.yellow + ' >>\ '.trap.bold.cyan;
+  const prompt = conf.bot_nickname.toLowerCase().yellow + '@'.yellow + host.yellow + ' >>\ '.trap.bold.cyan;
   return prompt;
 }
 /* END */
@@ -430,7 +438,7 @@ function botConsole() {
         const argument = args[2];
         update();
       } else if (args[0].toUpperCase() === 'DOCS') {
-        generateDocumentation(args[2].toUpperCase());
+        generateDocumentation();
       } else if (args[0].toUpperCase() === 'DO') {
         doSomething();
       } else if (args === '' || !args) {
@@ -654,8 +662,7 @@ function peersUpdate() {
 
 // START SUB: Documentation Generator
 /* START */
-function generateDocumentation(type) {
-  if (type === 'MARKUP') {
+function generateDocumentation() {
     console.log(timeStampLog() + 'Documentation generation beginning, please wait...'.yellow);
     fs.readFile(`${__dirname}/init.js`, 'utf8', (err, data) => {
       if (err) {
@@ -663,7 +670,7 @@ function generateDocumentation(type) {
       }
       const result = data
         .replace(/#!\/usr\/bin\/env node/g,
-          '# Welcome to my Documentation')
+          '# Documentation')
         .replace(/\/\/ START SECTION: /g,
           '## ')
         .replace(/\/\/ END SECTION: (.+)/g,
@@ -678,49 +685,41 @@ function generateDocumentation(type) {
           '```js')
         .replace(/\/\* END \*\//g,
           '```');
-      fs.writeFile(`${__dirname}/docs/DOCS.md`, result, 'utf8', (err) => {
-        if (err) {
-          return console.log(timeStampLog() + err);
-        }
-      });
-    });
-    console.log(timeStampLog() + 'Documentation (markup) generation done!'.bold.green);
-  } else if (type === 'HTML') {
-    console.log(timeStampLog() + 'Documentation generation beginning, please wait...'.yellow);
-    if (fs.existsSync(`${__dirname}/docs/DOCS.md`)) {
-      fs.readFile(`${__dirname}/docs/DOCS.md`, 'utf8', (err, data) => {
-        if (err) {
-          return console.log(timeStampLog() + err);
-        }
-        const result = data
-          .replace(/# Welcome to my Documentation/g,
-            '<h1>Welcome to my Documentation</h1>')
-          .replace(/### /g,
-            '<br /> ')
-          .replace(/##/g,
-            '<hr><br /> ')
-          .replace(/# /g,
-            '<hr><br /> ')
-          .replace(/\/\/ END SUB: (.+)/g,
-            '')
-          .replace(/\/\/ COMMENT: /g,
-            '')
-          .replace(/```js/g,
-            '<pre>')
-          .replace(/```/g,
-            '</pre>');
-        fs.writeFile(`${__dirname}/docs/DOCS.html`, result, 'utf8', (err) => {
-          if (err) return console.log(timeStampLog() + err);
-        });
-      });
-      console.log(timeStampLog() + 'Documentation (html) generation done!'.bold.green);
-    } else {
-      console.log(`${timeStampLog()
-      }Must do` + ` ${'docs markup'.inverse} `
-        + 'first, then' + ` ${'docs html'.inverse}!`);
-    }
-  }
-  botConsole();
+		fs.writeFile(`${__dirname}/docs/DOCS.md`, result, 'utf8', (err) => {
+			if (err) {
+			  return console.log(timeStampLog() + err);
+			} else {
+				if (fs.existsSync(`${__dirname}/docs/DOCS.md`)) {
+					fs.readFile(`${__dirname}/docs/DOCS.md`, 'utf8', (err, data) => {
+						if (err) {
+						  return console.log(timeStampLog() + err);
+						} else {
+						  var showdown  = require('showdown'),
+							  converter = new showdown.Converter(),
+							  text      = '# hello, markdown!',
+							  html      = converter.makeHtml(data);
+						  fs.writeFile(`${__dirname}/docs/DOCS.html`, html, 'utf8', (err) => {
+							if (err) {
+								return console.log(timeStampLog() + err);
+							} else {
+								var docStyle = `
+								<style>
+									body { background-color:#ffffff;color:#000;padding:5px; }
+									pre { border:1px solid gray; background-color:#f8f8ff;box-shadow:inset 0px 0px 0px 2px #D3D3D3;padding:2px;color:black;font-family: 'Lucida Console';font-size:.8em; } 
+								</style>`;
+								fs.appendFile(`${__dirname}/docs/DOCS.html`, docStyle, function (err) {
+									if (err) throw err;
+								});			
+							}
+						  });
+						}
+					});
+				}
+			}
+		});
+		console.log(timeStampLog() + 'Documentation generation done!'.bold.green);
+		botConsole();
+	});
 }
 /* END */
 // END SUB: Main Generator
@@ -729,7 +728,7 @@ function generateDocumentation(type) {
 
 // START SECTION: RUNTIME
 
-//START SUB: Cron Jobs
+// START SUB: Cron Jobs
 /* START */
 function peersUpdateCron(callback) {
   setInterval(function() {
@@ -756,7 +755,7 @@ function cron() {
 }
 cron();
 /* END */
-//END SUB: Cron Jobs
+// END SUB: Cron Jobs
 
 // START SUB: Initial Prompt and Console
 // COMMENT: Calls the console, which everything else calls back too... kinda.
