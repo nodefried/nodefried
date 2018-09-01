@@ -721,7 +721,9 @@ function generateDocumentation() {
 							</style>`;
               var docStyle2 = `
                 <meta charset="utf-8"/>
-								<link type="text/css" rel="stylesheet" href="https://raw.githubusercontent.com/nodefried/nodefried/master/assets/web/public/stylesheets/github-markdown.css">
+                <style>
+                @import url("https://raw.githubusercontent.com/nodefried/nodefried/master/assets/web/public/stylesheets/github-markdown.css");
+                </style>
 							`;
 							const data = fs.readFileSync(`${__dirname}/docs/DOCS.html`)
 							const fd = fs.openSync(`${__dirname}/docs/DOCS.html`, 'w+')

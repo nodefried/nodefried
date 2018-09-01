@@ -18,6 +18,7 @@ const path = require('path');
 const express = require('express');
 const request = require('request').defaults({ encoding: null });
 const http = require('http');
+const https = require('https');
 const blessed = require('blessed');
 const { Client } = require('discord.js');
 const conf = require('./lib/config.js');
@@ -478,10 +479,20 @@ function webServer(action) {
         console.log(timeStampLog() + 'Web Server already started!'.yellow);
         botConsole();
       } else {
-        const server = web.listen(conf.bot_port_web);
+
+        var options = {
+          key: fs.readFileSync(__dirname+'/assets/ssl/privatekey.pem'),
+          cert: fs.readFileSync(__dirname+'/assets/ssl/certificate.pem'),
+        };
+        //var webHTTPS = web.createServer(options, web).listen(conf.bot_port_web_ssl);
+        var webServerHTTP = web.listen(conf.bot_port_web);
+        var webServerHTTPS = https.createServer(options, web).listen(conf.bot_port_web_ssl);
+       
         web.use(express.static(path.join(__dirname, 'assets/web/public')));
         web.set('views', path.join(__dirname, 'assets/web/views'));
         web.set('view engine', 'ejs');
+        web.set('key',fs.readFileSync(__dirname+'/assets/ssl/privatekey.pem'));
+        web.set('cert',fs.readFileSync(__dirname+'/assets/ssl/certificate.pem'));
         web.get('/', (req, res) => res.render('pages/index', {
           web_title: conf.web_title,
           web_favicon: conf.web_favicon,
@@ -510,6 +521,7 @@ function webServer(action) {
         console.log(timeStampLog() + 'Web server started successfully!'.green);
         console.log(path.join(__dirname, 'assets/web/public'));   
         botConsole();
+
       }
     });
   } else if (action === 'STOP') {
@@ -721,7 +733,9 @@ function generateDocumentation() {
 							</style>`;
               var docStyle2 = `
                 <meta charset="utf-8"/>
-								<link type="text/css" rel="stylesheet" href="https://raw.githubusercontent.com/nodefried/nodefried/master/assets/web/public/stylesheets/github-markdown.css">
+                <style>
+                @import url("https://raw.githubusercontent.com/nodefried/nodefried/master/assets/web/public/stylesheets/github-markdown.css");
+                </style>
 							`;
 							const data = fs.readFileSync(`${__dirname}/docs/DOCS.html`)
 							const fd = fs.openSync(`${__dirname}/docs/DOCS.html`, 'w+')
