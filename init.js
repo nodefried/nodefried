@@ -7,7 +7,6 @@
 const exec = require('child_process').exec;
 const cluster = require('cluster');
 const os = require('os');
-
 const systemOS = os.platform();
 const prettySize = require('prettysize');
 const prettyMs = require('pretty-ms');
@@ -28,11 +27,13 @@ const MongoClient = require('mongodb').MongoClient;
 const mongoURI = conf.mongodb_uri;
 const assert = require('assert');
 const util = require('util');
+const cloudflareddns = require("cloudflare-dynamic-dns2");
 const log_file_debug = fs.createWriteStream(__dirname + '/logs/debug.log', {flags : 'w'});
 const log_file_irc = fs.createWriteStream(__dirname + '/logs/irc.log', {flags : 'w'});
 const log_file_discord = fs.createWriteStream(__dirname + '/logs/discord.log', {flags : 'w'});
 const log_file_services = fs.createWriteStream(__dirname + '/logs/services.log', {flags : 'w'});
 const log_file_peers = fs.createWriteStream(__dirname + '/logs/peers.log', {flags : 'w'});
+const log_file_cloudflare = fs.createWriteStream(__dirname + '/logs/cloudflare.log', {flags : 'w'});
 const log_stdout = process.stdout;
 /* END */
 // END SUB: Constants
@@ -329,6 +330,22 @@ function prompt(question, callback) {
 }
 /* END */
 // END SUB: Prompt
+
+// START SUB: Updates a Cloudflare Record
+/* START */
+function updateCloudFlare() {
+  cloudflareddns({
+    email: conf.cloudflare_email,
+    key: conf.cloudflare_api_key,
+    domain: conf.cloudflare_domain,
+    subdomain: conf.cloudflare_records
+  }).then(
+    ip => console.fileLog(`Updated ${conf.cloudflare_records} to ${ip}`, log_file_cloudflare),
+    reason => console.fileLog(reason, log_file_cloudflare)
+  );
+}
+/* END */
+// END SUB: Updates a Cloudflare Record
 
 // START SUB: Service Status Line
 /* START */
@@ -782,6 +799,16 @@ function testCron(callback) {
     callback(null, 'finished!');
   }, 10000);
 }
+function cloudflareCron(callback) {
+  setInterval(function() {
+    // this one made it into actual logging no need to console.fileLog
+    // also, we only update this if we are the master node, and web server is online...
+    if(conf.bot_mode === 'master') {
+      updateCloudFlare();
+    }
+    callback(null, 'finished!');
+  }, 60000);
+}
 function cron() {
   //console.log('started');
   peersUpdateCron(function(err, result) {
@@ -790,6 +817,10 @@ function cron() {
   testCron(function(err, result) {
     return result;
   });  
+  cloudflareCron(function(err, result) {
+    return result;
+  });    
+
 }
 cron();
 /* END */

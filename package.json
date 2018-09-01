@@ -29,6 +29,7 @@
         "asyncblock": "^2.2.12",
         "blessed": "^0.1.81",
         "child_process": "^1.0.2",
+        "cloudflare-dynamic-dns2": "^3.0.1",
         "cluster": "^0.7.7",
         "discord.js": "^11.4.2",
         "ejs": "^2.6.1",
