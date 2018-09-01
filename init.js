@@ -7,6 +7,7 @@
 const exec = require('child_process').exec;
 const cluster = require('cluster');
 const os = require('os');
+
 const systemOS = os.platform();
 const prettySize = require('prettysize');
 const prettyMs = require('pretty-ms');
@@ -20,29 +21,32 @@ const http = require('http');
 const https = require('https');
 const blessed = require('blessed');
 const { Client } = require('discord.js');
-const conf = require('./lib/config.js');
 const node_dropbox = require('node-dropbox-v2');
+
 const dropbox = node_dropbox.api(conf.dropbox_token);
 const MongoClient = require('mongodb').MongoClient;
+
 const mongoURI = conf.mongodb_uri;
 const assert = require('assert');
 const util = require('util');
-const cloudflareddns = require("cloudflare-dynamic-dns2");
-const log_file_debug = fs.createWriteStream(__dirname + '/logs/debug.log', {flags : 'w'});
-const log_file_irc = fs.createWriteStream(__dirname + '/logs/irc.log', {flags : 'w'});
-const log_file_discord = fs.createWriteStream(__dirname + '/logs/discord.log', {flags : 'w'});
-const log_file_services = fs.createWriteStream(__dirname + '/logs/services.log', {flags : 'w'});
-const log_file_peers = fs.createWriteStream(__dirname + '/logs/peers.log', {flags : 'w'});
-const log_file_cloudflare = fs.createWriteStream(__dirname + '/logs/cloudflare.log', {flags : 'w'});
+const cloudflareddns = require('cloudflare-dynamic-dns2');
+const conf = require('./lib/config.js');
+
+const log_file_debug = fs.createWriteStream(`${__dirname}/logs/debug.log`, { flags: 'w' });
+const log_file_irc = fs.createWriteStream(`${__dirname}/logs/irc.log`, { flags: 'w' });
+const log_file_discord = fs.createWriteStream(`${__dirname}/logs/discord.log`, { flags: 'w' });
+const log_file_services = fs.createWriteStream(`${__dirname}/logs/services.log`, { flags: 'w' });
+const log_file_peers = fs.createWriteStream(`${__dirname}/logs/peers.log`, { flags: 'w' });
+const log_file_cloudflare = fs.createWriteStream(`${__dirname}/logs/cloudflare.log`, { flags: 'w' });
 const log_stdout = process.stdout;
 /* END */
 // END SUB: Constants
 
 // START SUB: File Logger
 /* START */
-console.fileLog = function(d,file) { 
-  file.write(timeStampLogPlain()+util.format(d) + '\n');
-  //log_stdout.write(util.format(d) + '\n');
+console.fileLog = function (d, file) {
+  file.write(`${timeStampLogPlain() + util.format(d)}\n`);
+  // log_stdout.write(util.format(d) + '\n');
 };
 /* END */
 // END SUB: File Logger
@@ -70,7 +74,7 @@ process.on('SIGINT', () => {
 function timeStampLog() {
   const dateTime = require('node-datetime');
   const dt = dateTime.create();
-  return `${dt.format('Y-m-d H:M:S').dim.magenta} | `+getStatusLine()+` | `;
+  return `${dt.format('Y-m-d H:M:S').dim.magenta} | ${getStatusLine()} | `;
 }
 /* END */
 // END SUB: Timestamp Log Pretty
@@ -98,34 +102,34 @@ function timeStamp() {
 // START SUB: Ping
 /* START */
 function ping(host) {
-  var spawn = require('child_process').spawn;
-  var readline      = require('readline');
+  const spawn = require('child_process').spawn;
+  const readline = require('readline');
   if (systemOS === 'win32') {
     command = spawn('ping', ['-n', '5', host]);
     readline.createInterface({
-      input     : command.stdout,
-      terminal  : false
-    }).on('line', function(line) {
+      input: command.stdout,
+      terminal: false,
+    }).on('line', (line) => {
       console.log(line);
     });
-    command.on('data', function (data) {
+    command.on('data', (data) => {
       console.log(err);
     });
-    command.on('exit', function (data) {
+    command.on('exit', (data) => {
       botConsole();
     });
   } else if (systemOS === 'linux') {
     command = spawn('ping', ['-c', '5', host]);
     readline.createInterface({
-      input     : command.stdout,
-      terminal  : true
-    }).on('line', function(line) {
+      input: command.stdout,
+      terminal: true,
+    }).on('line', (line) => {
       console.log(line);
     });
-    command.on('data', function (data) {
+    command.on('data', (data) => {
       console.log(err);
     });
-    command.on('exit', function (data) {
+    command.on('exit', (data) => {
       botConsole();
     });
   }
@@ -166,23 +170,23 @@ function git(argument) {
 // START SUB: Update Routine
 /* START */
 function update() {
-        const sys = require('util');
-        const exec = require('child_process').exec;
-        function puts(error, stdout, stderr) {
-          console.log(stdout);
-          if(error) {
-            console.log('ERROR:'+error);
-            console.log('Update was not successful!'.red);
-          } else {
-            console.log('Update was successful!'.green)
-          }
-          botConsole();
-        }
-        if (systemOS === 'win32') {  
-          exec('git stash & git pull & npm update', puts);
-        } else {
-          exec('git stash ; git pull ; sudo npm update', puts);
-        }
+  const sys = require('util');
+  const exec = require('child_process').exec;
+  function puts(error, stdout, stderr) {
+    console.log(stdout);
+    if (error) {
+      console.log(`ERROR:${error}`);
+      console.log('Update was not successful!'.red);
+    } else {
+      console.log('Update was successful!'.green);
+    }
+    botConsole();
+  }
+  if (systemOS === 'win32') {
+    exec('git stash & git pull & npm update', puts);
+  } else {
+    exec('git stash ; git pull ; sudo npm update', puts);
+  }
 }
 /* END */
 // END SUB: Update Routine
@@ -338,10 +342,10 @@ function updateCloudFlare() {
     email: conf.cloudflare_email,
     key: conf.cloudflare_api_key,
     domain: conf.cloudflare_domain,
-    subdomain: conf.cloudflare_records
+    subdomain: conf.cloudflare_records,
   }).then(
     ip => console.fileLog(`Updated ${conf.cloudflare_records} to ${ip}`, log_file_cloudflare),
-    reason => console.fileLog(reason, log_file_cloudflare)
+    reason => console.fileLog(reason, log_file_cloudflare),
   );
 }
 /* END */
@@ -350,37 +354,37 @@ function updateCloudFlare() {
 // START SUB: Service Status Line
 /* START */
 function getStatusLine() {
-  var statusDSELF = true
-  var statusDBOT = true
-  var statusWEB = true
-  var statusDBOX = true
-  var statusDB = true
-  if(statusDSELF) {
-    statusDSELF = "✓ ".bold.green+"DSELF".gray
+  let statusDSELF = true;
+  let statusDBOT = true;
+  let statusWEB = true;
+  let statusDBOX = true;
+  let statusDB = true;
+  if (statusDSELF) {
+    statusDSELF = '✓ '.bold.green + 'DSELF'.gray;
   } else {
-    statusDSELF = "✗ ".bold.red+"DSELF".gray
+    statusDSELF = '✗ '.bold.red + 'DSELF'.gray;
   }
-  if(statusDBOT) {
-    statusDBOT = "✓ ".bold.green+"DBOT".gray
+  if (statusDBOT) {
+    statusDBOT = '✓ '.bold.green + 'DBOT'.gray;
   } else {
-    statusDBOT = "✗ ".bold.red+"DBOT".gray
+    statusDBOT = '✗ '.bold.red + 'DBOT'.gray;
   }
-  if(statusWEB) {
-    statusWEB = "✓ ".bold.green+"WEB".gray
+  if (statusWEB) {
+    statusWEB = '✓ '.bold.green + 'WEB'.gray;
   } else {
-    statusWEB = "✗ ".bold.red+"WEB".gray
-  } 
-  if(conf.dropbox_token) {
-    statusDBOX = "✓ ".bold.green+"DBOX".gray
+    statusWEB = '✗ '.bold.red + 'WEB'.gray;
+  }
+  if (conf.dropbox_token) {
+    statusDBOX = '✓ '.bold.green + 'DBOX'.gray;
   } else {
-    statusDBOX = "✗ ".bold.red+"DBOX".gray
-  }      
-  if(statusDB) {
-    statusDB = "✓ ".bold.green+"DB".gray
+    statusDBOX = '✗ '.bold.red + 'DBOX'.gray;
+  }
+  if (statusDB) {
+    statusDB = '✓ '.bold.green + 'DB'.gray;
   } else {
-    statusDB = "✗ ".bold.red+"DB".gray
-  }    
-  return statusDSELF+' '+statusDBOT+' '+statusWEB+' '+statusDBOX+' '+statusDB;
+    statusDB = '✗ '.bold.red + 'DB'.gray;
+  }
+  return `${statusDSELF} ${statusDBOT} ${statusWEB} ${statusDBOX} ${statusDB}`;
 }
 /* END */
 // END SUB: Service Status Line
@@ -452,7 +456,7 @@ function botConsole() {
         const argument = args[2];
         git(argument.toUpperCase());
       } else if (args[0].toUpperCase() === 'UPDATE') {
-        console.log(`${timeStampLog()}Updating `+conf.bot_nickname+`, please wait...`);
+        console.log(`${timeStampLog()}Updating ${conf.bot_nickname}, please wait...`);
         const argument = args[2];
         update();
       } else if (args[0].toUpperCase() === 'DOCS') {
@@ -463,18 +467,18 @@ function botConsole() {
         console.log(timeStampLog() + 'Need to enter a command...'.yellow);
         botConsole();
       } else {
-       const sys = require('util');
-       const exec = require('child_process').exec;
-       function puts(error, stdout, stderr) {
-         console.log(stdout);
-         botConsole();
-       }
-       if (conf.bot_shell_whitelist.indexOf(args[0].toLowerCase()) != -1) {
-         exec(botCommand, puts);
-       } else {
-         console.log(`${timeStampLog()}This command is blacklisted!`);
-         botConsole();
-       }
+        const sys = require('util');
+        const exec = require('child_process').exec;
+        function puts(error, stdout, stderr) {
+          console.log(stdout);
+          botConsole();
+        }
+        if (conf.bot_shell_whitelist.indexOf(args[0].toLowerCase()) != -1) {
+          exec(botCommand, puts);
+        } else {
+          console.log(`${timeStampLog()}This command is blacklisted!`);
+          botConsole();
+        }
 	    }
     });
   }
@@ -495,16 +499,15 @@ function webServer(action) {
         console.log(timeStampLog() + 'Web Server already started!'.yellow);
         botConsole();
       } else {
+        const privateKey = fs.readFileSync(`${__dirname}/assets/ssl/privatekey.pem`, 'utf8');
+        const certificate = fs.readFileSync(`${__dirname}/assets/ssl/certificate.pem`, 'utf8');
 
-        var privateKey  = fs.readFileSync(__dirname+'/assets/ssl/privatekey.pem', 'utf8');
-        var certificate = fs.readFileSync(__dirname+'/assets/ssl/certificate.pem', 'utf8');
-        
-        var credentials = {key: privateKey, cert: certificate};
-        var web = express();
-              
-        var httpServer = http.createServer(web);
-        var httpsServer = https.createServer(credentials, web);
-        
+        const credentials = { key: privateKey, cert: certificate };
+        const web = express();
+
+        const httpServer = http.createServer(web);
+        const httpsServer = https.createServer(credentials, web);
+
         httpServer.listen(80);
         httpsServer.listen(443);
 
@@ -535,9 +538,9 @@ function webServer(action) {
         });
         web.get(`/api/${conf.bot_api_key}/info/system`, (req, res) => {
           res.send(conf);
-        });      
+        });
         console.log(timeStampLog() + 'Web server started successfully!'.green);
-        console.log(path.join(__dirname, 'assets/web/public'));   
+        console.log(path.join(__dirname, 'assets/web/public'));
         botConsole();
       }
     });
@@ -604,12 +607,12 @@ function dropboxAPI(command, argument) {
           console.log(`Content Hash: ${result.content_hash}`);
           console.log(timeStampLog() + 'Sucessfully wrote '.green + argument[4].green + ' to DropBox!'.green);
           botConsole();
-        } else if(err) {
+        } else if (err) {
           console.log(timeStampLog() + err);
           botConsole();
         }
       });
-    })
+    });
   }
   if (command === 'GET') {
     console.log(`${timeStampLog()}Testing Dropbox download...`);
@@ -620,11 +623,11 @@ function dropboxAPI(command, argument) {
           console.log(timeStampLog() + 'Sucessfully wrote '.green + argument[4].green + ' to DropBox!'.green);
           botConsole();
         });
-      } else if(err) {
+      } else if (err) {
         console.log(timeStampLog() + err);
         botConsole();
       }
-    });  
+    });
   }
 }
 /* END */
@@ -633,7 +636,7 @@ function dropboxAPI(command, argument) {
 // START SUB: Peers List Wipe
 /* START */
 function peersWipe() {
-  fs.writeFile('config/peers.json', '{}', {ecoding: 'utf8'}, (err) => {
+  fs.writeFile('config/peers.json', '{}', { ecoding: 'utf8' }, (err) => {
     if (err) return console.log(timeStampLog() + err);
   });
 }
@@ -645,12 +648,12 @@ function peersWipe() {
 function peersGet() {
   dropbox.getFile('controller/peers.json', (err, res, body) => {
     if (!err) {
-      fs.writeFile('config/peers.json', body, {ecoding: 'utf8'}, (err) => {
+      fs.writeFile('config/peers.json', body, { ecoding: 'utf8' }, (err) => {
         if (err) return console.log(timeStampLog() + err);
       });
-    } else if(err) {
+    } else if (err) {
     }
-  });  
+  });
 }
 /* END */
 // END SUB: Peer List Get
@@ -661,120 +664,122 @@ function peersUpdate() {
   http.get('http://bot.whatismyipaddress.com', (res) => {
     res.setEncoding('utf8');
     res.on('data', (chunk) => {
-      MongoClient.connect(conf.mongodb_uri, { useNewUrlParser: true }, function(err, db) {
+      MongoClient.connect(conf.mongodb_uri, { useNewUrlParser: true }, (err, db) => {
         if (err) throw err;
-        var dbo = db.db(conf.mongodb_dbname);  
-        var fileNameConfig = __dirname+'/config/config.json';
-        var fileConfig = require(fileNameConfig);    
-        var lookup = { host_ip: chunk };
-        var peerUpdateInfo = { $set: fileConfig };
-		var timeStamp = + new Date();
-        dbo.collection("peers").updateOne(lookup, peerUpdateInfo, {upsert: true, safe: false}, function(err, res) {
+        const dbo = db.db(conf.mongodb_dbname);
+        const fileNameConfig = `${__dirname}/config/config.json`;
+        const fileConfig = require(fileNameConfig);
+        const lookup = { host_ip: chunk };
+        const peerUpdateInfo = { $set: fileConfig };
+        const timeStamp = +new Date();
+        dbo.collection('peers').updateOne(lookup, peerUpdateInfo, { upsert: true, safe: false }, (err, res) => {
           if (err) throw err;
-        });                
-        dbo.collection("peers").updateOne(lookup, { $set: { host_last_updated: timeStamp } }, {upsert: true, safe: false}, function(err, res) {
+        });
+        dbo.collection('peers').updateOne(lookup, { $set: { host_last_updated: timeStamp } }, { upsert: true, safe: false }, (err, res) => {
           if (err) throw err;
-        }); 
-	  }); 
+        });
+	  });
     });
   });
 }
-  // old dropbox method
-  // fs.readFile('config/peers.json', 'utf8', (err, data) => {
-  //   if (err) {
-  //     return console.log(err);
-  //   }  
-  //   dropbox.createFile('controller/peers.json', data, (err, res, body) => {
-  //     if (!err) {
-  //     } else if(err) {
-  //     }
-  //   });  
-  // });
+// old dropbox method
+// fs.readFile('config/peers.json', 'utf8', (err, data) => {
+//   if (err) {
+//     return console.log(err);
+//   }
+//   dropbox.createFile('controller/peers.json', data, (err, res, body) => {
+//     if (!err) {
+//     } else if(err) {
+//     }
+//   });
+// });
 /* END */
 // END SUB: Peer List Get
 
 // START SUB: Documentation Generator
 /* START */
 function generateDocumentation() {
-    console.log(timeStampLog() + 'Documentation generation beginning, please wait...'.yellow);
-    fs.readFile(`${__dirname}/init.js`, 'ascii', (err, data) => {
+  console.log(timeStampLog() + 'Documentation generation beginning, please wait...'.yellow);
+  fs.readFile(`${__dirname}/init.js`, 'ascii', (err, data) => {
+    if (err) {
+      return console.log(timeStampLog() + err);
+    }
+    const result = data
+      .replace(/#!\/usr\/bin\/env node/g,
+        '# Documentation')
+      .replace(/\/\/ START SECTION: /g,
+        '## ')
+      .replace(/\/\/ END SECTION: (.+)/g,
+        '')
+      .replace(/\/\/ START SUB: /g,
+        '### ')
+      .replace(/\/\/ END SUB: (.+)/g,
+        '')
+      .replace(/\/\/ COMMENT: /g,
+        '')
+      .replace(/\/\* START \*\//g,
+        '```js')
+      .replace(/\/\* END \*\//g,
+        '```');
+    fs.writeFile(`${__dirname}/docs/DOCS.md`, result, 'ascii', (err) => {
       if (err) {
-        return console.log(timeStampLog() + err);
-      }
-      const result = data
-        .replace(/#!\/usr\/bin\/env node/g,
-          '# Documentation')
-        .replace(/\/\/ START SECTION: /g,
-          '## ')
-        .replace(/\/\/ END SECTION: (.+)/g,
-          '')
-        .replace(/\/\/ START SUB: /g,
-          '### ')
-        .replace(/\/\/ END SUB: (.+)/g,
-          '')
-        .replace(/\/\/ COMMENT: /g,
-          '')
-        .replace(/\/\* START \*\//g,
-          '```js')
-        .replace(/\/\* END \*\//g,
-          '```');
-	fs.writeFile(`${__dirname}/docs/DOCS.md`, result, 'ascii', (err) => {
-		if (err) {
 		  return console.log(timeStampLog() + err);
-		} else {
-			if (fs.existsSync(`${__dirname}/docs/DOCS.md`)) {
-				fs.readFile(`${__dirname}/docs/DOCS.md`, 'ascii', (err, data) => {
-					if (err) {
+      }
+      if (fs.existsSync(`${__dirname}/docs/DOCS.md`)) {
+        fs.readFile(`${__dirname}/docs/DOCS.md`, 'ascii', (err, data) => {
+          if (err) {
 					  return console.log(timeStampLog() + err);
-					} else {
-					  var showdown  = require('showdown'),
-						  converter = new showdown.Converter(),
-						  text      = '# hello, markdown!',
-						  html      = converter.makeHtml(data);
+          }
+					  const showdown = require('showdown');
+
+
+          const converter = new showdown.Converter();
+
+
+          const text = '# hello, markdown!';
+
+
+          const html = converter.makeHtml(data);
 					  fs.writeFile(`${__dirname}/docs/DOCS.html`, html, 'ascii', (err) => {
-						if (err) {
-							return console.log(timeStampLog() + err);
-						} else {
-							var docStyle = `
-							<style>
-								body { 
-									background-color:#ffffff;color:#000;padding:5px; 
-								}
-								pre { 
-									border:1px solid gray; 
-									background-color:#f8f8ff;
-									box-shadow:inset 0px 0px 0px 2px #D3D3D3;
-									padding:2px;color:black;font-family: 'Lucida Console';
-									font-size:.8em; 
-								} 
-							</style>`;
-              var docStyle2 = `
+            if (err) {
+              return console.log(timeStampLog() + err);
+            }
+            const docStyle = `
+		<style>
+		body {
+			background-color:#ffffff;color:#000;padding:5px;
+		}
+		pre {
+			border:1px solid gray;
+			background-color:#f8f8ff;
+			box-shadow:inset 0px 0px 0px 2px #D3D3D3;
+			padding:2px;color:black;font-family: 'Lucida Console';
+			font-size:.8em;
+		}
+		</style>`;
+            const docStyle2 = `
                 <meta charset="utf-8"/>
                 <style>
                 @import url("https://raw.githubusercontent.com/nodefried/nodefried/master/assets/web/public/stylesheets/github-markdown.css");
-                </style>
-							`;
-							const data = fs.readFileSync(`${__dirname}/docs/DOCS.html`)
-							const fd = fs.openSync(`${__dirname}/docs/DOCS.html`, 'w+')
-							const insert = new Buffer(docStyle2)
-							fs.writeSync(fd, insert, 0, 'ascii', insert.length, 0)
-							fs.writeSync(fd, data, 0, 'ascii', data.length, insert.length)
-							fs.close(fd, (err) => {
+                </style>`;
+            const data = fs.readFileSync(`${__dirname}/docs/DOCS.html`);
+            const fd = fs.openSync(`${__dirname}/docs/DOCS.html`, 'w+');
+            const insert = new Buffer(docStyle2);
+            fs.writeSync(fd, insert, 0, 'ascii', insert.length, 0);
+            fs.writeSync(fd, data, 0, 'ascii', data.length, insert.length);
+            fs.close(fd, (err) => {
 							  if (err) throw err;
-							});
-							//fs.prependFile(`${__dirname}/docs/DOCS.html`, docStyle2, function (err) {
-							//	if (err) throw err;
-							//});			
-						}
-					  });
-					}
-				});
-			}
-		}
-	});
-	console.log(timeStampLog() + 'Documentation generation done!'.bold.green);
-	botConsole();
-	});
+            });
+            // fs.prependFile(`${__dirname}/docs/DOCS.html`, docStyle2, function (err) {
+            //	if (err) throw err;
+            // });
+	  });
+        });
+      }
+    });
+    console.log(timeStampLog() + 'Documentation generation done!'.bold.green);
+    botConsole();
+  });
 }
 /* END */
 // END SUB: Main Generator
@@ -786,41 +791,34 @@ function generateDocumentation() {
 // START SUB: Cron Jobs
 /* START */
 function peersUpdateCron(callback) {
-  setInterval(function() {
-    console.fileLog('Peers Synchronized Sucessfully!', log_file_peers)
+  setInterval(() => {
+    console.fileLog('Peers Synchronized Sucessfully!', log_file_peers);
     peersUpdate();
     callback(null, 'finished!');
   }, 20000);
 }
 function testCron(callback) {
-  setInterval(function() {
-    console.fileLog('Peer Status Updated Sucessfully!', log_file_peers)
-    //peersUpdate();
+  setInterval(() => {
+    console.fileLog('Peer Status Updated Sucessfully!', log_file_peers);
+    // peersUpdate();
     callback(null, 'finished!');
   }, 10000);
 }
 function cloudflareCron(callback) {
-  setInterval(function() {
+  setInterval(() => {
     // this one made it into actual logging no need to console.fileLog
     // also, we only update this if we are the master node, and web server is online...
-    if(conf.bot_mode === 'master') {
+    if (conf.bot_mode === 'master') {
       updateCloudFlare();
     }
     callback(null, 'finished!');
   }, 60000);
 }
 function cron() {
-  //console.log('started');
-  peersUpdateCron(function(err, result) {
-    return result;
-  });
-  testCron(function(err, result) {
-    return result;
-  });  
-  cloudflareCron(function(err, result) {
-    return result;
-  });    
-
+  // console.log('started');
+  peersUpdateCron((err, result) => result);
+  testCron((err, result) => result);
+  cloudflareCron((err, result) => result);
 }
 cron();
 /* END */
