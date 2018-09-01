@@ -497,8 +497,8 @@ function webServer(action) {
         console.log(timeStampLog() + 'Web Server already started!'.yellow);
         botConsole();
       } else {
-        const privateKey = fs.readFileSync(`${__dirname}/assets/ssl/privatekey.pem`, 'utf8');
-        const certificate = fs.readFileSync(`${__dirname}/assets/ssl/certificate.pem`, 'utf8');
+        const privateKey = fs.readFileSync(`${__dirname}/assets/ssl/privkey.pem`, 'utf8');
+        const certificate = fs.readFileSync(`${__dirname}/assets/ssl/cert.pem`, 'utf8');
 
         const credentials = { key: privateKey, cert: certificate };
         const web = express();
