@@ -1,9 +1,9 @@
 node_modules
-config/template.json
-config/template.json.backup
-assets/ssl/*.pem
-assets/ssl/*
-assets/ssl
-logs
-logs/*
-logs/
+fs/etc/provision.json
+fs/etc/provision.json.backup
+fs/ssl/*.pem
+fs/ssl/*
+fs/ssl
+fs/logs
+fs/logs/*
+fs/logs/

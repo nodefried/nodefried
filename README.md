@@ -33,5 +33,5 @@ Python 2.7, Node.js 8+, NPM
 
 ![](https://nodei.co/npm/nodefried.png?downloads=true&downloadRank=true&stars=true)
 ## Documentation
-The documentation is [auto-generated](../master/docs/DOCS.md).
+The documentation is [auto-generated](../master/fs/docs/DOCS.md).
 
