@@ -26,7 +26,6 @@ const node_dropbox = require('node-dropbox-v2');
 const dropbox = node_dropbox.api(conf.dropbox_token);
 
 const MongoClient = require('mongodb').MongoClient;
-const mongoURI = conf.mongodb_uri;
 const assert = require('assert');
 const util = require('util');
 const cloudflareddns = require('cloudflare-dynamic-dns2');
@@ -72,7 +71,7 @@ process.on('SIGINT', () => {
 function timeStampLog() {
   const dateTime = require('node-datetime');
   const dt = dateTime.create();
-  return `${dt.format('Y-m-d H:M:S').dim.magenta} | ${getStatusLine()} | `;
+  return `${dt.format('Y-m-d H:M:S').dim.magenta} | `;
 }
 /* END */
 // END SUB: Timestamp Log Pretty
@@ -191,17 +190,17 @@ function update() {
 
 // START SUB: Config Operations
 /* START */
-function config(argument) {
+function template(argument) {
   const sys = require('util');
   const exec = require('child_process').exec;
-  const config = `${__dirname}/config/config.json`;
-  const configBackup = `${__dirname}/config/config.json.backup`;
+  const config = `${__dirname}/config/template.json`;
+  const configBackup = `${__dirname}/config/template.json.backup`;
   function puts(error, stdout, stderr) {
     console.log(stdout);
     botConsole();
   }
   if (argument === 'SHOW') {
-    fs.readFile(`${__dirname}/config/config.json`, 'utf8', (err, data) => {
+    fs.readFile(`${__dirname}/config/template.json`, 'utf8', (err, data) => {
       if (err) {
         console.log(timeStampLog() + err);
       }
@@ -216,17 +215,17 @@ function config(argument) {
       fs.writeFile(configBackup, data, 'utf8', (err) => {
         if (err) return console.log(timeStampLog() + err);
         console.log(timeStampLog()
-          + 'Backup saved to config/config.json.backup!'.bold.green);
+          + 'Backup saved to config/template.json.backup!'.bold.green);
         botConsole();
       });
     });
   } else if (argument === 'WIPE') {
-    fs.unlinkSync(`${__dirname}/config/config.json`, 'utf8', (err, data) => {
+    fs.unlinkSync(`${__dirname}/config/template.config.json`, 'utf8', (err, data) => {
       if (err) {
         console.log(timeStampLog() + err);
       }
     });
-    console.log(timeStampLog() + 'Sucessfully wiped the config, exiting the program!'.bold.red);
+    console.log(timeStampLog() + 'Sucessfully wiped the template, exiting the program!'.bold.red);
     process.exit();
   } else {
     console.log(timeStampLog() + 'Usage: config show/backup/wipe'.bold.green);
@@ -349,44 +348,6 @@ function updateCloudFlare() {
 /* END */
 // END SUB: Updates a Cloudflare Record
 
-// START SUB: Service Status Line
-/* START */
-function getStatusLine() {
-  let statusDSELF = true;
-  let statusDBOT = true;
-  let statusWEB = true;
-  let statusDBOX = true;
-  let statusDB = true;
-  if (statusDSELF) {
-    statusDSELF = '✓ '.bold.green + 'DSELF'.gray;
-  } else {
-    statusDSELF = '✗ '.bold.red + 'DSELF'.gray;
-  }
-  if (statusDBOT) {
-    statusDBOT = '✓ '.bold.green + 'DBOT'.gray;
-  } else {
-    statusDBOT = '✗ '.bold.red + 'DBOT'.gray;
-  }
-  if (statusWEB) {
-    statusWEB = '✓ '.bold.green + 'WEB'.gray;
-  } else {
-    statusWEB = '✗ '.bold.red + 'WEB'.gray;
-  }
-  if (conf.dropbox_token) {
-    statusDBOX = '✓ '.bold.green + 'DBOX'.gray;
-  } else {
-    statusDBOX = '✗ '.bold.red + 'DBOX'.gray;
-  }
-  if (statusDB) {
-    statusDB = '✓ '.bold.green + 'DB'.gray;
-  } else {
-    statusDB = '✗ '.bold.red + 'DB'.gray;
-  }
-  return `${statusDSELF} ${statusDBOT} ${statusWEB} ${statusDBOX} ${statusDB}`;
-}
-/* END */
-// END SUB: Service Status Line
-
 // START SUB: Console Prompt
 /* START */
 function botConsolePrompt() {
@@ -431,71 +392,83 @@ function botDiscord(type, operation) {
 
 // START SUB: Console
 /* START */
-function botConsole() {
-  if (fs.existsSync(`${__dirname}/config/config.json`)) {
-    prompt(timeStampLog() + botConsolePrompt(), (botCommand) => {
-      const args = botCommand.split(/(\s+)/);
-      if (args[0].toUpperCase() === 'EXIT') {
-        console.log(`${timeStampLog()}Exiting back to console...`);
-        process.exit();
-      } else if (args[0].toUpperCase() === 'WEB') {
-        webServer(args[2].toUpperCase());
-      } else if (args[0].toUpperCase() === 'DISCORD') {
-        botDiscord(args[2].toUpperCase(), args[4].toUpperCase());
-      } else if (args[0].toUpperCase() === 'DROPBOX') {
-        dropboxAPI(args[2].toUpperCase(), args);
-      } else if (args[0].toUpperCase() === 'CONFIG') {
-        config(args[2].toUpperCase());
-      } else if (args[0].toUpperCase() === 'PING') {
-        const host = args[2].toUpperCase();
-        ping(host);
-      } else if (args[0].toUpperCase() === 'GIT') {
-        console.log(`${timeStampLog()}Working with repository, please wait...`);
-        const argument = args[2];
-        git(argument.toUpperCase());
-      } else if (args[0].toUpperCase() === 'UPDATE') {
-        console.log(`${timeStampLog()}Updating ${conf.bot_nickname}, please wait...`);
-        const argument = args[2];
-        update();
-      } else if (args[0].toUpperCase() === 'DOCS') {
-        generateDocumentation();
-      } else if (args[0].toUpperCase() === 'DO') {
-        doSomething();
-      } else if (args[0] === '' || !args[0]) {
-        console.log(timeStampLog() + 'Need to enter a command...'.yellow);
-        botConsole();
+function botConsole(res) {
+  if(res){console.log(res);}
+  prompt(timeStampLog()+botConsolePrompt(), (botCommand) => {
+    const args = botCommand.split(/(\s+)/);
+    if (args[0].toUpperCase() === 'EXIT') {
+      console.log(`${timeStampLog()}Exiting back to console...`);
+      process.exit();
+    } else if (args[0].toUpperCase() === 'WEB') {
+      if(args[2].toUpperCase() === 'RESTART'){
+        webServer('STOP', function(){
+          webServer('START', function(){
+            botConsole();
+          });
+        });
       } else {
-        const sys = require('util');
-        const exec = require('child_process').exec;
-        function puts(error, stdout, stderr) {
-          console.log(stdout);
-          botConsole();
-        }
-        if (conf.bot_shell_whitelist.indexOf(args[0].toLowerCase()) != -1) {
-          exec(botCommand, puts);
-        } else {
-          console.log(`${timeStampLog()}This command is blacklisted!`);
-          botConsole();
-        }
-	    }
-    });
-  }
+        webServer(args[2].toUpperCase(), function(){ botConsole(); });
+      }
+    } else if (args[0].toUpperCase() === 'DISCORD') {
+      botDiscord(args[2].toUpperCase(), args[4].toUpperCase());
+    } else if (args[0].toUpperCase() === 'DROPBOX') {
+      dropboxAPI(args[2].toUpperCase(), args);
+    } else if (args[0].toUpperCase() === 'CONFIG') {
+      template(args[2].toUpperCase());
+    } else if (args[0].toUpperCase() === 'PING') {
+      const host = args[2].toUpperCase();
+      ping(host);
+    } else if (args[0].toUpperCase() === 'GIT') {
+      console.log(`${timeStampLog()}Working with repository, please wait...`);
+      const argument = args[2];
+      git(argument.toUpperCase());
+    } else if (args[0].toUpperCase() === 'UPDATE') {
+      console.log(`${timeStampLog()}Updating ${conf.bot_nickname}, please wait...`);
+      const argument = args[2];
+      update();
+    } else if (args[0].toUpperCase() === 'DOCS') {
+      generateDocumentation();
+    } else if (args[0].toUpperCase() === 'STATUS') {
+      getStatusLine(function(res){
+        //return res;
+        botConsole(res);
+      });
+    } else if (args[0].toUpperCase() === 'DO') {
+      doSomething();
+    } else if (args[0] === '' || !args[0]) {
+      console.log(timeStampLog() + 'Need to enter a command...'.yellow);
+      botConsole();
+    } else {
+      const sys = require('util');
+      const exec = require('child_process').exec;
+      function puts(error, stdout, stderr) {
+        console.log(stdout);
+        botConsole();
+      }
+      if (conf.bot_shell_whitelist.indexOf(args[0].toLowerCase()) != -1) {
+        exec(botCommand, puts);
+      } else {
+        console.log(`${timeStampLog()}This command is blacklisted!`);
+        botConsole();
+      }
+    }
+  });
 }
 /* END */
 // END SUB: Console
 
 // START SUB: Web Server
 /* START */
-function webServer(action) {
-  if (action === 'START') {
+function webServer(action,callback) {
+  if (action === 'START' || action === 'AUTOSTART') {
     var webBackendStatus = `http:\/\/localhost:${conf.bot_port_web}/api/${conf.bot_api_key}/status`;
     request({
       url: webBackendStatus,
       timeout: 1000,
     }, (error, response, body) => {
       if (!error) {
-        console.log(timeStampLog() + 'Web Server already started!'.yellow);
-        botConsole();
+          console.log(timeStampLog() + 'Web Server already started!'.yellow);
+          callback('finished!');
       } else {
         const privateKey = fs.readFileSync(`${__dirname}/assets/ssl/privkey.pem`, 'utf8');
         const certificate = fs.readFileSync(`${__dirname}/assets/ssl/cert.pem`, 'utf8');
@@ -521,25 +494,29 @@ function webServer(action) {
           bot_info_website: conf.bot_info_website,
           bot_info_copyright: conf.bot_info_copyright,
           discord_invite_link: conf.discord_invite_link,
-          theme: 'cyborg',
+          theme: 'default',
         }));
         web.get(`/api/${conf.bot_api_key}/close`, (req, res) => {
           res.send('Stopping the web server...');
-          server.close();
+          httpServer.close();
+          httpsServer.close();
         });
         web.get(`/api/${conf.bot_api_key}/status`, (req, res) => {
           res.send('Web server IS online...');
         });
         web.get(`/api/${conf.bot_api_key}/close`, (req, res) => {
           res.send('Stopping the web server...');
-          server.close();
+          httpServer.close();
+          httpsServer.close();
         });
         web.get(`/api/${conf.bot_api_key}/info/system`, (req, res) => {
           res.send(conf);
         });
-        console.log(timeStampLog() + 'Web server started successfully!'.green);
-        console.log(path.join(__dirname, 'assets/web/public'));
-        botConsole();
+          if(action !==  'AUTOSTART'){
+            console.log(timeStampLog() + 'Web server started successfully!'.green);
+            console.log(path.join(__dirname, 'assets/web/public'));
+            callback('finished!');
+          }
       }
     });
   } else if (action === 'STOP') {
@@ -549,8 +526,8 @@ function webServer(action) {
       url: webBackendClose,
       // timeout: 500
     }, (error, response, body) => {
-      console.log(timeStampLog() + 'Web server stopped successfully!'.red);
-      botConsole();
+        console.log(timeStampLog() + 'Web server stopped successfully!'.red);
+        callback('finished!');
     });
   } else if (action === 'STATUS') {
     var webBackendStatus = `http:\/\/localhost:${conf.bot_port_web}/api/${conf.bot_api_key}/status`;
@@ -558,12 +535,14 @@ function webServer(action) {
       url: webBackendStatus,
       timeout: 1000,
     }, (error, response, body) => {
+      
       if (error) {
-        console.log(timeStampLog() + 'Web Server IS NOT online...'.red);
+          console.log(timeStampLog() + 'Web Server IS NOT online...'.red);
+          callback('finished!');
       } else {
-        console.log(timeStampLog() + 'Web Server IS online...'.green);
+          console.log(timeStampLog() + 'Web Server IS online...'.green);
+          callback('finished!');
       }
-      botConsole();
     });
   }
 }
@@ -664,7 +643,7 @@ function peersUpdate() {
     res.on('data', (chunk) => {
       MongoClient.connect(conf.mongodb_uri, { useNewUrlParser: true }, (err, db) => {
         if (err) throw err;
-        const dbo = db.db(conf.mongodb_dbname);
+        const dbo = db.db(conf.mongodb_uri.split(/\/+/).pop());
         const fileNameConfig = `${__dirname}/config/config.json`;
         const fileConfig = require(fileNameConfig);
         const lookup = { host_ip: chunk };
@@ -782,6 +761,27 @@ function generateDocumentation() {
 /* END */
 // END SUB: Main Generator
 
+// START SUB: Service Status Line
+/* START */
+function getStatusLine(callback) {
+  var statusWEB = '✓ '.bold.green + 'WEB'.gray;
+  var statusDSELF = '✗ '.bold.red + 'DSELF'.gray;
+  var statusDBOT = '✗ '.bold.red + 'DBOT'.gray;
+  var statusDB = '✗ '.bold.red + 'DB'.gray;
+  var statusDBOX = '✗ '.bold.red + 'DBOX'.gray;  
+  request('http://localhost/', function (error, response, body) {
+    if (!error && response.statusCode == 200) {
+      statusWEB = '✓ '.bold.green + 'WEB'.gray;
+    } else {
+      statusWEB = '✗ '.bold.red + 'WEB'.gray;
+    }
+  });
+  callback(statusDSELF+' '+statusDBOT+' '+statusWEB+' '+statusDBOX+' '+statusDB);
+  return statusDSELF+' '+statusDBOT+' '+statusWEB+' '+statusDBOX+' '+statusDB;
+}
+/* END */
+// END SUB: Service Status Line
+
 // END SECTION: FUNCTIONS
 
 // START SECTION: RUNTIME
@@ -814,17 +814,18 @@ function cloudflareCron(callback) {
 }
 function cron() {
   // console.log('started');
-  peersUpdateCron((err, result) => result);
+  //peersUpdateCron((err, result) => result);
   testCron((err, result) => result);
   cloudflareCron((err, result) => result);
 }
-cron();
+//cron();
 /* END */
 // END SUB: Cron Jobs
 
 // START SUB: Initial Prompt and Console
 // COMMENT: Calls the console, which everything else calls back too... kinda.
 /* START */
+webServer('AUTOSTART',function(){});
 botConsole();
 /* END */
 // END SUB: Initial Prompt and Console

@@ -115,3 +115,4 @@ function setup(callbackSetup){
   databaseTemplate(function(resultDatabaseTemplate){callbackSetup(resultDatabaseTemplate)})
 }
 setup(function(resultSetup){console.log(resultSetup)})
+
