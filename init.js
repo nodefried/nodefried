@@ -31,6 +31,9 @@ const log_file_peers=fs.createWriteStream(`${__dirname}/fs/logs/peers.log`,{flag
 const log_file_cloudflare=fs.createWriteStream(`${__dirname}/fs/logs/cloudflare.log`,{flags:'w'})
 const log_stdout=process.stdout
 var config
+mkdirp('fs/logs')
+mkdirp('fs/tmp')
+fs.writeFile('fs/logs/debug.log','',function(err){})
 MongoClient.connect(provision.mongodb_uri,{useNewUrlParser:true},function(err,db){
   if(err){throw err}
   var dbo=db.db(database)
@@ -253,7 +256,7 @@ MongoClient.connect(provision.mongodb_uri,{useNewUrlParser:true},function(err,db
                   // ee.emit('botConsole')
                 })
                 client.on('message', (msg) =>{
-                  fs.appendFile('logs/discord.log', `${msg.content}\n`, 'utf8', (err) =>{
+                  fs.appendFile('fs/logs/discord.log', `${msg.content}\n`, 'utf8', (err) =>{
                   })
                 })
                 client.login(token)
@@ -337,7 +340,11 @@ MongoClient.connect(provision.mongodb_uri,{useNewUrlParser:true},function(err,db
                   timeout: 1000,
                 }, (error, response, body) =>{
                   if(!error){
-                    console.log(timeStampLog() + 'Web Server already started!'.yellow)
+                    if(action === 'AUTOSTART'){
+                      console.log(timeStampLog()+'Web server failed to start!'.yellow)
+                    }else{
+                     console.log(timeStampLog()+'Web Server already started!'.yellow)
+                    }
                     callback('finished!')
                   } else{
                     const privateKey=fs.readFileSync(`${__dirname}/fs/ssl/privkey.pem`, 'utf8')
