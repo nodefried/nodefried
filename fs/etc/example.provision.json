@@ -1,5 +1,5 @@
 {
-	"_id": "template",
+	"_id": "provision",
 	"bot_mode": "",
 	"bot_api_key": "",
 	"bot_info_copyright": "",
@@ -10,7 +10,7 @@
 	"bot_nickname": "",
 	"bot_port_web": "",
 	"bot_port_web_ssl": "",	
-	"bot_shell_whitelist": "",
+	"bot_shell_whitelist": "ls, dir, cat, nslookup, dig, tracert, cp, copy, mv, dir, clear, ipconfig, ip, ifconfig, date",
 	"cloudflare_api_key": "",
 	"cloudflare_domain": "",
 	"cloudflare_email": "",
