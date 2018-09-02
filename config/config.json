@@ -1,0 +1,23 @@
+{
+	"bot_nickname": "Nodefried",
+	"bot_port_web": "9876",
+	"bot_api_key": "5sYvyIKOVEZDtuixR15E5Lca5q4g4OC9",
+	"bot_logo_long": "",
+	"bot_logo_square": "",
+	"bot_info_website": "",
+	"bot_info_copyright": "",
+	"bot_shell_whitelist": "ls, dir, cat, nslookup, dig, tracert, cp, copy, mv, dir, del, clear, ipconfig, ip, ifconfig, openvpn",
+	"bot_motd_disable": "",
+	"discord_token_bot": "",
+	"discord_token_self": "",
+	"discord_invite_link": "",
+	"web_title": "",
+	"web_favicon": "",
+	"dropbox_token": "unSz38AHAhAAAAAAAAAAGCLdZjLZp8oUppK_EX8Rv2GKHC69sWI07T7vzt9_SykH",
+	"mongodb_uri": "mongodb+srv://nodefried:n0d3fr13d99@nodefried-9zzfm.mongodb.net/nodefried",
+	"mongodb_dbname": "nodefried",
+	"host_status": "",
+	"host_ip": "64.137.188.115",
+	"host_os": "linux",
+	"host_last_updated": 1535769034796
+}
