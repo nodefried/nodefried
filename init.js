@@ -341,7 +341,7 @@ MongoClient.connect(provision.mongodb_uri,{useNewUrlParser:true},function(err,db
                 }, (error, response, body) =>{
                   if(!error){
                     if(action === 'AUTOSTART'){
-                      console.log(timeStampLog()+'Web server failed to start!'.yellow)
+                      console.fileLog(timeStampLogPlain()+'Web server failed to start!'.yellow)
                     }else{
                      console.log(timeStampLog()+'Web Server already started!'.yellow)
                     }
