@@ -23,5 +23,7 @@
 	"host_status": "",
 	"mongodb_uri": "",
 	"web_favicon": "",
-	"web_title": ""
+	"web_title": "",
+	"ssl-cert": "",
+	"ssl-key": ""
 }

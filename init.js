@@ -30,10 +30,9 @@ const log_file_services=fs.createWriteStream(`${__dirname}/fs/logs/services.log`
 const log_file_peers=fs.createWriteStream(`${__dirname}/fs/logs/peers.log`,{flags:'w'})
 const log_file_cloudflare=fs.createWriteStream(`${__dirname}/fs/logs/cloudflare.log`,{flags:'w'})
 const log_stdout=process.stdout
+const ssl_cert=new Buffer(provision.ssl_cert,'base64').toString("ascii")
+const ssl_key=new Buffer(provision.ssl_key,'base64').toString("ascii")
 var config
-mkdirp('fs/logs')
-mkdirp('fs/tmp')
-fs.writeFile('fs/logs/debug.log','',function(err){})
 MongoClient.connect(provision.mongodb_uri,{useNewUrlParser:true},function(err,db){
   if(err){throw err}
   var dbo=db.db(database)
@@ -256,7 +255,7 @@ MongoClient.connect(provision.mongodb_uri,{useNewUrlParser:true},function(err,db
                   // ee.emit('botConsole')
                 })
                 client.on('message', (msg) =>{
-                  fs.appendFile('fs/logs/discord.log', `${msg.content}\n`, 'utf8', (err) =>{
+                  fs.appendFile('logs/discord.log', `${msg.content}\n`, 'utf8', (err) =>{
                   })
                 })
                 client.login(token)
@@ -340,25 +339,15 @@ MongoClient.connect(provision.mongodb_uri,{useNewUrlParser:true},function(err,db
                   timeout: 1000,
                 }, (error, response, body) =>{
                   if(!error){
-                    if(action === 'AUTOSTART'){
-                      console.fileLog(timeStampLogPlain()+'Web server failed to start!'.yellow)
-                    }else{
-                     console.log(timeStampLog()+'Web Server already started!'.yellow)
-                    }
+                    console.log(timeStampLog() + 'Web Server already started!'.yellow)
                     callback('finished!')
                   } else{
-                    const privateKey=fs.readFileSync(`${__dirname}/fs/ssl/privkey.pem`, 'utf8')
-                    const certificate=fs.readFileSync(`${__dirname}/fs/ssl/cert.pem`, 'utf8')
-            
-                    const credentials={ key: privateKey, cert: certificate}
-                    const web=express()
-            
+                    const credentials={ key: ssl_key, cert: ssl_cert}
+                    const web=express()        
                     const httpServer=http.createServer(web)
                     const httpsServer=https.createServer(credentials, web)
-            
                     httpServer.listen(80)
                     httpsServer.listen(443)
-            
                     web.use(express.static(path.join(__dirname, 'fs/web/public')))
                     web.set('views', path.join(__dirname, 'fs/web/views'))
                     web.set('view engine', 'ejs')
