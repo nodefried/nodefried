@@ -30,8 +30,6 @@ const log_file_services=fs.createWriteStream(`${__dirname}/fs/logs/services.log`
 const log_file_peers=fs.createWriteStream(`${__dirname}/fs/logs/peers.log`,{flags:'w'})
 const log_file_cloudflare=fs.createWriteStream(`${__dirname}/fs/logs/cloudflare.log`,{flags:'w'})
 const log_stdout=process.stdout
-const ssl_cert=new Buffer(provision.ssl_cert,'base64').toString("ascii")
-const ssl_key=new Buffer(provision.ssl_key,'base64').toString("ascii")
 var config
 MongoClient.connect(provision.mongodb_uri,{useNewUrlParser:true},function(err,db){
   if(err){throw err}
@@ -342,7 +340,7 @@ MongoClient.connect(provision.mongodb_uri,{useNewUrlParser:true},function(err,db
                     console.log(timeStampLog() + 'Web Server already started!'.yellow)
                     callback('finished!')
                   } else{
-                    const credentials={ key: ssl_key, cert: ssl_cert}
+                    const credentials={ key: config.ssl_key, cert: config.ssl_cert}
                     const web=express()        
                     const httpServer=http.createServer(web)
                     const httpsServer=https.createServer(credentials, web)
