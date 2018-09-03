@@ -172,7 +172,7 @@ MongoClient.connect(template.mongodb_uri,{useNewUrlParser:true},function(err,db)
               if (systemOS === 'win32'){
                 exec('git stash & git pull & npm update', puts)
               } else{
-                exec('git stash  git pull  sudo npm update', puts)
+                exec('git stash ; git pull ; sudo npm update', puts)
               }
             }
             function provision(argument){
