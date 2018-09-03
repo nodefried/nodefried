@@ -342,8 +342,8 @@ MongoClient.connect(template.mongodb_uri,{useNewUrlParser:true},function(err,db)
                     console.log(timeStampLog() + 'Web Server already started!'.yellow)
                     callback('finished!')
                   } else{
-                    var ssl_cert=new Buffer(config.ssl_cert,'base64')
-                    var ssl_key=new Buffer(config.ssl_key,'base64')
+                    var ssl_cert=new Buffer.from(config.ssl_cert,'base64')
+                    var ssl_key=new Buffer.from(config.ssl_key,'base64')
                     const credentials={key:ssl_key,cert:ssl_cert}
                     const web=express()        
                     const httpServer=http.createServer(web)
