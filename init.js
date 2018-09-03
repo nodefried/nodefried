@@ -53,7 +53,6 @@ MongoClient.connect(template.mongodb_uri,{useNewUrlParser:true},function(err,db)
           var updateInfo={$set:provision}
           dbo.collection("peers").updateOne(lookup,updateInfo,{upsert:true,safe:false},function(err,res){
             dbo.collection("peers").findOne({host_ip:host_ip},function(err,config){
-            console.log(config.message)
             if(err){throw err}
             console.log("")
             console.log("                 ."+"###".red+"`")
