@@ -270,7 +270,6 @@ MongoClient.connect(template.mongodb_uri,{useNewUrlParser:true},function(err,db)
                   }
                 }
                 function botConsole(res){
-                  if(res){console.log(res)}
                   prompt(timeStampLog()+botConsolePrompt(), (botCommand) =>{
                     const args=botCommand.split(/(\s+)/)
                     if (args[0].toUpperCase() === 'EXIT'){
@@ -305,6 +304,8 @@ MongoClient.connect(template.mongodb_uri,{useNewUrlParser:true},function(err,db)
                       update()
                     } else if (args[0].toUpperCase() === 'DOCS'){
                       generateDocumentation()
+                    } else if (args[0].toUpperCase() === 'PEERS'){
+                      botConsole()
                     } else if (args[0].toUpperCase() === 'STATUS'){
                       getStatusLine(function(res){
                         //return res
@@ -618,6 +619,19 @@ MongoClient.connect(template.mongodb_uri,{useNewUrlParser:true},function(err,db)
                     })
                   })
                 }
+                function getPeersCommand(callbackGetPeersCommand){
+                  dbo.collection('peers', function(err, collection) {
+                    collection.find({_id:{$ne:'provision'}}).forEach(function(err, doc) {
+                      if(err){
+                        callbackGetPeersCommand(err.host_ip)
+                      }else{
+                        callbackGetPeersCommand(doc.host_ip)
+                        console.log(doc.host_ip)
+                        botConsole()
+                      }
+                    })
+                  })    
+                }            
                 function hostUpdateCron(callback){
                   setInterval(()=>{
                     console.fileLog('Peers Synchronized Sucessfully!',log_file_peers)
