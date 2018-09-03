@@ -39,9 +39,9 @@ MongoClient.connect(template.mongodb_uri,{useNewUrlParser:true},function(err,db)
   var dbo=db.db(database)
   //// ```
   //// ### Check for Provision Template in Database
-  //// ```
+  //// `
   dbo.collection('peers').findOne({_id:'provision'},function(err,provision){
-  //// ```
+  //// `
     //// #### Provision Data Exists, Provision the Node with it
     //// ```
     if(provision){
@@ -631,9 +631,9 @@ MongoClient.connect(template.mongodb_uri,{useNewUrlParser:true},function(err,db)
       })
       //// ```
     //// ### No Provision Template in Database, First Run of Network
-    //// ```
+    //// `
     }else{
-    // ```  
+    // `  
       //// #### Add our Provision Template as DB Provision Template
       //// ```
       var lookup={_id:'provision'}
