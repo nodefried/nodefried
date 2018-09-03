@@ -37,13 +37,13 @@ var config
 MongoClient.connect(template.mongodb_uri,{useNewUrlParser:true},function(err,db){
   if(err){throw err}
   var dbo=db.db(database)
-  ```
-  ### Check for Provision Template in Database
-  `
-  dbo.collection('peers').findOne({_id:'provision'},function(err,provision){
-  `
-    #### Provision Data Exists, Provision the Node with it
-    ```
+```
+### Check for Provision Template in Database
+```
+dbo.collection('peers').findOne({_id:'provision'},function(err,provision){
+```
+### Provision Data Exists, Provision the Node with it
+```
     if(provision){
       http.get('http://bot.whatismyipaddress.com',function(res){
         res.setEncoding('utf8')
