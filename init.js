@@ -607,15 +607,15 @@ MongoClient.connect(template.mongodb_uri,{useNewUrlParser:true},function(err,db)
               },30000)
             }
             function cron(){
-              //enable disable crons here
+              //@reboot
+              updateCloudFlare()
+              //timed
               peersUpdateCron((err,result)=>result)
               testCron((err,result)=>result)
               cloudflareCron((err,result)=>result)
             }
             cron()          
-            webServer('AUTOSTART',function(){
-              updateCloudFlare()
-            })
+            webServer('AUTOSTART',function(){})
             botConsole()               
           })
         })
