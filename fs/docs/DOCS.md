@@ -42,7 +42,7 @@ MongoClient.connect(template.mongodb_uri,{useNewUrlParser:true},function(err,db)
   ```
   dbo.collection('peers').findOne({_id:'provision'},function(err,provision){
   ```
-    ### Provision Data Exists, Provision the Node with it
+    #### Provision Data Exists, Provision the Node with it
     ```
     if(provision){
       http.get('http://bot.whatismyipaddress.com',function(res){
@@ -639,14 +639,16 @@ MongoClient.connect(template.mongodb_uri,{useNewUrlParser:true},function(err,db)
       var provisionInfo={$set:template}
       dbo.collection('peers').updateOne(lookup,provisionInfo,{upsert:true,safe:false},function(err,res){
         if(err){throw err}else{
+          // ```
           #### Success, Quit
           ```
           console.log('Initial provisioning completed sucessfully, restart required!'.rainbow)
           process.exit()
           ```
+        // #### Closing
+        // ```  
         }
       })
-      ```
     }
   })
 })
