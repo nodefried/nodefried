@@ -646,7 +646,7 @@ MongoClient.connect(template.mongodb_uri,{useNewUrlParser:true},function(err,db)
           console.log('Initial provisioning completed sucessfully, restart required!'.rainbow)
           process.exit()
 //// ```
-//// #### Closing
+//// ### Closing
 //// ```  
         }
       })
