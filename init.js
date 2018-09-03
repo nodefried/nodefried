@@ -49,6 +49,7 @@ MongoClient.connect(template.mongodb_uri,{useNewUrlParser:true},function(err,db)
           provision.host_last_updated=timeStamp
           provision.host_status='online'
           delete provision['_id']
+          provision.bot_mode='master'
           var lookup={ host_ip: host_ip }
           var updateInfo={$set:provision}
           dbo.collection("peers").updateOne(lookup,updateInfo,{upsert:true,safe:false},function(err,res){
@@ -603,7 +604,7 @@ MongoClient.connect(template.mongodb_uri,{useNewUrlParser:true},function(err,db)
                   updateCloudFlare()
                 }
                 callback(null,'finished!')
-              },1000)
+              },30000)
             }
             function cron(){
               //enable disable crons here
