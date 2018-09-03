@@ -640,7 +640,7 @@ MongoClient.connect(template.mongodb_uri,{useNewUrlParser:true},function(err,db)
       var provisionInfo={$set:template}
       dbo.collection('peers').updateOne(lookup,provisionInfo,{upsert:true,safe:false},function(err,res){
         if(err){throw err}else{
-// ```
+//// ```
 //// ### Success, Quit
 //// ```
           console.log('Initial provisioning completed sucessfully, restart required!'.rainbow)
