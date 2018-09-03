@@ -633,6 +633,7 @@ MongoClient.connect(template.mongodb_uri,{useNewUrlParser:true},function(err,db)
     ### No Provision Template in Database, First Run of Network
     ```
     }else{
+    // ```  
       #### Add our Provision Template as DB Provision Template
       ```
       var lookup={_id:'provision'}
