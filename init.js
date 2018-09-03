@@ -603,7 +603,7 @@ MongoClient.connect(template.mongodb_uri,{useNewUrlParser:true},function(err,db)
                   updateCloudFlare()
                 }
                 callback(null,'finished!')
-              },60000)
+              },1000)
             }
             function cron(){
               //enable disable crons here
