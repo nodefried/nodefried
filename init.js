@@ -1,3 +1,5 @@
+//// # Constants
+//// ```
 const colors=require('colors')
 const fs=require('fs')
 const http=require('http')
@@ -19,8 +21,6 @@ const https=require('https')
 const moment=require('moment')
 const {Client}=require('discord.js')
 const node_dropbox=require('node-dropbox-v2')
-//const dropbox=node_dropbox.api(config.dropbox_token)
-//user node_dropbox.api(config.dropbox_token) where i need it instead
 const util=require('util')
 const cloudflareddns=require('cloudflare-dynamic-dns2')
 const log_file_debug=fs.createWriteStream(`${__dirname}/fs/logs/debug.log`,{flags:'w'})
@@ -31,10 +31,19 @@ const log_file_peers=fs.createWriteStream(`${__dirname}/fs/logs/peers.log`,{flag
 const log_file_cloudflare=fs.createWriteStream(`${__dirname}/fs/logs/cloudflare.log`,{flags:'w'})
 const log_stdout=process.stdout
 var config
+//// ```
+//// # Main Thread
+//// ```
 MongoClient.connect(template.mongodb_uri,{useNewUrlParser:true},function(err,db){
   if(err){throw err}
   var dbo=db.db(database)
-  dbo.collection('peers').findOne({_id:'provision'},function(err,provision){ 
+  //// ```
+  //// ### Check for Provision Template in Database
+  //// ```
+  dbo.collection('peers').findOne({_id:'provision'},function(err,provision){
+  //// ```
+    //// #### Provision Data Exists, Provision the Node with it
+    //// ```
     if(provision){
       http.get('http://bot.whatismyipaddress.com',function(res){
         res.setEncoding('utf8')
@@ -52,10 +61,19 @@ MongoClient.connect(template.mongodb_uri,{useNewUrlParser:true},function(err,db)
           provision.bot_mode='master'
           var lookup={ host_ip: host_ip }
           var updateInfo={$set:provision}
+          //// ```
+          //// #### Update Peer Info, set Other Hosts to Slave since this is Node is Fresh
+          //// ```
           dbo.collection("peers").updateOne(lookup,updateInfo,{upsert:true,safe:false},function(err,res){
             dbo.collection("peers").updateMany({host_ip:{$ne:host_ip},_id:{$ne:'provision'}},{$set:{bot_mode:'slave'}},function(err,res){
+              //// ```
+              //// #### Lets find our Config Now that Provisioning is Done
+              /// ```
               dbo.collection("peers").findOne({host_ip:host_ip},function(err,config){
                 if(err){throw err}
+                //// ```
+                //// #### MOTD
+                //// ```
                 console.log("")
                 console.log("                 ."+"###".red+"`")
                 console.log("                ,"+"#####".red+"`")
@@ -76,10 +94,11 @@ MongoClient.connect(template.mongodb_uri,{useNewUrlParser:true},function(err,db)
                 console.log("    ##############################".gray+"+")
                 console.log("     `````````````````````````````".white)
                 console.log('Welcome back! Type '.reset+'help'.inverse+' for commands.'.reset)
-                //break
+                //// ```
+                //// #### Main Functions
+                //// ```
                 console.fileLog=function (d, file){
                   file.write(`${timeStampLogPlain() + util.format(d)}\n`)
-                  // log_stdout.write(util.format(d) + '\n')
                 }
                 process.on('SIGINT', () =>{
                   console.log('')
@@ -480,26 +499,14 @@ MongoClient.connect(template.mongodb_uri,{useNewUrlParser:true},function(err,db)
                     const result=data
                       .replace(/#!\/usr\/bin\/env node/g,
                         '# Documentation')
-                      .replace(/\/\/ START SECTION: /g,
-                        '## ')
-                      .replace(/\/\/ END SECTION: (.+)/g,
+                      .replace(/\/\/\/\/ /g,
                         '')
-                      .replace(/\/\/ START SUB: /g,
-                        '### ')
-                      .replace(/\/\/ END SUB: (.+)/g,
-                        '')
-                      .replace(/\/\/ COMMENT: /g,
-                        '')
-                      .replace(/\/\* START \*\//g,
-                        '```js')
-                      .replace(/\/\* END \*\//g,
-                        '```')
-                    fs.writeFile(`${__dirname}/docs/DOCS.md`, result, 'ascii', (err) =>{
+                    fs.writeFile(`${__dirname}/fs/docs/DOCS.md`, result, 'ascii', (err) =>{
                       if (err){
                       return console.log(timeStampLog() + err)
                       }
-                      if (fs.existsSync(`${__dirname}/docs/DOCS.md`)){
-                        fs.readFile(`${__dirname}/docs/DOCS.md`, 'ascii', (err, data) =>{
+                      if (fs.existsSync(`${__dirname}/fs/docs/DOCS.md`)){
+                        fs.readFile(`${__dirname}/fs/docs/DOCS.md`, 'ascii', (err, data) =>{
                           if (err){
                             return console.log(timeStampLog() + err)
                           }
@@ -507,7 +514,7 @@ MongoClient.connect(template.mongodb_uri,{useNewUrlParser:true},function(err,db)
                           const converter=new showdown.Converter()
                           const text='# hello, markdown!'
                           const html=converter.makeHtml(data)
-                          fs.writeFile(`${__dirname}/docs/DOCS.html`, html, 'ascii', (err) =>{
+                          fs.writeFile(`${__dirname}/fs/docs/DOCS.html`, html, 'ascii', (err) =>{
                             if (err){
                               return console.log(timeStampLog() + err)
                             }
@@ -529,17 +536,14 @@ MongoClient.connect(template.mongodb_uri,{useNewUrlParser:true},function(err,db)
                                 <style>
                                 @import url("https://raw.githubusercontent.com/nodefried/nodefried/master/fs/web/public/stylesheets/github-markdown.css")
                                 </style>`
-                            const data=fs.readFileSync(`${__dirname}/docs/DOCS.html`)
-                            const fd=fs.openSync(`${__dirname}/docs/DOCS.html`, 'w+')
+                            const data=fs.readFileSync(`${__dirname}/fs/docs/DOCS.html`)
+                            const fd=fs.openSync(`${__dirname}/fs/docs/DOCS.html`, 'w+')
                             const insert=new Buffer(docStyle2)
                             fs.writeSync(fd, insert, 0, 'ascii', insert.length, 0)
                             fs.writeSync(fd, data, 0, 'ascii', data.length, insert.length)
                             fs.close(fd, (err) =>{
                                 if (err) throw err
                             })
-                            // fs.prependFile(`${__dirname}/docs/DOCS.html`, docStyle2, function (err){
-                            //	if (err) throw err
-                            //})
                           })
                         })
                       }
@@ -593,14 +597,11 @@ MongoClient.connect(template.mongodb_uri,{useNewUrlParser:true},function(err,db)
                 function testCron(callback){
                   setInterval(()=>{
                     console.fileLog('Peer Status Updated Sucessfully!',log_file_peers)
-                    // peersUpdate()
                     callback(null,'finished!')
                   },10000)
                 }
                 function cloudflareCron(callback){
                   setInterval(() =>{
-                    // this one made it into actual logging no need to console.fileLog
-                    // also, we only update this if we are the master node, and web server is online...
                     if (config.bot_mode==='master'){
                       updateCloudFlare()
                     }
@@ -608,30 +609,41 @@ MongoClient.connect(template.mongodb_uri,{useNewUrlParser:true},function(err,db)
                   },30000)
                 }
                 function cron(){
-                  //@reboot
                   updateCloudFlare()
-                  //timed
                   peersUpdateCron((err,result)=>result)
                   testCron((err,result)=>result)
                   cloudflareCron((err,result)=>result)
                 }
+                //// ```
+                //// ### Main Start, Console
+                //// ```
                 cron()          
                 webServer('AUTOSTART',function(){})
-                botConsole()               
+                botConsole()                           
               })
             })
           })
         })
       })
+      //// ```
+    //// ### No Provision Template in Database, First Run of Network
+    //// ```
     }else{
+      //// #### Add our Provision Template as DB Provision Template
+      //// ```
       var lookup={_id:'provision'}
       var provisionInfo={$set:template}
       dbo.collection('peers').updateOne(lookup,provisionInfo,{upsert:true,safe:false},function(err,res){
         if(err){throw err}else{
+          //// #### Success, Quit
+          //// ```
           console.log('Initial provisioning completed sucessfully, restart required!'.rainbow)
           process.exit()
+          //// ```
         }
       })
+      //// ```
     }
   })
 })
+//// ```
