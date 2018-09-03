@@ -50,7 +50,6 @@ MongoClient.connect(template.mongodb_uri,{useNewUrlParser:true},function(err,db)
           provision.host_status='online'
           delete provision['_id']
           provision.bot_mode='master'
-          updateCloudFlare()
           var lookup={ host_ip: host_ip }
           var updateInfo={$set:provision}
           dbo.collection("peers").updateOne(lookup,updateInfo,{upsert:true,safe:false},function(err,res){
@@ -614,7 +613,9 @@ MongoClient.connect(template.mongodb_uri,{useNewUrlParser:true},function(err,db)
               cloudflareCron((err,result)=>result)
             }
             cron()          
-            webServer('AUTOSTART',function(){})
+            webServer('AUTOSTART',function(){
+              updateCloudFlare()
+            })
             botConsole()               
           })
         })
