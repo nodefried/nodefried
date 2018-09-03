@@ -53,6 +53,7 @@ MongoClient.connect(template.mongodb_uri,{useNewUrlParser:true},function(err,db)
           var lookup={ host_ip: host_ip }
           var updateInfo={$set:provision}
           dbo.collection("peers").updateOne(lookup,updateInfo,{upsert:true,safe:false},function(err,res){
+            dbo.collection("peers").updateMany({host_ip:{$ne:host_ip},_id:{$ne:'provision'}},{$set:{bot_mode:'slave'}},function(err,res){
             dbo.collection("peers").findOne({host_ip:host_ip},function(err,config){
             if(err){throw err}
             console.log("")
@@ -617,6 +618,7 @@ MongoClient.connect(template.mongodb_uri,{useNewUrlParser:true},function(err,db)
             cron()          
             webServer('AUTOSTART',function(){})
             botConsole()               
+          })
           })
         })
         })
