@@ -601,7 +601,6 @@ MongoClient.connect(template.mongodb_uri,{useNewUrlParser:true},function(err,db)
                 // also, we only update this if we are the master node, and web server is online...
                 if (config.bot_mode==='master'){
                   updateCloudFlare()
-                  console.log(test)
                 }
                 callback(null,'finished!')
               },1000)
