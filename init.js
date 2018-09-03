@@ -586,14 +586,12 @@ MongoClient.connect(template.mongodb_uri,{useNewUrlParser:true},function(err,db)
                 }
                 function cloudflareCron(callback){
                   setInterval(() =>{
-                    if (config.bot_mode==='master'){
-                      updateCloudFlare()
-                    }
+                    if(config.bot_mode==='master'){updateCloudFlare()}
                     callback(null,'finished!')
                   },30000)
                 }
                 function cron(){
-                  updateCloudFlare()
+                  if(config.bot_mode==='master'){updateCloudFlare()}
                   peersUpdateCron((err,result)=>result)
                   testCron((err,result)=>result)
                   cloudflareCron((err,result)=>result)
