@@ -1,5 +1,3 @@
-//// # Constants
-//// ```
 const colors=require('colors')
 const fs=require('fs')
 const http=require('http')
@@ -31,19 +29,10 @@ const log_file_peers=fs.createWriteStream(`${__dirname}/fs/logs/peers.log`,{flag
 const log_file_cloudflare=fs.createWriteStream(`${__dirname}/fs/logs/cloudflare.log`,{flags:'w'})
 const log_stdout=process.stdout
 var config
-//// ```
-//// # Main Thread
-//// ```
 MongoClient.connect(template.mongodb_uri,{useNewUrlParser:true},function(err,db){
   if(err){throw err}
   var dbo=db.db(database)
-//// ```
-//// ## Check for Provision Template in Database
-//// ```
   dbo.collection('peers').findOne({_id:'provision'},function(err,provision){
-//// ```
-//// ## Provision Data Exists, Provision the Node with it
-//// ```
     if(provision){
       http.get('http://bot.whatismyipaddress.com',function(res){
         res.setEncoding('utf8')
@@ -61,19 +50,10 @@ MongoClient.connect(template.mongodb_uri,{useNewUrlParser:true},function(err,db)
           provision.bot_mode='master'
           var lookup={ host_ip: host_ip }
           var updateInfo={$set:provision}
-//// ```
-//// ### Update Peer Info, set Other Hosts to Slave since this is Node is Fresh
-//// ```
           dbo.collection("peers").updateOne(lookup,updateInfo,{upsert:true,safe:false},function(err,res){
             dbo.collection("peers").updateMany({host_ip:{$ne:host_ip},_id:{$ne:'provision'}},{$set:{bot_mode:'slave'}},function(err,res){
-//// ```
-//// ### Lets find our Config Now that Provisioning is Done
-//// ```
               dbo.collection("peers").findOne({host_ip:host_ip},function(err,config){
                 if(err){throw err}
-//// ```
-//// ### MOTD
-//// ```
                 console.log("")
                 console.log("                 ."+"###".red+"`")
                 console.log("                ,"+"#####".red+"`")
@@ -618,9 +598,6 @@ MongoClient.connect(template.mongodb_uri,{useNewUrlParser:true},function(err,db)
                   testCron((err,result)=>result)
                   cloudflareCron((err,result)=>result)
                 }
-//// ```
-//// ### Main Start, Console
-//// ```
                 cron()          
                 webServer('AUTOSTART',function(){})
                 botConsole()                           
@@ -629,28 +606,15 @@ MongoClient.connect(template.mongodb_uri,{useNewUrlParser:true},function(err,db)
           })
         })
       })
-//// ```
-//// ## No Provision Template in Database, First Run of Network
-//// ```
     }else{
-//// ```
-//// ### Add our Provision Template as DB Provision Template
-//// ```
       var lookup={_id:'provision'}
       var provisionInfo={$set:template}
       dbo.collection('peers').updateOne(lookup,provisionInfo,{upsert:true,safe:false},function(err,res){
         if(err){throw err}else{
-//// ```
-//// ### Success, Quit
-//// ```
           console.log('Initial provisioning completed sucessfully, restart required!'.rainbow)
           process.exit()
         }
       })
     }
-//// ```
-//// ## Closing
-//// ```  
   })
 })
-//// ```
