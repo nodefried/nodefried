@@ -417,7 +417,7 @@ MongoClient.connect(template.mongodb_uri,{useNewUrlParser:true},function(err,db)
             function dropboxAPI(command, argument){
               if (command === 'ACCOUNT'){
                 console.log(`${timeStampLog()}Querying DropBox account information, please wait...`)
-                dropbox.account((err, res, body) =>{
+                  node_dropbox.api(config.dropbox_token).account((err, res, body) =>{
                   if (!err){
                     console.log(body)
                     botConsole()
@@ -433,7 +433,7 @@ MongoClient.connect(template.mongodb_uri,{useNewUrlParser:true},function(err,db)
                   if (err){
                     return console.log(err)
                   }
-                  dropbox.createFile(argument[4], data, (err, res, body) =>{
+                  node_dropbox.api(config.dropbox_token).createFile(argument[4], data, (err, res, body) =>{
                     if (!err){
                       const result=JSON.parse(body)
                       console.log(`Name: ${result.name}`)
@@ -456,7 +456,7 @@ MongoClient.connect(template.mongodb_uri,{useNewUrlParser:true},function(err,db)
               }
               if (command === 'GET'){
                 console.log(`${timeStampLog()}Testing Dropbox download...`)
-                dropbox.getFile(argument[4], (err, res, body) =>{
+                node_dropbox.api(config.dropbox_token).getFile(argument[4], (err, res, body) =>{
                   if (!err){
                     fs.writeFile(argument[6], body, 'utf8', (err) =>{
                       if (err) return console.log(timeStampLog() + err)
