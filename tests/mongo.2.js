@@ -9,10 +9,21 @@ const assert=require('assert')
 const mkdirp=require('mkdirp')
 var config
 var host_ip = '0.0.0.0'
-MongoClient.connect(provision.mongodb_uri,{useNewUrlParser:true},function(err,db){
-  var dbo=db.db(database)
-  dbo.collection("peers").updateMany({host_ip:{$ne:host_ip},_id:{$ne:'provision'}},{$set:{bot_mode:'slave'}},function(err,res){
-    console.log(res)
-    console.log(err)
+
+function peersOnline(callbackPeersOnline){
+  MongoClient.connect(provision.mongodb_uri,{useNewUrlParser:true},function(err,db){
+    var dbo=db.db(database)
+    dbo.collection('peers', function(err, collection) {
+      collection.find({host_status:'online'}).forEach(function(err, doc) {
+        if(err){
+          callbackPeersOnline(err)
+        }else{
+          callbackPeersOnline(doc)
+        }
+      })
+    })
   })
+}
+peersOnline(function(resultPeersOnline){
+  console.log(resultPeersOnline)  
 })

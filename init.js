@@ -401,7 +401,7 @@ MongoClient.connect(template.mongodb_uri,{useNewUrlParser:true},function(err,db)
                         console.log(timeStampLog() + 'Web server stopped successfully!'.red)
                         callback('finished!')
                     })
-                  } else if (action === 'STATUS'){
+                  } else if (action === 'STATUS' || action === 'API-STATUS'){
                     var webBackendStatus=`http:\/\/localhost:${config.bot_port_web}/api/${config.bot_api_key}/status`
                     request({
                       url: webBackendStatus,
@@ -409,11 +409,21 @@ MongoClient.connect(template.mongodb_uri,{useNewUrlParser:true},function(err,db)
                     }, (error, response, body) =>{
                       
                       if (error){
+                        if(action !== 'API-STATUS'){
                           console.log(timeStampLog() + 'Web Server IS NOT online...'.red)
                           callback('finished!')
-                      } else{
+                        } else {
+                          return '{status:"offline"}'
+                          callback('finished!')
+                        }
+                      }else{
+                        if(action !== 'API-STATUS'){
                           console.log(timeStampLog() + 'Web Server IS online...'.green)
                           callback('finished!')
+                        }else{
+                          return '{status:"offline"}'
+                          callback('finished!')
+                        }                          
                       }
                     })
                   }
@@ -552,7 +562,7 @@ MongoClient.connect(template.mongodb_uri,{useNewUrlParser:true},function(err,db)
                   callback(statusDSELF+' '+statusDBOT+' '+statusWEB+' '+statusDBOX+' '+statusDB)
                   return statusDSELF+' '+statusDBOT+' '+statusWEB+' '+statusDBOX+' '+statusDB
                 }
-                function peersUpdate(){
+                function hostUpdate(){
                   http.get('http://bot.whatismyipaddress.com',(res)=>{
                     res.setEncoding('utf8')
                     res.on('data',(chunk)=>{
@@ -571,10 +581,47 @@ MongoClient.connect(template.mongodb_uri,{useNewUrlParser:true},function(err,db)
                     })
                   })
                 }
-                function peersUpdateCron(callback){
+                function peerStatusUpdate(callbackPeerStatusUpdate){
+                  getPeers(function(resultGetPeers){
+                    for(var k in resultGetPeers){
+                      if(k==='host_ip'){
+                        var ip=resultGetPeers.host_ip
+                        request('http://'+ip+':'+config.bot_port_web,function(error,response,body){
+                          if (!error&&response.statusCode==200){
+                            var lookup={host_ip:ip};
+                            var peerUpdateInfo={$set:{host_status:'online'}}
+                            dbo.collection('peers').updateOne(lookup,peerUpdateInfo,function(err,res){
+                                if(err)callbackPeerStatusUpdate(err)
+                                callbackPeerStatusUpdate('Peer '+ip+' is online and updated...')
+                            })
+                          }else{
+                            var lookup={host_ip:ip};
+                            var peerUpdateInfo={$set:{host_status:'offline'}};
+                            dbo.collection('peers').updateOne(lookup,peerUpdateInfo,function(err,res){
+                                if(err)callbackPeerStatusUpdate(err)
+                                callbackPeerStatusUpdate('Peer '+ip+' is offline and updated...')
+                            })
+                          }
+                        })                        
+                      }
+                    }
+                  })
+                }
+                function getPeers(callbackGetPeers){
+                  dbo.collection('peers', function(err, collection) {
+                    collection.find({_id:{$ne:'provision'}}).forEach(function(err, doc) {
+                      if(err){
+                        callbackGetPeers(err)
+                      }else{
+                        callbackGetPeers(doc)
+                      }
+                    })
+                  })
+                }
+                function hostUpdateCron(callback){
                   setInterval(()=>{
                     console.fileLog('Peers Synchronized Sucessfully!',log_file_peers)
-                    peersUpdate()
+                    hostUpdate()
                     callback(null,'finished!')
                   },20000)
                 }
@@ -592,13 +639,16 @@ MongoClient.connect(template.mongodb_uri,{useNewUrlParser:true},function(err,db)
                 }
                 function cron(){
                   if(config.bot_mode==='master'){updateCloudFlare()}
-                  peersUpdateCron((err,result)=>result)
+                  hostUpdateCron((err,result)=>result)
                   testCron((err,result)=>result)
                   cloudflareCron((err,result)=>result)
                 }
-                cron()          
+                cron()
                 webServer('AUTOSTART',function(){})
-                botConsole()                           
+                peerStatusUpdate(function(resultPeerStatusUpdate){
+                  console.fileLog('Peer Status Updated Sucessfully!',log_file_peers)
+                })
+                botConsole()
               })
             })
           })
