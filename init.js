@@ -1,9 +1,9 @@
 const colors=require('colors')
 const fs=require('fs')
 const http=require('http')
-const provision=require(__dirname+'//fs/etc//provision.json')
+const template=require(__dirname+'//fs/etc//provision.json')
 const MongoClient=require('mongodb').MongoClient
-const database=provision.mongodb_uri.split(/\/+/).pop()
+const database=template.mongodb_uri.split(/\/+/).pop()
 const assert=require('assert')
 const mkdirp=require('mkdirp')
 const exec=require('child_process').exec
@@ -31,27 +31,29 @@ const log_file_peers=fs.createWriteStream(`${__dirname}/fs/logs/peers.log`,{flag
 const log_file_cloudflare=fs.createWriteStream(`${__dirname}/fs/logs/cloudflare.log`,{flags:'w'})
 const log_stdout=process.stdout
 var config
-MongoClient.connect(provision.mongodb_uri,{useNewUrlParser:true},function(err,db){
+MongoClient.connect(template.mongodb_uri,{useNewUrlParser:true},function(err,db){
   if(err){throw err}
   var dbo=db.db(database)
-  dbo.collection('peers').findOne({_id:'provision'},function(err,config){ 
-    if(config){
+  dbo.collection('peers').findOne({_id:'provision'},function(err,provision){ 
+    if(provision){
       http.get('http://bot.whatismyipaddress.com',function(res){
         res.setEncoding('utf8')
-        res.on('data',function(chunk){
+        res.on('data',function(host_ip){
           var host
           var isWin=/^win/.test(process.platform)
           var isDarwin=/^darwin/.test(process.platform)
           if(isWin){host="win32"}else if(isDarwin){host="osx"}else{host="linux"}
           var timeStamp=moment().unix()
-          config.host_ip=chunk
-          config.host_os=host
-          config.host_last_updated=timeStamp
-          config.host_status='online'
-          delete config['_id']
-          var lookup={ host_ip: config.host_ip }
-          var updateInfo={$set:config}
+          provision.host_ip=host_ip
+          provision.host_os=host
+          provision.host_last_updated=timeStamp
+          provision.host_status='online'
+          delete provision['_id']
+          var lookup={ host_ip: host_ip }
+          var updateInfo={$set:provision}
           dbo.collection("peers").updateOne(lookup,updateInfo,{upsert:true,safe:false},function(err,res){
+            dbo.collection("peers").findOne({host_ip:host_ip},function(err,config){
+            console.log(config.message)
             if(err){throw err}
             console.log("")
             console.log("                 ."+"###".red+"`")
@@ -340,7 +342,9 @@ MongoClient.connect(provision.mongodb_uri,{useNewUrlParser:true},function(err,db
                     console.log(timeStampLog() + 'Web Server already started!'.yellow)
                     callback('finished!')
                   } else{
-                    const credentials={ key: config.ssl_key, cert: config.ssl_cert}
+                    var ssl_cert=new Buffer(config.ssl_cert,'base64')
+                    var ssl_key=new Buffer(config.ssl_key,'base64')
+                    const credentials={key:ssl_key,cert:ssl_cert}
                     const web=express()        
                     const httpServer=http.createServer(web)
                     const httpsServer=https.createServer(credentials, web)
@@ -613,10 +617,11 @@ MongoClient.connect(provision.mongodb_uri,{useNewUrlParser:true},function(err,db
             botConsole()               
           })
         })
+        })
       })
     }else{
       var lookup={_id:'provision'}
-      var provisionInfo={$set:provision}
+      var provisionInfo={$set:template}
       dbo.collection('peers').updateOne(lookup,provisionInfo,{upsert:true,safe:false},function(err,res){
         if(err){throw err}else{
           console.log('Initial provisioning completed sucessfully, restart required!'.rainbow)
