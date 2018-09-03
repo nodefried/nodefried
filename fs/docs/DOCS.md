@@ -359,8 +359,12 @@ MongoClient.connect(template.mongodb_uri,{useNewUrlParser:true},function(err,db)
                       timeout: 1000,
                     }, (error, response, body) =>{
                       if(!error){
-                        console.log(timeStampLog() + 'Web Server already started!'.yellow)
-                        callback('finished!')
+                        if(action==='AUTOSTART'){
+                          callback('finished!')
+                        }else{
+                          console.log(timeStampLog()+'Web Server already started!'.yellow)
+                          callback('finished!')
+                        }
                       } else{
                         var ssl_cert=new Buffer.from(config.ssl_cert,'base64')
                         var ssl_key=new Buffer.from(config.ssl_key,'base64')
