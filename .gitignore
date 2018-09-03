@@ -8,4 +8,3 @@ fs/logs
 fs/logs/*
 fs/logs/
 package-lock.json
-tests/
