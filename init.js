@@ -249,8 +249,8 @@ MongoClient.connect(template.mongodb_uri,{useNewUrlParser:true},function(err,db)
                     client=new Client()
                     client.on('ready',() =>{})
                     client.on('message',(msg) =>{
-                        fs.appendFile(log_file_discord, `${msg.content}\n`, 'utf8',(err) =>{
-                      })
+                      console.fileLog(msg.content,log_file_discord)
+
                     })
                     client.login(token)
                     var msg=`Discord ${type.toLowerCase()} started successfully!`
@@ -329,7 +329,7 @@ MongoClient.connect(template.mongodb_uri,{useNewUrlParser:true},function(err,db)
                 }
                 function webServer(action,callback){
                   if(action === 'START' || action === 'AUTOSTART'){
-                    var webBackendStatus=`http:\/\/localhost:${config.bot_port_web}/api/${config.bot_api_key}/status`
+                    var webBackendStatus=`http:\/\/localhost:${config.bot_port_web}/api/cli/status`
                     request({
                       url: webBackendStatus,
                       timeout: 1000,
@@ -364,21 +364,32 @@ MongoClient.connect(template.mongodb_uri,{useNewUrlParser:true},function(err,db)
                           discord_invite_link: config.discord_invite_link,
                           theme: 'default',
                         }))
-                        web.get(`/api/${config.bot_api_key}/close`,(req, res) =>{
-                          res.send('Stopping the web server...')
-                          httpServer.close()
-                          httpsServer.close()
-                        })
-                        web.get(`/api/${config.bot_api_key}/status`,(req, res) =>{
+                        //API for CLI
+                        web.get(`/api/cli/status`,(req, res) =>{
                           res.send('Web server IS online...')
                         })
-                        web.get(`/api/${config.bot_api_key}/close`,(req, res) =>{
+                        web.get(`/api/cli/close/${config.bot_api_key}`,(req, res) =>{
                           res.send('Stopping the web server...')
                           httpServer.close()
                           httpsServer.close()
                         })
-                        web.get(`/api/${config.bot_api_key}/info/system`,(req, res) =>{
-                          res.send(conf)
+                        web.get(`/api/cli/config/${config.bot_api_key}`,(req, res) =>{
+                          res.send(config)
+                        })
+                        //API Vanilla
+                        web.get(`/api/status`,(req, res) =>{
+                          res.json({request: 'status', response: 'online'})
+                        })
+                        web.get(`/api/status/${config.bot_api_key}`,(req, res) =>{
+                          res.json({request: 'status', response: 'online'})
+                        })                        
+                        web.get(`/api/close/${config.bot_api_key}`,(req, res) =>{
+                          res.json({request: 'close', response: 'success'})
+                          httpServer.close()
+                          httpsServer.close()
+                        })
+                        web.get(`/api/config/${config.bot_api_key}`,(req, res) =>{
+                          res.json({request: 'config', config: config})
                         })
                           if(action !==  'AUTOSTART'){
                             console.log(timeStampLog() + 'Web server started successfully!'.green)
@@ -388,8 +399,8 @@ MongoClient.connect(template.mongodb_uri,{useNewUrlParser:true},function(err,db)
                       }
                     })
                   } else if(action === 'STOP'){
-                    const webBackendClose=`http:\/\/localhost:${config.bot_port_web}/api/${config.bot_api_key}/close`
-                    var webBackendStatus=`http:\/\/localhost:${config.bot_port_web}/api/${config.bot_api_key}/status`
+                    const webBackendClose=`http:\/\/localhost:${config.bot_port_web}/api/cli/close/${config.bot_api_key}`
+                    var webBackendStatus=`http:\/\/localhost:${config.bot_port_web}/api/cli/status`
                     request({
                       url: webBackendClose,
                       // timeout: 500
@@ -397,31 +408,23 @@ MongoClient.connect(template.mongodb_uri,{useNewUrlParser:true},function(err,db)
                         console.log(timeStampLog() + 'Web server stopped successfully!'.red)
                         callback('finished!')
                     })
-                  } else if(action === 'STATUS' || action === 'API-STATUS'){
-                    var webBackendStatus=`http:\/\/localhost:${config.bot_port_web}/api/${config.bot_api_key}/status`
+                  } else if(action === 'STATUS'){
+                    var webBackendStatus=`http:\/\/localhost:${config.bot_port_web}/api/cli/status`
                     request({
                       url: webBackendStatus,
                       timeout: 1000,
                     },(error, response, body) =>{
-                      
                       if(error){
-                        if(action !== 'API-STATUS'){
-                          console.log(timeStampLog() + 'Web Server IS NOT online...'.red)
-                          callback('finished!')
-                        } else {
-                          return '{status:"offline"}'
-                          callback('finished!')
-                        }
+                        console.log(timeStampLog() + 'Web Server IS NOT online...'.red)
+                        callback('finished!')
                       }else{
-                        if(action !== 'API-STATUS'){
-                          console.log(timeStampLog() + 'Web Server IS online...'.green)
-                          callback('finished!')
-                        }else{
-                          return '{status:"offline"}'
-                          callback('finished!')
-                        }                          
+                        console.log(timeStampLog() + 'Web Server IS online...'.green)
+                        callback('finished!')                     
                       }
                     })
+                  } else {
+                    console.log('Not an argument for the web server...'.yellow)
+                    callback('finished!')
                   }
                 }
                 function dropboxAPI(command, argument){
@@ -543,19 +546,19 @@ MongoClient.connect(template.mongodb_uri,{useNewUrlParser:true},function(err,db)
                   })
                 }
                 function getStatusLine(callback){
-                  var statusWEB='ON '.bold.green + 'WEB'.gray
-                  var statusDSELF='OFF '.bold.red + 'DSELF'.gray
-                  var statusDBOT='OFF '.bold.red + 'DBOT'.gray
-                  var statusDB='OFF '.bold.red + 'DB'.gray
-                  var statusDBOX='OFF '.bold.red + 'DBOX'.gray;
-                  request('http://localhost/', function (error, response, body){
-                    if(!error&&response.statusCode==200){
+                  request({url: 'http://localhost/api/status',json: true}, function (error, response, body){
+                    var statusWEB='OFF '.bold.red + 'WEB'.gray
+                    var statusDSELF='OFF '.bold.red + 'DSELF'.gray
+                    var statusDBOT='OFF '.bold.red + 'DBOT'.gray
+                    var statusDB='OFF '.bold.red + 'DB'.gray
+                    var statusDBOX='OFF '.bold.red + 'DBOX'.gray
+                    if(!error&&body.response=='online'){
                       statusWEB='ON '.bold.green+'WEB'.gray
                     }else{
                       statusWEB='OFF '.bold.red+'WEB'.gray
                     }
+                    callback(statusDSELF+' | '+statusDBOT+' | '+statusWEB+' | '+statusDBOX+' | '+statusDB)
                   })
-                  callback(statusDSELF+' | '+statusDBOT+' | '+statusWEB+' | '+statusDBOX+' | '+statusDB)
                 }
                 function hostUpdate(){
                   http.get('http://bot.whatismyipaddress.com',(res)=>{

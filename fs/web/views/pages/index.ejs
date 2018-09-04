@@ -19,7 +19,22 @@
 </div>
 <div class="container" style="text-align:center;">
 <h3><span class="glyphicon glyphicon-info-sign"></span><%= bot_nickname %> is Operational</h3>
-<br /><br />
+<br />
+<style>
+button {
+  cursor:default;
+}
+button:hover {
+  cursor:pointer;
+}
+</style>
+<a href="/posts" target="_new"><button type="button" class="btn btn-dark">Posts</button></a>
+<a href="/logs" target="_new"><button type="button" class="btn btn-dark">Logs</button></a>
+<a href="/api/status" target="_new"><button type="button" class="btn btn-dark">Status</button></a>
+<a href="https://www.github.com/nodefried/nodefried" target="_new"><button type="button" class="btn btn-dark">GitHub</button></a>
+<a href="https://www.npmjs.com/package/nodefried" target="_new"><button type="button" class="btn btn-dark">NPM</button></a>
+
+<br />
 <hr>
 <div class="row">
 <div class="col-lg-12">
