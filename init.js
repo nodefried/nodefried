@@ -364,6 +364,17 @@ MongoClient.connect(template.mongodb_uri,{useNewUrlParser:true},function(err,db)
                           discord_invite_link: config.discord_invite_link,
                           theme: 'default',
                         }))
+                        web.get('/posts',(req, res) => res.render('pages/posts',{
+                          web_title: config.web_title,
+                          web_favicon: config.web_favicon,
+                          bot_nickname: config.bot_nickname,
+                          bot_logo_long: config.bot_logo_long,
+                          bot_logo_square: config.bot_logo_square,
+                          bot_info_website: config.bot_info_website,
+                          bot_info_copyright: config.bot_info_copyright,
+                          discord_invite_link: config.discord_invite_link,
+                          theme: 'default',
+                        }))                        
                         //API for CLI
                         web.get(`/api/cli/status`,(req, res) =>{
                           res.send('Web server IS online...')

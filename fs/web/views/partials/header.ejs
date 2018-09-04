@@ -1,7 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
 <title><%= web_title %></title>
 <link rel="stylesheet" type="text/css" href="./stylesheets/bootstrap.min.css" />
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 <script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 <link rel="stylesheet" type="text/css" href="./stylesheets/main.css" />
 <link rel="shortcut icon" href="/images/favicon.ico">
-
+<style>
+button {
+  cursor:default;
+  margin-left:2px;
+  margin-right:2px;
+}
+button:hover {
+  cursor:pointer;
+  margin-left:2px;
+  margin-right:2px;
+}
+#navbar {
+  text-align:center;
+  width:100%;
+  margin-left:auto;
+  margin-right:auto;
+  margin-top:10px;
+  margin-bottom:10px;
+}
+</style>
+</head>
+<body>
+<% include ../partials/nav.ejs %>
+<div class="jumbotron text-center" style="padding-top:5px;border-top:2px solid white;">
+<div class="container">
+<h1>Nodefried</h1>
+<h3>(no-de-f-r-EE-d)</h3>
+<p>A Very Capable Bot</p>
+</div>
+<div class="logo" style="margin-bottom:-10px;">
+  <a href="<%= bot_info_website %>" class="lang-logo">
+    <img src="<%= bot_logo_long %>">
+  </a>
+</div>
+</div>
+<div class="container" style="text-align:center;">

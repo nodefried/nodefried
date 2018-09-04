@@ -1,51 +1,10 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <% include ../partials/header.ejs %>
-</head>
-<body>
-<% include ../partials/nav.ejs %>
-<div class="jumbotron text-center">
-<div class="container">
-<br />
-<h2>Statistics and Status Page</h2>
-<p>A Very Capable Bot</p>
-</div>
-<div class="logo" style="margin-bottom:-10px;">
-  <a href="<%= bot_info_website %>" class="lang-logo">
-    <img src="<%= bot_logo_long %>">
-  </a>
-</div>
-</div>
-<div class="container" style="text-align:center;">
+<% include ../partials/header.ejs %>
 <h3><span class="glyphicon glyphicon-info-sign"></span><%= bot_nickname %> is Operational</h3>
-<br />
-<style>
-button {
-  cursor:default;
-}
-button:hover {
-  cursor:pointer;
-}
-</style>
-<a href="/posts" target="_new"><button type="button" class="btn btn-dark">Posts</button></a>
-<a href="/logs" target="_new"><button type="button" class="btn btn-dark">Logs</button></a>
-<a href="/api/status" target="_new"><button type="button" class="btn btn-dark">Status</button></a>
-<a href="https://www.github.com/nodefried/nodefried" target="_new"><button type="button" class="btn btn-dark">GitHub</button></a>
-<a href="https://www.npmjs.com/package/nodefried" target="_new"><button type="button" class="btn btn-dark">NPM</button></a>
-
-<br />
-<hr>
+<hr />
 <div class="row">
 <div class="col-lg-12">
 <a href="<%= discord_invite_link %>">
 <img style="max-width:300px;" src="https://cdn.arstechnica.net/wp-content/uploads/2017/08/Discord-LogoWordmark-Color-800x272.png">
 </div>
-</div> 
-<hr>
 </div>
-<div class="well text-center" role="well" style="bottom:0px;">
-  <a href="<%= bot_info_website %>"><%= bot_info_copyright %></a> | All Rights Reserved
-</div>
-</body>
-</html>
+<% include ../partials/footer.ejs %>
