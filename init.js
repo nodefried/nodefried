@@ -74,13 +74,10 @@ MongoClient.connect(template.mongodb_uri,{useNewUrlParser:true},function(err,db)
                 console.log("    ##############################".gray+"+")
                 console.log("     `````````````````````````````".white)
                 console.log('Welcome back! Type '.reset+'help'.inverse+' for commands.'.reset)
-//// ```
-//// ### Main Functions
-//// ```
                 console.fileLog=function (d, file){
                   file.write(`${timeStampLogPlain() + util.format(d)}\n`)
                 }
-                process.on('SIGINT', () =>{
+                process.on('SIGINT',() =>{
                   console.log('')
                   console.log('Received SIGINT, killing current command...')
                 })
@@ -102,32 +99,32 @@ MongoClient.connect(template.mongodb_uri,{useNewUrlParser:true},function(err,db)
                 function ping(host){
                   const spawn=require('child_process').spawn
                   const readline=require('readline')
-                  if (systemOS === 'win32'){
+                  if(systemOS === 'win32'){
                     command=spawn('ping', ['-n', '5', host])
                     readline.createInterface({
                       input: command.stdout,
                       terminal: false,
-                    }).on('line', (line) =>{
+                    }).on('line',(line) =>{
                       console.log(line)
                     })
-                    command.on('data', (data) =>{
+                    command.on('data',(data) =>{
                       console.log(err)
                     })
-                    command.on('exit', (data) =>{
+                    command.on('exit',(data) =>{
                       botConsole()
                     })
-                  } else if (systemOS === 'linux'){
+                  } else if(systemOS === 'linux'){
                     command=spawn('ping', ['-c', '5', host])
                     readline.createInterface({
                       input: command.stdout,
                       terminal: true,
-                    }).on('line', (line) =>{
+                    }).on('line',(line) =>{
                       console.log(line)
                     })
-                    command.on('data', (data) =>{
+                    command.on('data',(data) =>{
                       console.log(err)
                     })
-                    command.on('exit', (data) =>{
+                    command.on('exit',(data) =>{
                       botConsole()
                     })
                   }
@@ -139,14 +136,14 @@ MongoClient.connect(template.mongodb_uri,{useNewUrlParser:true},function(err,db)
                     console.log(stdout)
                     botConsole()
                   }
-                  if (argument === 'HISTORY'){
-                    if (systemOS === 'win32'){
+                  if(argument === 'HISTORY'){
+                    if(systemOS === 'win32'){
                       exec('git log --pretty=format:"%h - %an (%ae): %s" --shortstat  -n 3', puts)
                     } else{
                       exec('git log --pretty=format:"%h - %an (%ae): %s" --shortstat  -n 3', puts)
                     }
-                  } else if (argument === 'PULL'){
-                    if (systemOS === 'win32'){
+                  } else if(argument === 'PULL'){
+                    if(systemOS === 'win32'){
                       exec('git stash && git pull', puts)
                     } else{
                       exec('git stash; git pull', puts)
@@ -161,7 +158,7 @@ MongoClient.connect(template.mongodb_uri,{useNewUrlParser:true},function(err,db)
                   const exec=require('child_process').exec
                   function puts(error, stdout, stderr){
                     console.log(stdout)
-                    if (error){
+                    if(error){
                       console.log(`ERROR:${error}`)
                       console.log('Update was not successful!'.red)
                     } else{
@@ -169,7 +166,7 @@ MongoClient.connect(template.mongodb_uri,{useNewUrlParser:true},function(err,db)
                     }
                     botConsole()
                   }
-                  if (systemOS === 'win32'){
+                  if(systemOS === 'win32'){
                     exec('git stash & git pull & npm update', puts)
                   } else{
                     exec('git stash ; git pull ; sudo npm update', puts)
@@ -184,29 +181,29 @@ MongoClient.connect(template.mongodb_uri,{useNewUrlParser:true},function(err,db)
                     console.log(stdout)
                     botConsole()
                   }
-                  if (argument === 'SHOW'){
-                    fs.readFile(`${__dirname}/fs/etc/provision.json`, 'utf8', (err, data) =>{
-                      if (err){
+                  if(argument === 'SHOW'){
+                    fs.readFile(`${__dirname}/fs/etc/provision.json`, 'utf8',(err, data) =>{
+                      if(err){
                         console.log(timeStampLog() + err)
                       }
                       console.log(data)
                       botConsole()
                     })
-                  } else if (argument === 'BACKUP'){
-                    fs.readFile(config, 'utf8', (err, data) =>{
-                      if (err){
+                  } else if(argument === 'BACKUP'){
+                    fs.readFile(config, 'utf8',(err, data) =>{
+                      if(err){
                         return console.log(timeStampLog() + err)
                       }
-                      fs.writeFile(configBackup, data, 'utf8', (err) =>{
-                        if (err) return console.log(timeStampLog() + err)
+                      fs.writeFile(configBackup, data, 'utf8',(err) =>{
+                        if(err) return console.log(timeStampLog() + err)
                         console.log(timeStampLog()
                           + 'Backup saved to fs/etc/provision.json.backup!'.bold.green)
                         botConsole()
                       })
                     })
-                  } else if (argument === 'WIPE'){
-                    fs.unlinkSync(`${__dirname}/fs/etc/provision.config.json`, 'utf8', (err, data) =>{
-                      if (err){
+                  } else if(argument === 'WIPE'){
+                    fs.unlinkSync(`${__dirname}/fs/etc/provision.config.json`, 'utf8',(err, data) =>{
+                      if(err){
                         console.log(timeStampLog() + err)
                       }
                     })
@@ -222,7 +219,7 @@ MongoClient.connect(template.mongodb_uri,{useNewUrlParser:true},function(err,db)
                   const stdout=process.stdout
                   stdin.resume()
                   stdout.write(question)
-                  stdin.once('data', (data) =>{
+                  stdin.once('data',(data) =>{
                     callback(data.toString().trim())
                   })
                 }
@@ -238,31 +235,28 @@ MongoClient.connect(template.mongodb_uri,{useNewUrlParser:true},function(err,db)
                   )
                 }
                 function botConsolePrompt(){
-                  if (!config.host_ip){ var host='localhost'} else{ var host=config.host_ip}
+                  if(!config.host_ip){ var host='localhost'} else{ var host=config.host_ip}
                   const prompt=config.bot_nickname.toLowerCase().yellow + '@'.yellow + host.yellow + ' >>\ '.trap.bold.cyan
                   return prompt
                 }
                 function botDiscord(type, operation){
-                  if (operation === 'START'){
-                    if (type === 'SELF'){
+                  if(operation === 'START'){
+                    if(type === 'SELF'){
                       token=config.discord_token_self
-                    } else if (type === 'BOT'){
+                    } else if(type === 'BOT'){
                       token=config.discord_token_bot
                     }
                     client=new Client()
-                    client.on('ready', () =>{
-                      // console.log(timeStampLog()+"Discord "+type+" is ready for you!")
-                      // ee.emit('botConsole')
-                    })
-                    client.on('message', (msg) =>{
-                      fs.appendFile('logs/discord.log', `${msg.content}\n`, 'utf8', (err) =>{
+                    client.on('ready',() =>{})
+                    client.on('message',(msg) =>{
+                        fs.appendFile(log_file_discord, `${msg.content}\n`, 'utf8',(err) =>{
                       })
                     })
                     client.login(token)
                     var msg=`Discord ${type.toLowerCase()} started successfully!`
                     console.log(timeStampLog() + msg.green)
                     botConsole()
-                  } else if (operation === 'STOP'){
+                  } else if(operation === 'STOP'){
                     var msg=`Discord ${type.toLowerCase()} stopped successfully!`
                     client.destroy()
                     console.log(timeStampLog() + msg.red)
@@ -270,12 +264,12 @@ MongoClient.connect(template.mongodb_uri,{useNewUrlParser:true},function(err,db)
                   }
                 }
                 function botConsole(res){
-                  prompt(timeStampLog()+botConsolePrompt(), (botCommand) =>{
+                  prompt(timeStampLog()+botConsolePrompt(),(botCommand) =>{
                     const args=botCommand.split(/(\s+)/)
-                    if (args[0].toUpperCase() === 'EXIT'){
+                    if(args[0].toUpperCase() === 'EXIT'){
                       console.log(`${timeStampLog()}Exiting back to console...`)
                       process.exit()
-                    } else if (args[0].toUpperCase() === 'WEB'){
+                    } else if(args[0].toUpperCase() === 'WEB'){
                       if(args[2].toUpperCase() === 'RESTART'){
                         webServer('STOP', function(){
                           webServer('START', function(){
@@ -285,45 +279,46 @@ MongoClient.connect(template.mongodb_uri,{useNewUrlParser:true},function(err,db)
                       } else{
                         webServer(args[2].toUpperCase(), function(){ botConsole()})
                       }
-                    } else if (args[0].toUpperCase() === 'DISCORD'){
+                    } else if(args[0].toUpperCase() === 'DISCORD'){
                       botDiscord(args[2].toUpperCase(), args[4].toUpperCase())
-                    } else if (args[0].toUpperCase() === 'DROPBOX'){
+                    } else if(args[0].toUpperCase() === 'DROPBOX'){
                       dropboxAPI(args[2].toUpperCase(), args)
-                    } else if (args[0].toUpperCase() === 'PROVISION'){
+                    } else if(args[0].toUpperCase() === 'PROVISION'){
                       provision(args[2].toUpperCase())
-                    } else if (args[0].toUpperCase() === 'PING'){
+                    } else if(args[0].toUpperCase() === 'PING'){
                       const host=args[2].toUpperCase()
                       ping(host)
-                    } else if (args[0].toUpperCase() === 'GIT'){
+                    } else if(args[0].toUpperCase() === 'GIT'){
                       console.log(`${timeStampLog()}Working with repository, please wait...`)
                       const argument=args[2]
                       git(argument.toUpperCase())
-                    } else if (args[0].toUpperCase() === 'UPDATE'){
+                    } else if(args[0].toUpperCase() === 'UPDATE'){
                       console.log(`${timeStampLog()}Updating ${config.bot_nickname}, please wait...`)
                       const argument=args[2]
                       update()
-                    } else if (args[0].toUpperCase() === 'DOCS'){
+                    }else if(args[0].toUpperCase()==='DOCS'){
                       generateDocumentation()
-                    } else if (args[0].toUpperCase() === 'PEERS'){
+                    }else if(args[0].toUpperCase()==='PEERS'){
                       botConsole()
-                    } else if (args[0].toUpperCase() === 'STATUS'){
+                    }else if(args[0].toUpperCase()==='STATUS'){
                       getStatusLine(function(res){
+                        console.log(res)
                         //return res
                         botConsole(res)
                       })
-                    } else if (args[0].toUpperCase() === 'DO'){
+                    }else if(args[0].toUpperCase()==='DO'){
                       doSomething()
-                    } else if (args[0] === '' || !args[0]){
-                      console.log(timeStampLog() + 'Need to enter a command...'.yellow)
+                    } else if(args[0]===''|| !args[0]){
+                      console.log(timeStampLog()+'Need to enter a command...'.yellow)
                       botConsole()
-                    } else{
+                    }else{
                       const sys=require('util')
                       const exec=require('child_process').exec
                       function puts(error, stdout, stderr){
                         console.log(stdout)
                         botConsole()
                       }
-                      if (config.bot_shell_whitelist.indexOf(args[0].toLowerCase()) != -1){
+                      if(config.bot_shell_whitelist.indexOf(args[0].toLowerCase())!=-1){
                         exec(`${botCommand}`, puts)
                       } else{
                         console.log(`${timeStampLog()}This command is blacklisted!`)
@@ -333,12 +328,12 @@ MongoClient.connect(template.mongodb_uri,{useNewUrlParser:true},function(err,db)
                   })
                 }
                 function webServer(action,callback){
-                  if (action === 'START' || action === 'AUTOSTART'){
+                  if(action === 'START' || action === 'AUTOSTART'){
                     var webBackendStatus=`http:\/\/localhost:${config.bot_port_web}/api/${config.bot_api_key}/status`
                     request({
                       url: webBackendStatus,
                       timeout: 1000,
-                    }, (error, response, body) =>{
+                    },(error, response, body) =>{
                       if(!error){
                         if(action==='AUTOSTART'){
                           callback('finished!')
@@ -358,7 +353,7 @@ MongoClient.connect(template.mongodb_uri,{useNewUrlParser:true},function(err,db)
                         web.use(express.static(path.join(__dirname, 'fs/web/public')))
                         web.set('views', path.join(__dirname, 'fs/web/views'))
                         web.set('view engine', 'ejs')
-                        web.get('/', (req, res) => res.render('pages/index',{
+                        web.get('/',(req, res) => res.render('pages/index',{
                           web_title: config.web_title,
                           web_favicon: config.web_favicon,
                           bot_nickname: config.bot_nickname,
@@ -369,20 +364,20 @@ MongoClient.connect(template.mongodb_uri,{useNewUrlParser:true},function(err,db)
                           discord_invite_link: config.discord_invite_link,
                           theme: 'default',
                         }))
-                        web.get(`/api/${config.bot_api_key}/close`, (req, res) =>{
+                        web.get(`/api/${config.bot_api_key}/close`,(req, res) =>{
                           res.send('Stopping the web server...')
                           httpServer.close()
                           httpsServer.close()
                         })
-                        web.get(`/api/${config.bot_api_key}/status`, (req, res) =>{
+                        web.get(`/api/${config.bot_api_key}/status`,(req, res) =>{
                           res.send('Web server IS online...')
                         })
-                        web.get(`/api/${config.bot_api_key}/close`, (req, res) =>{
+                        web.get(`/api/${config.bot_api_key}/close`,(req, res) =>{
                           res.send('Stopping the web server...')
                           httpServer.close()
                           httpsServer.close()
                         })
-                        web.get(`/api/${config.bot_api_key}/info/system`, (req, res) =>{
+                        web.get(`/api/${config.bot_api_key}/info/system`,(req, res) =>{
                           res.send(conf)
                         })
                           if(action !==  'AUTOSTART'){
@@ -392,24 +387,24 @@ MongoClient.connect(template.mongodb_uri,{useNewUrlParser:true},function(err,db)
                           }
                       }
                     })
-                  } else if (action === 'STOP'){
+                  } else if(action === 'STOP'){
                     const webBackendClose=`http:\/\/localhost:${config.bot_port_web}/api/${config.bot_api_key}/close`
                     var webBackendStatus=`http:\/\/localhost:${config.bot_port_web}/api/${config.bot_api_key}/status`
                     request({
                       url: webBackendClose,
                       // timeout: 500
-                    }, (error, response, body) =>{
+                    },(error, response, body) =>{
                         console.log(timeStampLog() + 'Web server stopped successfully!'.red)
                         callback('finished!')
                     })
-                  } else if (action === 'STATUS' || action === 'API-STATUS'){
+                  } else if(action === 'STATUS' || action === 'API-STATUS'){
                     var webBackendStatus=`http:\/\/localhost:${config.bot_port_web}/api/${config.bot_api_key}/status`
                     request({
                       url: webBackendStatus,
                       timeout: 1000,
-                    }, (error, response, body) =>{
+                    },(error, response, body) =>{
                       
-                      if (error){
+                      if(error){
                         if(action !== 'API-STATUS'){
                           console.log(timeStampLog() + 'Web Server IS NOT online...'.red)
                           callback('finished!')
@@ -430,10 +425,10 @@ MongoClient.connect(template.mongodb_uri,{useNewUrlParser:true},function(err,db)
                   }
                 }
                 function dropboxAPI(command, argument){
-                  if (command === 'ACCOUNT'){
+                  if(command === 'ACCOUNT'){
                     console.log(`${timeStampLog()}Querying DropBox account information, please wait...`)
                       node_dropbox.api(config.dropbox_token).account((err, res, body) =>{
-                      if (!err){
+                      if(!err){
                         console.log(body)
                         botConsole()
                       } else{
@@ -442,14 +437,14 @@ MongoClient.connect(template.mongodb_uri,{useNewUrlParser:true},function(err,db)
                       }
                     })
                   }
-                  if (command === 'PUT'){
+                  if(command === 'PUT'){
                     console.log(`${timeStampLog()}Testing Dropbox upload...`)
-                    fs.readFile(`${__dirname}/${argument[4]}`, 'utf8', (err, data) =>{
-                      if (err){
+                    fs.readFile(`${__dirname}/${argument[4]}`, 'utf8',(err, data) =>{
+                      if(err){
                         return console.log(err)
                       }
-                      node_dropbox.api(config.dropbox_token).createFile(argument[4], data, (err, res, body) =>{
-                        if (!err){
+                      node_dropbox.api(config.dropbox_token).createFile(argument[4], data,(err, res, body) =>{
+                        if(!err){
                           const result=JSON.parse(body)
                           console.log(`Name: ${result.name}`)
                           console.log(`Path Lower: ${result.path_lower}`)
@@ -462,23 +457,23 @@ MongoClient.connect(template.mongodb_uri,{useNewUrlParser:true},function(err,db)
                           console.log(`Content Hash: ${result.content_hash}`)
                           console.log(timeStampLog() + 'Sucessfully wrote '.green + argument[4].green + ' to DropBox!'.green)
                           botConsole()
-                        } else if (err){
+                        } else if(err){
                           console.log(timeStampLog() + err)
                           botConsole()
                         }
                       })
                     })
                   }
-                  if (command === 'GET'){
+                  if(command === 'GET'){
                     console.log(`${timeStampLog()}Testing Dropbox download...`)
-                    node_dropbox.api(config.dropbox_token).getFile(argument[4], (err, res, body) =>{
-                      if (!err){
-                        fs.writeFile(argument[6], body, 'utf8', (err) =>{
-                          if (err) return console.log(timeStampLog() + err)
+                    node_dropbox.api(config.dropbox_token).getFile(argument[4],(err, res, body) =>{
+                      if(!err){
+                        fs.writeFile(argument[6], body, 'utf8',(err) =>{
+                          if(err) return console.log(timeStampLog() + err)
                           console.log(timeStampLog() + 'Sucessfully wrote '.green + argument[4].green + ' to DropBox!'.green)
                           botConsole()
                         })
-                      } else if (err){
+                      } else if(err){
                         console.log(timeStampLog() + err)
                         botConsole()
                       }
@@ -487,8 +482,8 @@ MongoClient.connect(template.mongodb_uri,{useNewUrlParser:true},function(err,db)
                 }
                 function generateDocumentation(){
                   console.log(timeStampLog() + 'Documentation generation beginning, please wait...'.yellow)
-                  fs.readFile(`${__dirname}/init.js`, 'ascii', (err, data) =>{
-                    if (err){
+                  fs.readFile(`${__dirname}/init.js`, 'ascii',(err, data) =>{
+                    if(err){
                       return console.log(timeStampLog() + err)
                     }
                     const result=data
@@ -496,21 +491,21 @@ MongoClient.connect(template.mongodb_uri,{useNewUrlParser:true},function(err,db)
                         '# Documentation')
                       .replace(/\/\/\/\/ /g,
                         '')
-                    fs.writeFile(`${__dirname}/fs/docs/DOCS.md`, result, 'ascii', (err) =>{
-                      if (err){
+                    fs.writeFile(`${__dirname}/fs/docs/DOCS.md`, result, 'ascii',(err) =>{
+                      if(err){
                       return console.log(timeStampLog() + err)
                       }
-                      if (fs.existsSync(`${__dirname}/fs/docs/DOCS.md`)){
-                        fs.readFile(`${__dirname}/fs/docs/DOCS.md`, 'ascii', (err, data) =>{
-                          if (err){
+                      if(fs.existsSync(`${__dirname}/fs/docs/DOCS.md`)){
+                        fs.readFile(`${__dirname}/fs/docs/DOCS.md`, 'ascii',(err, data) =>{
+                          if(err){
                             return console.log(timeStampLog() + err)
                           }
                           const showdown=require('showdown')
                           const converter=new showdown.Converter()
                           const text='# hello, markdown!'
                           const html=converter.makeHtml(data)
-                          fs.writeFile(`${__dirname}/fs/docs/DOCS.html`, html, 'ascii', (err) =>{
-                            if (err){
+                          fs.writeFile(`${__dirname}/fs/docs/DOCS.html`, html, 'ascii',(err) =>{
+                            if(err){
                               return console.log(timeStampLog() + err)
                             }
                             const docStyle=`
@@ -536,8 +531,8 @@ MongoClient.connect(template.mongodb_uri,{useNewUrlParser:true},function(err,db)
                             const insert=new Buffer(docStyle2)
                             fs.writeSync(fd, insert, 0, 'ascii', insert.length, 0)
                             fs.writeSync(fd, data, 0, 'ascii', data.length, insert.length)
-                            fs.close(fd, (err) =>{
-                                if (err) throw err
+                            fs.close(fd,(err) =>{
+                                if(err) throw err
                             })
                           })
                         })
@@ -548,20 +543,19 @@ MongoClient.connect(template.mongodb_uri,{useNewUrlParser:true},function(err,db)
                   })
                 }
                 function getStatusLine(callback){
-                  var statusWEB='✓ '.bold.green + 'WEB'.gray
-                  var statusDSELF='✗ '.bold.red + 'DSELF'.gray
-                  var statusDBOT='✗ '.bold.red + 'DBOT'.gray
-                  var statusDB='✗ '.bold.red + 'DB'.gray
-                  var statusDBOX='✗ '.bold.red + 'DBOX'.gray  
+                  var statusWEB='ON '.bold.green + 'WEB'.gray
+                  var statusDSELF='OFF '.bold.red + 'DSELF'.gray
+                  var statusDBOT='OFF '.bold.red + 'DBOT'.gray
+                  var statusDB='OFF '.bold.red + 'DB'.gray
+                  var statusDBOX='OFF '.bold.red + 'DBOX'.gray;
                   request('http://localhost/', function (error, response, body){
-                    if (!error && response.statusCode == 200){
-                      statusWEB='✓ '.bold.green + 'WEB'.gray
-                    } else{
-                      statusWEB='✗ '.bold.red + 'WEB'.gray
+                    if(!error&&response.statusCode==200){
+                      statusWEB='ON '.bold.green+'WEB'.gray
+                    }else{
+                      statusWEB='OFF '.bold.red+'WEB'.gray
                     }
                   })
-                  callback(statusDSELF+' '+statusDBOT+' '+statusWEB+' '+statusDBOX+' '+statusDB)
-                  return statusDSELF+' '+statusDBOT+' '+statusWEB+' '+statusDBOX+' '+statusDB
+                  callback(statusDSELF+' | '+statusDBOT+' | '+statusWEB+' | '+statusDBOX+' | '+statusDB)
                 }
                 function hostUpdate(){
                   http.get('http://bot.whatismyipaddress.com',(res)=>{
@@ -588,7 +582,7 @@ MongoClient.connect(template.mongodb_uri,{useNewUrlParser:true},function(err,db)
                       if(k==='host_ip'){
                         var ip=resultGetPeers.host_ip
                         request('http://'+ip+':'+config.bot_port_web,function(error,response,body){
-                          if (!error&&response.statusCode==200){
+                          if(!error&&response.statusCode==200){
                             var lookup={host_ip:ip};
                             var peerUpdateInfo={$set:{host_status:'online'}}
                             dbo.collection('peers').updateOne(lookup,peerUpdateInfo,function(err,res){
@@ -609,8 +603,8 @@ MongoClient.connect(template.mongodb_uri,{useNewUrlParser:true},function(err,db)
                   })
                 }
                 function getPeers(callbackGetPeers){
-                  dbo.collection('peers', function(err, collection) {
-                    collection.find({_id:{$ne:'provision'}}).forEach(function(err, doc) {
+                  dbo.collection('peers', function(err, collection){
+                    collection.find({_id:{$ne:'provision'}}).forEach(function(err, doc){
                       if(err){
                         callbackGetPeers(err)
                       }else{
@@ -620,8 +614,8 @@ MongoClient.connect(template.mongodb_uri,{useNewUrlParser:true},function(err,db)
                   })
                 }
                 function getPeersCommand(callbackGetPeersCommand){
-                  dbo.collection('peers', function(err, collection) {
-                    collection.find({_id:{$ne:'provision'}}).forEach(function(err, doc) {
+                  dbo.collection('peers', function(err, collection){
+                    collection.find({_id:{$ne:'provision'}}).forEach(function(err, doc){
                       if(err){
                         callbackGetPeersCommand(err.host_ip)
                       }else{
